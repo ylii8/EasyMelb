@@ -138,7 +138,7 @@
     
   <section class="yellow bg-primary" id="contact">
       <div class="container">
-        <h2>Welcom
+        <h2>Welcome
           <i class="fas fa-heart"></i>
           new friend!</h2>
       </div>
@@ -158,31 +158,8 @@
 
 
   <footer>
-    <div class="container">
-      <p>&copy; Gizmo Gurus</p>
-      <!-- <ul class="list-inline">
-        <li class="list-inline-item">
-          <a href="#">Privacy</a>
-        </li>
-        <li class="list-inline-item">
-          <a href="#">Terms</a>
-        </li>
-        <li class="list-inline-item">
-          <a href="#">FAQ</a>
-        </li>
-      </ul> -->
-    </div>
+      <?php include 'footer.php'; ?>
   </footer>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="lib/jquery/jquery.min.js"></script>
-  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="lib/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="js/new-age.min.js"></script>
 
 </body>
 
