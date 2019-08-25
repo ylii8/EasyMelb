@@ -1,24 +1,24 @@
 <?php
 
-$servername = "localhost;3306";
-$database = "light";
-$username = "root";
-$password = "root";
-$charset = "utf8mb4";
-
-try {
-
-    $dsn = "mysql:host=$servername;dbname=$database;charset=$charset";
-    $pdo = new PDO($dsn, $username, $password );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connection Okay";
-
-    return $pdo;
-
-}
-catch (PDOException $e)
+class DbConnect
 {
-    echo "Connection failed: ". $e->getMessage();
+    private $host = 'localhost;3306';
+    private $dbName = 'light';
+    private $user = 'root';
+    private $pass = 'root';
+
+    public function connect()
+    {
+        try {
+            $conn = new PDO('mysql:host=' . $this->host . '; dbname' . $this->dbName,
+                $this->user, $this->pass);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            echo "Connected";
+            return $conn;
+        } catch (PDOException $e) {
+            echo 'Database Error: ' . $e->getMessage();
+        }
+    }
 }
 
 ?>
