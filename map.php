@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <?php include 'header.php'; ?>
-    <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
-        #map {
-            height: 100%;
-        }
-        /* Optional: Makes the sample page fill the window. */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+<!--    <style>-->
+<!--        /* Always set the map height explicitly to define the size of the div-->
+<!--         * element that contains the map. */-->
+<!--        #map {-->
+<!--            height: 100%;-->
+<!--        }-->
+<!--        /* Optional: Makes the sample page fill the window. */-->
+<!--        html, body {-->
+<!--            height: 100%;-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--        }-->
+<!--    </style>-->
 </head>
 
 <body>
@@ -31,31 +31,31 @@
 </nav>
 
 
-<div id="map"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<?php include_once 'locations_model.php'; ?>
+<div id="map">
+    <h2>Try it</h2>
+</div>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
 
-<script>
-    var map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-        });
-    }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE_QUgncNwk1lNw3QdVic6K5qIFj9_13o&callback=initMap"
-        async defer></script>
+<?php
+    require 'light.php';
+    $light = new light;
+    $lightData = $light->getLightsLatLon();
+    print_r($lightData);
+    exit;
 
+?>
 
-
-
-
-
-
-
-
-
+<!--<script>-->
+<!--    var map;-->
+<!--    function initMap() {-->
+<!--        map = new google.maps.Map(document.getElementById('map'), {-->
+<!--            center: {lat: -34.397, lng: 150.644},-->
+<!--            zoom: 8-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE_QUgncNwk1lNw3QdVic6K5qIFj9_13o&callback=initMap"-->
+<!--        async defer></script>-->
 
 
 
@@ -68,5 +68,4 @@
 </footer>
 
 </body>
-
 </html>
