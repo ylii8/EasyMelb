@@ -11,6 +11,7 @@ class Light
     private $lon;
     private $conn;
     private $tableName = "lights";
+    private $dbName = "light";
 
     function setAsset_number($asset_number) { $this->asset_number = $asset_number; }
     function getAsset_number() { return $this->asset_number; }
@@ -36,7 +37,7 @@ class Light
 
     public function getLightsLatLon()
     {
-        $sql = "Select * from $this->tableName";
+        $sql = "Select * from $this->dbName.$this->tableName";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
