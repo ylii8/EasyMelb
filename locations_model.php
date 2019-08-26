@@ -2,12 +2,12 @@
 
 // Gets data from URL parameters.
 function get_all_locations(){
-    $con=mysqli_connect ("localhost:3306", 'root', 'gghd666666','pedestrian');
+    $con=mysqli_connect ("127.0.0.1", 'root', 'root','light');
     if (!$con) {
         die('Not connected : ' . mysqli_connect_error());
     }
     // update location with location_status if admin location_status.
-    $sqldata = mysqli_query($con,"select sensor_id ,sensor_name,latitude,longitude,sensor_description,status from location");
+    $sqldata = mysqli_query($con,"select sensor_id ,sensor_name,latitude,longitude,sensor_description,status from sensor_locations");
 
     $rows = array();
     while($r = mysqli_fetch_assoc($sqldata)) {

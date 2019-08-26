@@ -18,6 +18,8 @@ class DbConnect
         } catch (PDOException $e) {
             echo 'Database Error: ' . $e->getMessage();
         }
+
+
     }
 }
 
