@@ -27,7 +27,7 @@
     </style>
 </head>
 
-<body>
+<body bgcolor="#fdcc52">
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
@@ -37,39 +37,46 @@
 </nav>
 
 
-
-<!--map-->
-
-<div class="container_map row no-gutters">
-    <!-- Filter Checkboxes -->
-    <div class="marker-filter col-lg-1">
-        <hr>
-        <span class="filter-box">
-            <label for="seats">
+<section class="yellow bg-primary" id="contact">
+    <div class="container">
+        <h2>Check out seats, toilets and drinking fountains!</h2>
+    </div>
+    <div class="container_map row no-gutters">
+        <!-- Filter Checkboxes -->
+        <div class="marker-filter col-lg-2" style="margin-left: 30px">
+            <p style="margin-top: 8rem; font-size: 25px; font-weight: bold;">To find out:</p>
+            <span class="filter-box">
+            <label for="seats" style="font-size: 18px;">
                 <input type="checkbox" name="seats" id="seats" onclick="getSeats()">
                 Seats
             </label>
         </span>
-        <hr>
-        <span class="filter-box">
-            <label for="toilets">
+            <hr>
+            <span class="filter-box">
+            <label for="toilets" style="font-size: 18px;">
                 <input type="checkbox" name="toilets"  id="toilets" onclick="getToilet()">
                 Toilets
             </label>
         </span>
-        <hr>
-        <span class="filter-box">
-            <label for="drinking_fountains">
+            <hr>
+            <span class="filter-box">
+            <label for="drinking_fountains" style="font-size: 18px;">
                 <input type="checkbox" name="drinking_fountains" id="drinking_fountains" onclick="getDrink()">
                 Drinking Fountains
             </label>
         </span>
-<!--        <p id="seatText" style="display:none">Seats is SELECTED!</p>-->
-<!--        <p id="drinkText" style="display:none">Drinking Fountains is SELECTED!</p>-->
-<!--        <p id="toiletText" style="display:none">Toilets is SELECTED!</p>-->
+            <!--        <p id="seatText" style="display:none">Seats is SELECTED!</p>-->
+            <!--        <p id="drinkText" style="display:none">Drinking Fountains is SELECTED!</p>-->
+            <!--        <p id="toiletText" style="display:none">Toilets is SELECTED!</p>-->
+        </div>
+        <div class="col-lg-9" id="map" ></div>
     </div>
-    <div class="col-lg-11" id="map"></div>
-</div>
+</section>
+
+
+<!--map-->
+
+
 
 
 <!--click event -->
@@ -77,10 +84,10 @@
     <table class="map1">
         <tr>
             <input name="id" type='hidden' id='id'/>
-            <td><a>Description:</a></td>
+            <td><a>Detailed Location:</a></td>
             <td><textarea disabled id='description' placeholder='Description'></textarea></td>
         </tr>
-        <tr><td></td><td><input type='button' value='View Histroy Record' onclick='HistroyData()'/></td></tr>
+<!--        <tr><td></td><td><input type='button' value='View Histroy Record' onclick='HistroyData()'/></td></tr>-->
     </table>
 </div>
 
@@ -103,8 +110,10 @@
     var toiletMarkers = [];
     var drinkMarkers = [];
     var infowindow;
-    var red_icon =  'http://maps.google.com/mapfiles/ms/icons/red-dot.png' ;
-    var purple_icon =  'http://maps.google.com/mapfiles/ms/icons/purple-dot.png' ;
+    var infoBubble;
+    var toilet_icon = "img/toilet.png";
+    var drink_icon = "img/drink.png";
+    var seat_icon = "img/seat.png";
     var locations;
 
     function getSeats(){
@@ -115,7 +124,33 @@
         {
             // text.style.display = "block";
             locations = <?php get_seats_locations() ?>;
-            seatMarkers=addMarkers();
+            var markers =[];
+            var i ;
+            for (i = 0; i < locations.length; i++)
+            {
+
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: seat_icon,
+                    html: document.getElementById('form')
+
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        // $("#id").val(locations[i][0]);
+                        $("#description").val(locations[i][0]);
+                        $("#form").show();
+                         infowindow.setContent(marker.html);
+                         infowindow.open(map, marker);
+                        // infoBubble.setContent(marker.html);
+                        // infoBubble.open(map, marker);
+                    }
+                })(marker, i));
+                markers.push(marker);
+            }
+                seatMarkers = markers;
         }
         else
         {
@@ -134,7 +169,31 @@
         {
             // text.style.display = "block";
             locations = <?php get_drink_locations() ?>;
-            drinkMarkers = addMarkers();
+            var markers =[];
+            var i ;
+            for (i = 0; i < locations.length; i++)
+            {
+
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: drink_icon,
+                    html: document.getElementById('form')
+
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        // $("#id").val(locations[i][0]);
+                        $("#description").val(locations[i][0]);
+                        $("#form").show();
+                        infowindow.setContent(marker.html);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                markers.push(marker);
+            }
+            drinkMarkers = markers;
         }
         else
         {
@@ -153,7 +212,31 @@
         {
             // text.style.display = "block";
             locations = <?php get_toilet_locations() ?>;
-            toiletMarkers=addMarkers();
+            var markers =[];
+            var i ;
+            for (i = 0; i < locations.length; i++)
+            {
+
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: toilet_icon,
+                    html: document.getElementById('form')
+
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        // $("#id").val(locations[i][0]);
+                        $("#description").val(locations[i][0]);
+                        $("#form").show();
+                        infowindow.setContent(marker.html);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+                markers.push(marker);
+            }
+            toiletMarkers = markers;
         }
         else
         {
@@ -178,37 +261,36 @@
 
     }
 
-    // check checkbox first, get data, add marker
 
 
-    function addMarkers()
-    {
-        var markers =[];
-        var i ;
-        for (i = 0; i < locations.length; i++)
-        {
-
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                map: map,
-                // icon: locations[i][5] === 'A' ? red_icon : purple_icon,
-                html: document.getElementById('form')
-
-            });
-
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
-                    // $("#id").val(locations[i][0]);
-                    $("#description").val(locations[i][4]);
-                    $("#form").show();
-                    infowindow.setContent(marker.html);
-                    infowindow.open(map, marker);
-                }
-            })(marker, i));
-            markers.push(marker);
-        }
-        return markers;
-    }
+    // function addMarkers()
+    // {
+    //     var markers =[];
+    //     var i ;
+    //     for (i = 0; i < locations.length; i++)
+    //     {
+    //
+    //         marker = new google.maps.Marker({
+    //             position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+    //             map: map,
+    //             // icon: locations[i][5] === 'A' ? red_icon : purple_icon,
+    //             html: document.getElementById('form')
+    //
+    //         });
+    //
+    //         google.maps.event.addListener(marker, 'click', (function (marker, i) {
+    //             return function () {
+    //                 // $("#id").val(locations[i][0]);
+    //                 $("#description").val(locations[i][4]);
+    //                 $("#form").show();
+    //                 infowindow.setContent(marker.html);
+    //                 infowindow.open(map, marker);
+    //             }
+    //         })(marker, i));
+    //         markers.push(marker);
+    //     }
+    //     return markers;
+    // }
 
     // function removeSeatsMarker()
     // {
