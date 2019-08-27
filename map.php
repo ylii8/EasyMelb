@@ -64,9 +64,9 @@
                 Drinking Fountains
             </label>
         </span>
-        <p id="seatText" style="display:none">Seats is SELECTED!</p>
-        <p id="drinkText" style="display:none">Drinking Fountains is SELECTED!</p>
-        <p id="toiletText" style="display:none">Toilets is SELECTED!</p>
+<!--        <p id="seatText" style="display:none">Seats is SELECTED!</p>-->
+<!--        <p id="drinkText" style="display:none">Drinking Fountains is SELECTED!</p>-->
+<!--        <p id="toiletText" style="display:none">Toilets is SELECTED!</p>-->
     </div>
     <div class="col-lg-11" id="map"></div>
 </div>
@@ -98,7 +98,10 @@
 
     var map;
     var marker;
-    var markers =[];
+    // var markers =[];
+    var seatMarkers = [];
+    var toiletMarkers = [];
+    var drinkMarkers = [];
     var infowindow;
     var red_icon =  'http://maps.google.com/mapfiles/ms/icons/red-dot.png' ;
     var purple_icon =  'http://maps.google.com/mapfiles/ms/icons/purple-dot.png' ;
@@ -107,51 +110,57 @@
     function getSeats(){
 
         var checkBox = document.getElementById("seats");
-        var text = document.getElementById("seatText");
+        // var text = document.getElementById("seatText");
         if (checkBox.checked == true)
         {
-            text.style.display = "block";
+            // text.style.display = "block";
             locations = <?php get_seats_locations() ?>;
-            addMarkers();
+            seatMarkers=addMarkers();
         }
         else
         {
-            text.style.display = "none";
-            removeMarker();
+            // text.style.display = "none";
+            for (var i = 0; i < seatMarkers.length; i++) {
+                seatMarkers[i].setMap(null);
+            }
         }
     }
 
     function getDrink(){
 
         var checkBox = document.getElementById("drinking_fountains");
-        var text = document.getElementById("drinkText");
+        // var text = document.getElementById("drinkText");
         if (checkBox.checked == true)
         {
-            text.style.display = "block";
+            // text.style.display = "block";
             locations = <?php get_drink_locations() ?>;
-            addMarkers();
+            drinkMarkers = addMarkers();
         }
         else
         {
-            text.style.display = "none";
-            removeMarker();
+            // text.style.display = "none";
+            for (var i = 0; i < drinkMarkers.length; i++) {
+                drinkMarkers[i].setMap(null);
+            }
         }
     }
 
     function getToilet(){
 
         var checkBox = document.getElementById("toilets");
-        var text = document.getElementById("toiletText");
+        // var text = document.getElementById("toiletText");
         if (checkBox.checked == true)
         {
-            text.style.display = "block";
+            // text.style.display = "block";
             locations = <?php get_toilet_locations() ?>;
-            addMarkers();
+            toiletMarkers=addMarkers();
         }
         else
         {
-            text.style.display = "none";
-            removeMarker();
+            // text.style.display = "none";
+            for (var i = 0; i < toiletMarkers.length; i++) {
+                toiletMarkers[i].setMap(null);
+            }
         }
     }
 
@@ -174,6 +183,7 @@
 
     function addMarkers()
     {
+        var markers =[];
         var i ;
         for (i = 0; i < locations.length; i++)
         {
@@ -196,18 +206,18 @@
                 }
             })(marker, i));
             markers.push(marker);
-
         }
+        return markers;
     }
 
-    function removeSeatsMarker()
-    {
-
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
-    }
-
+    // function removeSeatsMarker()
+    // {
+    //
+    //     for (var i = 0; i < markers.length; i++) {
+    //         markers[i].setMap(null);
+    //     }
+    // }
+    //
 
 
 </script>
