@@ -88,7 +88,7 @@ section h2 {
 
 /* 导航栏中项目品牌的样式 */
 #mainNav .navbar-brand {
-  color: #fdcc52;
+    color: white;
   font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
   font-weight: 800;
   letter-spacing: 2px;

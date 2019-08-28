@@ -4,7 +4,9 @@
     <?php include 'header.php'; ?>
 </head>
 <style>
-    
+    .showcase hr {
+        width:0px;
+    }
     </style>
 
 <body>
@@ -20,10 +22,10 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="index.html">Features</a>
+                    <a class="nav-link js-scroll-trigger" href="index.html">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="index.html">Start</a>
+                    <a class="nav-link js-scroll-trigger" href="map.php">Map</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="#">About us</a>
@@ -48,7 +50,8 @@
             <div class="col-lg-6 order-lg-2 text-white" style="background-image: url('img/team.jpg'); height: 500px; background-size: cover;" ></div>
             <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                 <h2>We are Gizmo Gurus!</h2>
-                <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">We are a fun team with capability !</p>
+                <hr>
+                <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">We are students from Monash University. Hope our website can provide useful information for you!</p>
             </div>
         </div>
     </div>
@@ -57,6 +60,7 @@
 <section class="yellow bg-primary" id="contact">
     <div class="container">
         <h2>Meet the team</h2>
+        <hr id="hrstyle" style="width: 50%; margin-top: 40px;">
     </div>
 </section>
 

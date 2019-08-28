@@ -23,16 +23,32 @@
         .marker-filter hr{
             width:0;
         }
-
     </style>
 </head>
 
-<body bgcolor="#fdcc52">
+<body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="index.html"><img src="img/logo.PNG" style="margin-right:.3rem;margin-bottom:3px;width:2.2rem;height:2.2rem;">Your Guider</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#">Map</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="aboutUs.php">About us</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
@@ -65,7 +81,8 @@
                 Drinking Fountains
             </label>
         </span>
-            <!--        <p id="seatText" style="display:none">Seats is SELECTED!</p>-->
+                <hr>
+                  <p id="seatText" style="display:none">More functions are upcoming!</p>
             <!--        <p id="drinkText" style="display:none">Drinking Fountains is SELECTED!</p>-->
             <!--        <p id="toiletText" style="display:none">Toilets is SELECTED!</p>-->
         </div>
@@ -119,45 +136,45 @@
     function getSeats(){
 
         var checkBox = document.getElementById("seats");
-        // var text = document.getElementById("seatText");
+        var text = document.getElementById("seatText");
         if (checkBox.checked == true)
         {
-            // text.style.display = "block";
-            locations = <?php get_seats_locations() ?>;
-            var markers =[];
-            var i ;
-            for (i = 0; i < locations.length; i++)
-            {
-
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                    map: map,
-                    icon: seat_icon,
-                    html: document.getElementById('form')
-
-                });
-
-                google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                    return function () {
-                        // $("#id").val(locations[i][0]);
-                        $("#description").val(locations[i][0]);
-                        $("#form").show();
-                         infowindow.setContent(marker.html);
-                         infowindow.open(map, marker);
-                        // infoBubble.setContent(marker.html);
-                        // infoBubble.open(map, marker);
-                    }
-                })(marker, i));
-                markers.push(marker);
-            }
-                seatMarkers = markers;
+             text.style.display = "block";
+            //locations = <?php //get_seats_locations() ?>//;
+            //var markers =[];
+            //var i ;
+            //for (i = 0; i < locations.length; i++)
+            //{
+            //
+            //    marker = new google.maps.Marker({
+            //        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            //        map: map,
+            //        icon: seat_icon,
+            //        html: document.getElementById('form')
+            //
+            //    });
+            //
+            //    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            //        return function () {
+            //            // $("#id").val(locations[i][0]);
+            //            $("#description").val(locations[i][0]);
+            //            $("#form").show();
+            //             infowindow.setContent(marker.html);
+            //             infowindow.open(map, marker);
+            //            // infoBubble.setContent(marker.html);
+            //            // infoBubble.open(map, marker);
+            //        }
+            //    })(marker, i));
+            //    markers.push(marker);
+            //}
+            //    seatMarkers = markers;
         }
         else
         {
-            // text.style.display = "none";
-            for (var i = 0; i < seatMarkers.length; i++) {
-                seatMarkers[i].setMap(null);
-            }
+            text.style.display = "none";
+            // for (var i = 0; i < seatMarkers.length; i++) {
+            //     seatMarkers[i].setMap(null);
+            // }
         }
     }
 
