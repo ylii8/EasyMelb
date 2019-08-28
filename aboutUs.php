@@ -3,9 +3,35 @@
 <head>
     <?php include 'header.php'; ?>
 </head>
+<style>
+    
+    </style>
 
 <body>
 
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html"><img src="img/logo.PNG" style="margin-right:.3rem;margin-bottom:3px;width:2.2rem;height:2.2rem;">Your Guider</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="index.html">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="index.html">Start</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#">About us</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <section class="yellow bg-primary" id="features">
     <div class="container">
@@ -13,6 +39,24 @@
             <h2>About us</h2>
             <hr id="hrstyle" style="width: 50%; margin-top: 40px;">
         </div>
+    </div>
+</section>
+
+<section class="showcase" style="padding-top:0px;padding-bottom:0px;">
+<div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-lg-6 order-lg-2 text-white" style="background-image: url('img/team.jpg'); height: 500px; background-size: cover;" ></div>
+            <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                <h2>We are Gizmo Gurus!</h2>
+                <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">We are a fun team with capability !</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="yellow bg-primary" id="contact">
+    <div class="container">
+        <h2>Meet the team</h2>
     </div>
 </section>
 
@@ -37,7 +81,7 @@
                             <div class="col-lg-6">
                                 <div class="feature-item">
                                     <div class="card">
-                                        <img class="card-imd-top" style="height:420px;width:325px; src="img/yu.jpg">
+                                        <img class="card-imd-top" style="height:420px;width:325px;" src="img/yu.jpg">
                                         <div class="card-body">
                                             <h4 class="card-title">Yu Li</h4>
                                             <p class="card-text">Yu Li is from Master of Data Science.</p>
@@ -61,7 +105,7 @@
                             <div class="col-lg-6">
                                 <div class="feature-item">
                                     <div class="card">
-                                        <img class="card-imd-top" style="height:420px;width:325px; src="img/binh.jpg">
+                                        <img class="card-imd-top" style="height:420px;width:325px;" src="img/binh.jpg">
                                         <div class="card-body">
                                             <h4 class="card-title">Thuy Tri Binh Tran</h4>
                                             <p class="card-text">Binh is from Master of Business Information System.</p>
