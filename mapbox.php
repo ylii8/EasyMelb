@@ -116,7 +116,7 @@
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
         center: [144.96565, -37.81384], //default location when load the map
-        zoom: 13, //default zoom level
+        zoom: 15, //default zoom level
         // Zero is perpendicular to the surface
         pitch: 45,
         // the compass direction that is "up"
@@ -125,26 +125,8 @@
     var seatMarkers = [];
     var toiletMarkers = [];
     var drinkMarkers = [];
+    var locations;
 
-
-
-
-    // function addMarkers() {
-    //     var markers = [];
-    //     var i ;
-    //     for (i = 0; i < locations.length; i++)
-    //     {
-    //         var marker = new mapboxgl.Marker()
-    //             .setLngLat([locations[i][2], locations[i][1]])
-    //             .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    //             .setHTML('<h3>'+ 'Detailed location:' +'</h3><p>' + locations[i][0] + '</p>'))
-    //             .addTo(map);
-    //
-    //         markers.push(marker);
-    //
-    //     }
-    //     toiletMarkers = markers;
-    // }
 
     function getToilets(){
 
@@ -189,7 +171,7 @@
                     .setLngLat([locations[i][2], locations[i][1]])
 
                     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                        .setHTML('<h3>'+ 'Detailed location:' +'</h3><p>' + locations[i][0] + '</p>'))
+                    .setHTML('<h3>'+ 'Detailed location:' +'</h3><p style=\"text-align: Left;\">' + locations[i][0] + '</p>'))
                     .addTo(map);
 
                 markers.push(marker);
@@ -233,6 +215,8 @@
             }
         }
     }
+
+
 
 
 </script>
