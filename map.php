@@ -280,34 +280,34 @@
 
 
 
-    // function addMarkers()
-    // {
-    //     var markers =[];
-    //     var i ;
-    //     for (i = 0; i < locations.length; i++)
-    //     {
-    //
-    //         marker = new google.maps.Marker({
-    //             position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-    //             map: map,
-    //             // icon: locations[i][5] === 'A' ? red_icon : purple_icon,
-    //             html: document.getElementById('form')
-    //
-    //         });
-    //
-    //         google.maps.event.addListener(marker, 'click', (function (marker, i) {
-    //             return function () {
-    //                 // $("#id").val(locations[i][0]);
-    //                 $("#description").val(locations[i][4]);
-    //                 $("#form").show();
-    //                 infowindow.setContent(marker.html);
-    //                 infowindow.open(map, marker);
-    //             }
-    //         })(marker, i));
-    //         markers.push(marker);
-    //     }
-    //     return markers;
-    // }
+    function addMarkers()
+    {
+        var markers =[];
+        var i ;
+        for (i = 0; i < locations.length; i++)
+        {
+
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map,
+                // icon: locations[i][5] === 'A' ? red_icon : purple_icon,
+                html: document.getElementById('form')
+
+            });
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    // $("#id").val(locations[i][0]);
+                    $("#description").val(locations[i][4]);
+                    $("#form").show();
+                    infowindow.setContent(marker.html);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+            markers.push(marker);
+        }
+        return markers;
+    }
 
     // function removeSeatsMarker()
     // {
