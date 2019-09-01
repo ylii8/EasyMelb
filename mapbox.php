@@ -23,14 +23,6 @@
         .marker-filter hr{
             width:0;
         }
-        .marker {
-            background-image: url('img/mapbox-icon.png');
-            background-size: cover;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
 
     </style>
 </head>
@@ -64,11 +56,12 @@
 <section class="yellow bg-primary" id="contact">
     <div class="container">
         <h2>Check out seats, toilets and drinking fountains!</h2>
+
     </div>
     <div class="container_map row no-gutters">
         <!-- Filter Checkboxes -->
-        <div class="marker-filter col-lg-2" style="margin-left: 30px">
-            <p style="margin-top: 8rem; font-size: 25px; font-weight: bold;">To find out:</p>
+        <div class="marker-filter col-lg-2" style="margin-left: 20px;">
+            <p style="margin-top: 2rem; font-size: 25px; font-weight: bold;">To find out:</p>
             <span class="filter-box">
             <label for="seats" style="font-size: 18px;">
                 <input type="checkbox" name="seats" id="seats" onclick="getSeats()">
@@ -90,10 +83,26 @@
             </label>
         </span>
             <hr>
-            <p id="seatText" style="display:none">More functions are upcoming!</p>
+            <p style="margin-top: 1rem; font-size: 24px; font-weight: bold;">Change map style:</p>
+            <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem">
 
+                <input id='streets-v11' type='radio' name='rtoggle' value='streets' >
+                <label  for='streets'>streets</label>
+                <br>
+                <input id='light-v10' type='radio' name='rtoggle' value='light' checked='checked'>
+                <label for='light'>light</label>
+                <br>
+                <input id='dark-v10' type='radio' name='rtoggle' value='dark'>
+                <label for='dark'>dark</label>
+                <br>
+                <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors'>
+                <label for='outdoors'>outdoors</label>
+                <br>
+                <input id='satellite-v9' type='radio' name='rtoggle' value='satellite'>
+                <label for='satellite'>satellite</label>
+            </div>
         </div>
-             <div class="col-lg-9" id='map' ></div>
+             <div class="col-lg-9" id='map' style="margin-left: 20px"></div>
     </div>
 </section>
 
@@ -116,12 +125,47 @@
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
         center: [144.96565, -37.81384], //default location when load the map
-        zoom: 15, //default zoom level
+        zoom: 14, //default zoom level
         // Zero is perpendicular to the surface
         pitch: 45,
         // the compass direction that is "up"
         bearing: -17.6,
     });
+
+    // switch layer
+    var layerList = document.getElementById('menu');
+    var inputs = layerList.getElementsByTagName('input');
+    function switchLayer(layer) {
+        var layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    }
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].onclick = switchLayer;
+    }
+
+    // get user location
+        if(navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(function(position){
+                console.log(position);
+                var marker = new mapboxgl.Marker({color:'#fcd703'})
+                    .setLngLat([position.coords.longitude,position.coords.latitude])
+                    .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                        .setHTML('<h3>Your current location</h3>'))
+                    .addTo(map);
+            });
+        else
+            console.log("geolocation is not supported");
+
+
+    // // Add geolocate control to the map.
+    // map.addControl(new mapboxgl.GeolocateControl({
+    //     positionOptions: {
+    //         enableHighAccuracy: true
+    //     },
+    //     trackUserLocation: true,
+    //     showUserLocation: true
+    // }));
+
     var seatMarkers = [];
     var toiletMarkers = [];
     var drinkMarkers = [];
