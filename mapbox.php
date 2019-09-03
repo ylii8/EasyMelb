@@ -338,14 +338,15 @@
         if (checkBox.checked == true)
         {
             locations = <?php get_seats_locations() ?>;
+
             var markers = [];
             var i ;
             for (i = 0; i < locations.length; i++)
             {
                 var marker = new mapboxgl.Marker({color: '#79c142'})
-                    .setLngLat([locations[i][2], locations[i][1]])
+                    .setLngLat([locations[i][3], locations[i][2]])
                     .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                        .setHTML('<h3>'+ 'Detailed location:' +'</h3><p>' + locations[i][0] + '</p>'))
+                        .setHTML('<h3>'+ 'Detailed location:' +'</h3><p>' + locations[i][1] + '</p>'))
                     .addTo(map);
 
                 markers.push(marker);

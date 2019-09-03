@@ -10,23 +10,39 @@
     }
 
     // Gets data from URL parameters.
+    get_seats_locations();
     function get_seats_locations()
     {
-        $con= connect_db();
-        // update location with location_status if admin location_status.
+//        $con= connect_db();
+//        // update location with location_status if admin location_status.
+//
+//        $seatData = mysqli_query($con,"select LOCATION_DESC,lat,lon from seats");
+//
+//        $rows = array();
+//        while($r = mysqli_fetch_assoc($seatData)) {
+//            $rows[] = $r;
+//        }
+//
+//      $indexed = array_map('array_values', $rows);
+//      //  $array = array_filter($indexed);
+//
+//        echo json_encode($indexed);
+//        if (!$rows) {return null;}
 
-        $seatData = mysqli_query($con,"select LOCATION_DESC,lat,lon from seats");
-
-        $rows = array();
-        while($r = mysqli_fetch_assoc($seatData)) {
-            $rows[] = $r;
+        $f_pointer = fopen("seats.csv", "r"); // file pointer
+        $array=[];
+        while (!feof($f_pointer)) {
+            $ar = fgetcsv($f_pointer);
+            array_push($array,$ar);
         }
+//        echo print_r($array);
 
-      $indexed = array_map('array_values', $rows);
-      //  $array = array_filter($indexed);
+        $indexed = array_map('array_values', $array);
+        //  $array = array_filter($indexed);
 
         echo json_encode($indexed);
-        if (!$rows) {return null;}
+        if (!$array) {return null;}
+
     }
 
     function get_drink_locations()
