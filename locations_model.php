@@ -10,7 +10,6 @@
     }
 
     // Gets data from URL parameters.
-    get_seats_locations();
     function get_seats_locations()
     {
 
