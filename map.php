@@ -5,6 +5,8 @@
 <head>
     <meta charset=utf-8 />
     <title>Filtering marker cluster groups</title>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css' rel='stylesheet' />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v3.2.0/mapbox.css' rel='stylesheet' />
@@ -41,57 +43,107 @@
 
 
 <script>
-    var locations;
-    // var mymap = L.map('map').setView([-37.8136,144.9631], 15);
+    //var locations;
+    //// var mymap = L.map('map').setView([-37.8136,144.9631], 15);
+    ////
+    //// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    ////     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    ////     maxZoom: 18,
+    ////     id: 'mapbox.streets',
+    ////     accessToken: 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw'
+    //// }).addTo(mymap);
+    //L.mapbox.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
+    //var map = L.mapbox.map('map')
+    //    .setView([-37.8136,144.9631], 15)
+    //    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
     //
-    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    //     maxZoom: 18,
-    //     id: 'mapbox.streets',
-    //     accessToken: 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw'
-    // }).addTo(mymap);
-    L.mapbox.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
-    var map = L.mapbox.map('map')
-        .setView([-37.8136,144.9631], 15)
-        .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+    //// var overlays = L.layerGroup().addTo(map);
+    //// var layers;
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //    // pass data to Geojson array
+    //    locations = //;
+    //    var geojson = {};
+    //    geojson['type'] = 'FeatureCollection';
+    //    geojson['features'] = [];
+    //
+    //    for (var k in locations) {
+    //        var newFeature = {
+    //            "type": "Feature",
+    //            "geometry": {
+    //                "type": "Point",
+    //                "coordinates": [parseFloat(locations[k][2]), parseFloat(locations[k][1])]
+    //            },
+    //            "properties": {
+    //                "description": locations[k][0]
+    //            }
+    //        }
+    //        geojson['features'].push(newFeature);
+    //    }
+    //
+    //    console.log(geojson);
+    //
+    //var myLayer = L.mapbox.featureLayer().addTo(map);
+    //
+    //myLayer.setGeoJSON(geojson);
 
-    // var overlays = L.layerGroup().addTo(map);
-    // var layers;
+    mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
+    var map = new mapboxgl.Map({
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [-74.0066, 40.7135],
+        zoom: 15.5,
+        pitch: 45,
+        bearing: -17.6,
+        container: 'map',
+        antialias: true
+    });
 
+    // The 'building' layer in the mapbox-streets vector source contains building-height
+    // data from OpenStreetMap.
+    map.on('load', function() {
+// Insert the layer beneath any symbol layer.
+        var layers = map.getStyle().layers;
 
-
-
-
-
-
-
-        // pass data to Geojson array
-        locations = <?php get_toilet_locations() ?>;
-        var geojson = {};
-        geojson['type'] = 'FeatureCollection';
-        geojson['features'] = [];
-
-        for (var k in locations) {
-            var newFeature = {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [parseFloat(locations[k][2]), parseFloat(locations[k][1])]
-                },
-                "properties": {
-                    "description": locations[k][0]
-                }
+        var labelLayerId;
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                labelLayerId = layers[i].id;
+                break;
             }
-            geojson['features'].push(newFeature);
         }
 
-        console.log(geojson);
+        map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 15,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
 
-    var myLayer = L.mapbox.featureLayer().addTo(map);
-
-    myLayer.setGeoJSON(geojson);
-
-
+// use an 'interpolate' expression to add a smooth transition effect to the
+// buildings as the user zooms in
+                'fill-extrusion-height': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "height"]
+                ],
+                'fill-extrusion-base': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "min_height"]
+                ],
+                'fill-extrusion-opacity': .6
+            }
+        }, labelLayerId);
+    });
 
 </script>
 </body>

@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
     <?php include 'header.php'; ?>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.2.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- Geocoder plugin -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+    <!-- Turf.js plugin -->
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <style>
 
         #map {
@@ -64,21 +69,21 @@
             <p style="margin-top: 2rem; font-size: 25px; font-weight: bold;">To find out:</p>
             <span class="filter-box">
             <label for="seats" style="font-size: 18px;">
-                <input type="checkbox" name="seats" id="seats" onclick="getSeats()">
+                <input type="checkbox" name="checkbox" id="seats" onclick="getSeats()">
                 Seats
             </label>
         </span>
             <hr>
             <span class="filter-box">
             <label for="toilets" style="font-size: 18px;">
-                <input type="checkbox" name="toilets"  id="toilets" onclick="getToilets()">
+                <input type="checkbox" name="checkbox"  id="toilets" onclick="getToilets()">
                 Toilets
             </label>
         </span>
             <hr>
             <span class="filter-box">
             <label for="drinking_fountains" style="font-size: 18px;">
-                <input type="checkbox" name="drinking_fountains" id="drinking_fountains" onclick="getDrink()">
+                <input type="checkbox" name="checkbox" id="drinking_fountains" onclick="getDrink()">
                 Drinking Fountains
             </label>
         </span>
@@ -86,19 +91,16 @@
             <p style="margin-top: 1rem; font-size: 24px; font-weight: bold;">Change map style:</p>
             <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem">
 
-                <input id='streets-v11' type='radio' name='rtoggle' value='streets' >
-                <label  for='streets'>streets</label>
-                <br>
-                <input id='light-v10' type='radio' name='rtoggle' value='light' checked='checked'>
+                <input id='light-v10' type='radio' name='rtoggle' value='light' checked='checked' onclick="initmap()">
                 <label for='light'>light</label>
                 <br>
-                <input id='dark-v10' type='radio' name='rtoggle' value='dark'>
+                <input id='streets-v11' type='radio' name='rtoggle' value='streets'onclick="street()" >
+                <label  for='streets'>streets</label>
+                <br>
+                <input id='dark-v10' type='radio' name='rtoggle' value='dark' onclick="dark()" >
                 <label for='dark'>dark</label>
                 <br>
-                <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors'>
-                <label for='outdoors'>outdoors</label>
-                <br>
-                <input id='satellite-v9' type='radio' name='rtoggle' value='satellite'>
+                <input id='satellite-v9' type='radio' name='rtoggle' value='satellite' onclick="satellite()">
                 <label for='satellite'>satellite</label>
             </div>
         </div>
@@ -120,30 +122,90 @@
 <script>
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
+    var map;
+    var seatMarkers = [];
+    var toiletMarkers = [];
+    var drinkMarkers = [];
+    var locations;
 
-    var map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
-        center: [144.96565, -37.81384], //default location when load the map
-        zoom: 14, //default zoom level
-        // Zero is perpendicular to the surface
-        pitch: 45,
-        // the compass direction that is "up"
-        bearing: -17.6,
-    });
+    initmap();
 
-    // switch layer
-    var layerList = document.getElementById('menu');
-    var inputs = layerList.getElementsByTagName('input');
-    function switchLayer(layer) {
-        var layerId = layer.target.id;
-        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    function initmap(){
+        map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
+            center: [144.96565, -37.81384], //default location when load the map
+            zoom: 14, //default zoom level
+            // Zero is perpendicular to the surface
+            pitch: 45,
+            // the compass direction that is "up"
+            bearing: -17.6,
+            antialias: true
+        });
+        load3D();
+        getUserLocation();
+        unSelectAll();
     }
-    for (var i = 0; i < inputs.length; i++) {
-        inputs[i].onclick = switchLayer;
+
+    function unSelectAll() {
+        var items = document.getElementsByName('checkbox');
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].type == 'checkbox')
+                items[i].checked = false;
+        }
     }
 
-    // get user location
+    function satellite(){
+        map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/satellite-v9', //style URL of map style
+            center: [144.96565, -37.81384], //default location when load the map
+            zoom: 14, //default zoom level
+            // Zero is perpendicular to the surface
+            pitch: 45,
+            // the compass direction that is "up"
+            bearing: -17.6,
+            antialias: true
+        });
+        getUserLocation();
+        unSelectAll();
+    }
+
+    function dark(){
+         map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v10', //style URL of map style
+            center: [144.96565, -37.81384], //default location when load the map
+            zoom: 14, //default zoom level
+            // Zero is perpendicular to the surface
+            pitch: 45,
+            // the compass direction that is "up"
+            bearing: -17.6,
+            antialias: true
+        });
+        load3D();
+        getUserLocation();
+        unSelectAll();
+    }
+
+    function street(){
+        map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11', //style URL of map style
+            center: [144.96565, -37.81384], //default location when load the map
+            zoom: 14, //default zoom level
+            // Zero is perpendicular to the surface
+            pitch: 45,
+            // the compass direction that is "up"
+            bearing: -17.6,
+            antialias: true
+        });
+        load3D();
+        getUserLocation();
+        unSelectAll();
+    }
+
+    function getUserLocation(){
         if(navigator.geolocation)
             navigator.geolocation.getCurrentPosition(function(position){
                 console.log(position);
@@ -156,20 +218,59 @@
         else
             console.log("geolocation is not supported");
 
+        // fake user location, just for testing, delete this when publish
+        var marker = new mapboxgl.Marker({color:'#fcd703'})
+            .setLngLat([144.9639,-37.8136])
+            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                .setHTML('<h3>Fake current location</h3>'))
+            .addTo(map);
+    }
 
-    // // Add geolocate control to the map.
-    // map.addControl(new mapboxgl.GeolocateControl({
-    //     positionOptions: {
-    //         enableHighAccuracy: true
-    //     },
-    //     trackUserLocation: true,
-    //     showUserLocation: true
-    // }));
 
-    var seatMarkers = [];
-    var toiletMarkers = [];
-    var drinkMarkers = [];
-    var locations;
+    function load3D(){
+        // The 'building' layer in the mapbox-streets vector source contains building-height
+        // data from OpenStreetMap.
+
+        map.on('load', function() {
+            // Insert the layer beneath any symbol layer.
+            var layers = map.getStyle().layers;
+
+            var labelLayerId;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                    labelLayerId = layers[i].id;
+                    break;
+                }
+            }
+
+            map.addLayer({
+                'id': '3d-buildings',
+                'source': 'composite',
+                'source-layer': 'building',
+                'filter': ['==', 'extrude', 'true'],
+                'type': 'fill-extrusion',
+                'minzoom': 15,
+                'paint': {
+                    'fill-extrusion-color': '#aaa',
+
+                    // use an 'interpolate' expression to add a smooth transition effect to the
+                    // buildings as the user zooms in
+                    'fill-extrusion-height': [
+                        "interpolate", ["linear"], ["zoom"],
+                        15, 0,
+                        15.05, ["get", "height"]
+                    ],
+                    'fill-extrusion-base': [
+                        "interpolate", ["linear"], ["zoom"],
+                        15, 0,
+                        15.05, ["get", "min_height"]
+                    ],
+                    'fill-extrusion-opacity': .6
+                }
+            }, labelLayerId);
+        });
+
+    }
 
 
     function getToilets(){
@@ -258,6 +359,20 @@
                 seatMarkers[i].remove();
             }
         }
+    }
+
+    function getGradient(){
+
+        var checkBox = document.getElementById("gradient");
+        if (checkBox.checked == true)
+        {
+
+        }
+        else
+        {
+
+        }
+
     }
 
 
