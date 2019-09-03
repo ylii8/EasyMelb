@@ -67,7 +67,7 @@
         <!-- Filter Checkboxes -->
         <div class="marker-filter col-lg-2" style="margin-left: 20px;">
             <p style="margin-top: 2rem; font-size: 25px; font-weight: bold;">To find out:</p>
-            <span class="filter-box">
+        <span class="filter-box">
             <label for="seats" style="font-size: 18px;">
                 <input type="checkbox" name="checkbox" id="seats" onclick="getSeats()">
                 Seats
@@ -85,6 +85,14 @@
             <label for="drinking_fountains" style="font-size: 18px;">
                 <input type="checkbox" name="checkbox" id="drinking_fountains" onclick="getDrink()">
                 Drinking Fountains
+            </label>
+        </span>
+        </span>
+            <hr>
+            <span class="filter-box">
+            <label for="gradient" style="font-size: 18px;">
+                <input type="checkbox" name="checkbox" id="gradient" onclick="getGradient()">
+                Gradient
             </label>
         </span>
             <hr>
@@ -362,22 +370,66 @@
         }
     }
 
+
     function getGradient(){
 
+        var map = window.map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [144.9631, -37.8136],
+            zoom: 12,
+        });
+        
         var checkBox = document.getElementById("gradient");
         if (checkBox.checked == true)
         {
 
+            var geojson = 'Footpath steepness.geojson';
+            map.on('load', function () {
+                // 'line-gradient' can only be used with GeoJSON sources
+                // and the source must have the 'lineMetrics' option set to true
+                map.addSource('line', {
+                    type: 'geojson',
+                    lineMetrics: true,
+                    data: geojson
+                });
+
+                // the layer must be of type 'line'
+                map.addLayer({
+                    type: 'line',
+                    source: 'line',
+                    id: 'line',
+                    paint: {
+                        'line-color': 'red',
+                        'line-width': 3,
+                        // 'line-gradient' must be specified using an expression
+                        // with the special 'line-progress' property
+                        'line-gradient': [
+                            'interpolate',
+                            ['linear'],
+                            ['line-progress'],
+                            0, "blue",
+                            0.1, "royalblue",
+                            0.3, "cyan",
+                            0.5, "lime",
+                            0.7, "yellow",
+                            1, "red"
+                        ]
+                    },
+                    layout: {
+                        'line-cap': 'round',
+                        'line-join': 'round'
+                    }
+                });
+            });
+
         }
         else
         {
-
+            map.removeLayer('line')
         }
 
     }
-
-
-
 
 </script>
 
