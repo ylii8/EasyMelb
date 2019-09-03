@@ -66,29 +66,7 @@
     <div class="container_map row no-gutters">
         <!-- Filter Checkboxes -->
         <div class="marker-filter col-lg-2" style="margin-left: 20px;">
-            <p style="margin-top: 2rem; font-size: 25px; font-weight: bold;">To find out:</p>
-        <span class="filter-box">
-            <label for="seats" style="font-size: 18px;">
-                <input type="checkbox" name="checkbox" id="seats" onclick="getSeats()">
-                Seats
-            </label>
-        </span>
-            <hr>
-            <span class="filter-box">
-            <label for="toilets" style="font-size: 18px;">
-                <input type="checkbox" name="checkbox"  id="toilets" onclick="getToilets()">
-                Toilets
-            </label>
-        </span>
-            <hr>
-            <span class="filter-box">
-            <label for="drinking_fountains" style="font-size: 18px;">
-                <input type="checkbox" name="checkbox" id="drinking_fountains" onclick="getDrink()">
-                Drinking Fountains
-            </label>
-        </span>
 
-            <hr>
             <p style="margin-top: 1rem; font-size: 24px; font-weight: bold;">Change map style:</p>
             <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem">
 
@@ -96,7 +74,7 @@
                 <label for='light'>light</label>
                 <br>
                 <input id='gradient' type='radio' name='rtoggle' onclick="getGradient()" >
-                <label for='light'>Gradient</label>
+                <label for='light'>Gradient Map</label>
                 <br>
                 <input id='streets-v11' type='radio' name='rtoggle' value='streets'onclick="street()" >
                 <label  for='streets'>streets</label>
@@ -107,6 +85,31 @@
                 <input id='satellite-v9' type='radio' name='rtoggle' value='satellite' onclick="satellite()">
                 <label for='satellite'>satellite</label>
             </div>
+
+            <hr>
+
+            <p style="margin-top: 2rem; font-size: 25px; font-weight: bold;">To find out:</p>
+            <span class="filter-box">
+                <label for="seats" style="font-size: 18px;">
+                    <input type="checkbox" name="checkbox" id="seats" onclick="getSeats()">
+                    <label>Seats</label>
+                </label>
+            </span>
+                <hr>
+                <span class="filter-box">
+                <label for="toilets" style="font-size: 18px;">
+                    <input type="checkbox" name="checkbox"  id="toilets" onclick="getToilets()">
+                    Toilets
+                </label>
+            </span>
+                <hr>
+                <span class="filter-box">
+                <label for="drinking_fountains" style="font-size: 18px;">
+                    <input type="checkbox" name="checkbox" id="drinking_fountains" onclick="getDrink()">
+                    Drinking Fountains
+                </label>
+            </span>
+
         </div>
              <div class="col-lg-9" id='map' style="margin-left: 20px"></div>
     </div>
@@ -371,9 +374,14 @@
 
         var map = window.map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [144.9631, -37.8136],
-            zoom: 12,
+            style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
+            center: [144.96565, -37.81384], //default location when load the map
+            zoom: 16, //default zoom level
+            // Zero is perpendicular to the surface
+            pitch: 45,
+            // the compass direction that is "up"
+            bearing: -17.6,
+            antialias: true
         });
         
         var checkBox = document.getElementById("gradient");
@@ -424,6 +432,9 @@
         {
             map.removeLayer('line')
         }
+
+        getUserLocation();
+        unSelectAll();
 
     }
 
