@@ -13,21 +13,6 @@
     get_seats_locations();
     function get_seats_locations()
     {
-//        $con= connect_db();
-//        // update location with location_status if admin location_status.
-//
-//        $seatData = mysqli_query($con,"select LOCATION_DESC,lat,lon from seats");
-//
-//        $rows = array();
-//        while($r = mysqli_fetch_assoc($seatData)) {
-//            $rows[] = $r;
-//        }
-//
-//      $indexed = array_map('array_values', $rows);
-//      //  $array = array_filter($indexed);
-//
-//        echo json_encode($indexed);
-//        if (!$rows) {return null;}
 
         $f_pointer = fopen("seats.csv", "r"); // file pointer
         $array=[];
@@ -35,10 +20,8 @@
             $ar = fgetcsv($f_pointer);
             array_push($array,$ar);
         }
-//        echo print_r($array);
 
         $indexed = array_map('array_values', $array);
-        //  $array = array_filter($indexed);
 
         echo json_encode($indexed);
         if (!$array) {return null;}
@@ -58,7 +41,6 @@
         }
 
         $indexed = array_map('array_values', $rows);
-        //  $array = array_filter($indexed);
 
         echo json_encode($indexed);
         if (!$rows) {return null;}
@@ -67,8 +49,6 @@
     function get_toilet_locations()
     {
         $con= connect_db();
-        // update location with location_status if admin location_status.
-
         $toiletData = mysqli_query($con,"select name,lat,lon from toilets");
 
         $rows = array();
@@ -76,20 +56,10 @@
             $rows[] = $r;
         }
         $indexed = array_map('array_values', $rows);
-        //  $array = array_filter($indexed);
 
         echo json_encode($indexed);
         if (!$rows) {return null;}
     }
 
-//    function get_sqlData()
-//    {
-//        $con= connect_db();
-//        if
-//        $seatData = mysqli_query($con,"select LOCATION_DESC,lat,lon from seats");
-//        $sqlData = mysqli_query($con,"select Description,lat,lon from drinking_fountains");
-//        $sqlData = mysqli_query($con,"select name,lat,lon from toilets");
-//        return $sqlData;
-//    }
 
 ?>
