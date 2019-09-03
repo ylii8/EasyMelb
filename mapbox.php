@@ -87,20 +87,16 @@
                 Drinking Fountains
             </label>
         </span>
-        </span>
-            <hr>
-            <span class="filter-box">
-            <label for="gradient" style="font-size: 18px;">
-                <input type="checkbox" name="checkbox" id="gradient" onclick="getGradient()">
-                Gradient
-            </label>
-        </span>
+
             <hr>
             <p style="margin-top: 1rem; font-size: 24px; font-weight: bold;">Change map style:</p>
             <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem">
 
                 <input id='light-v10' type='radio' name='rtoggle' value='light' checked='checked' onclick="initmap()">
                 <label for='light'>light</label>
+                <br>
+                <input id='gradient' type='radio' name='rtoggle' onclick="getGradient()" >
+                <label for='light'>Gradient</label>
                 <br>
                 <input id='streets-v11' type='radio' name='rtoggle' value='streets'onclick="street()" >
                 <label  for='streets'>streets</label>
