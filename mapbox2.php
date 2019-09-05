@@ -240,7 +240,6 @@
                 </nav>
             </div>
             <div class="col-lg-9" id='map' ></div>
-
         </div>
     </section>
     <footer>
