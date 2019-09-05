@@ -21,14 +21,148 @@
         shape-outside: ellipse();
         width: 100%;
         height: 100%;
-        right: -90px;
-        left: -100px;
     }
     
     .container_map {
         height: 600px;
         width: 100%
     }
+
+     .filter-group {
+         font-size: 13px;
+         font-family: 'Open Sans', sans-serif;
+         position: absolute;
+         top: 50px;
+         right: -1000px;
+         z-index: 1;
+         border: 1px solid rgba(0, 0, 0, 0.4);
+         width: 140px;
+         color: #404040;
+     }
+
+    .filter-group input[type=checkbox]:first-child + label {
+        border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+        border-radius: 0 0 3px 3px;
+        border: none;
+    }
+
+    .filter-group input[type=checkbox] {
+        display: none;
+    }
+
+    .filter-group input[type=checkbox] + label {
+        background-color: #3386c0;
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        margin-bottom: 0;
+    }
+
+    .filter-group input[type=checkbox] + label {
+        background-color: #fff;
+        text-transform: capitalize;
+    }
+
+    .filter-group input[type=checkbox] + label:hover,
+    .filter-group input[type=checkbox]:checked + label {
+        background-color: #fdcb50;
+    }
+
+    .filter-group input[type=checkbox]:checked + label:before {
+        content: '✔ ';
+
+    }
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: -861px;
+        border-radius: 3px;
+        width: 140px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu label {
+        right: -880px;
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        text-align: center;
+    }
+
+    #menu label:last-child {
+        border: none;
+    }
+
+    #menu label:hover {
+        background-color: #fdcb50;
+        color: #404040;
+    }
+
+    #menu label:active {
+        background-color: #ff9609;
+        color: #ffffff;
+    }
+
+    #menu label:active:hover {
+        background: #ff9609;
+    }
+
+    #blockLabel {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        right: -1000px;
+        border-radius: 3px;
+        width: 140px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #blockLabel label {
+        right: -880px;
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        text-align: center;
+    }
+
+    #blockLabel label:last-child {
+        border: none;
+    }
+
+    #blockLabel label:hover {
+        background-color: #fdcb50;
+        color: #404040;
+    }
+
+    #blockLabel label:active {
+        background-color: #ff9609;
+        color: #ffffff;
+    }
+
+    #blockLabel label:active:hover {
+        background: #ff9609;
+    }
+
+
     </style>
 </head>
 
@@ -59,111 +193,7 @@
         <div class="container_map row no-gutters">
             <!-- Filter Checkboxes -->
             <div class="marker-filter col-lg-2">
-                <style>
-                #menu {
-                    background: #fff;
-                    position: absolute;
-                    z-index: 1;
-                    top: 10px;
-                    right: -861px;
-                    border-radius: 3px;
-                    width: 140px;
-                    border: 1px solid rgba(0, 0, 0, 0.4);
-                    font-family: 'Open Sans', sans-serif;
-                }
 
-                #menu label {
-                    right: -880px;
-                    font-size: 13px;
-                    color: #404040;
-                    display: block;
-                    margin: 0;
-                    padding: 0;
-                    padding: 10px;
-                    text-decoration: none;
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-                    text-align: center;
-                }
-
-                #menu label:last-child {
-                    border: none;
-                }
-
-                #menu label:hover {
-                    background-color: #fdcb50;
-                    color: #404040;
-                }
-
-                #menu label:active {
-                    background-color: #ff9609;
-                    color: #ffffff;
-                }
-
-                #menu label:active:hover {
-                    background: #ff9609;
-                }
-
-                #blockLabel {
-                    background: #fff;
-                    position: absolute;
-                    z-index: 1;
-                    top: 10px;
-                    right: -1000px;
-                    border-radius: 3px;
-                    width: 140px;
-                    border: 1px solid rgba(0, 0, 0, 0.4);
-                    font-family: 'Open Sans', sans-serif;
-                }
-
-                #blockLabel label {
-                    right: -880px;
-                    font-size: 13px;
-                    color: #404040;
-                    display: block;
-                    margin: 0;
-                    padding: 0;
-                    padding: 10px;
-                    text-decoration: none;
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-                    text-align: center;
-                }
-
-                #blockLabel label:last-child {
-                    border: none;
-                }
-
-                #blockLabel label:hover {
-                    background-color: #fdcb50;
-                    color: #404040;
-                }
-
-                #blockLabel label:active {
-                    background-color: #ff9609;
-                    color: #ffffff;
-                }
-
-                #blockLabel label:active:hover {
-                    background: #ff9609;
-                }
-
-                </style>
-                <script type="text/javascript">
-                $(document).ready(function() {
-
-                    $("#blockLabel").hover(function() {
-                        $("#menu").css("display", "block");
-                    }, function() {
-                        $("#menu").css("display", "none");
-                    });
-
-                    $("#hideLabel").hover(function() {
-                        $("#menu").css("display", "block");
-                    }, function() {
-                        $("#menu").css("display", "none");
-                    });
-
-                });
-                </script>
                 <div id='blockLabel' style="text-align: left;font-size: 18px; margin-left: 4rem">
                     <label style="right: -1000px;">Change style</label>
                 </div>
@@ -175,57 +205,7 @@
                         <label for='satellite' onclick="satellite()">satellite</label>
                     </div>
                 </div>
-                <style>
-                .filter-group {
-                    font-size: 13px;
-                    font-family: 'Open Sans', sans-serif;
-                    position: absolute;
-                    top: 50px;
-                    right: -1000px;
-                    z-index: 1;
-                    border: 1px solid rgba(0, 0, 0, 0.4);
-                    width: 140px;
-                    color: #404040;
-                }
 
-                .filter-group input[type=checkbox]:first-child + label {
-                    border-radius: 3px 3px 0 0;
-                }
-
-                .filter-group label:last-child {
-                    border-radius: 0 0 3px 3px;
-                    border: none;
-                }
-
-                .filter-group input[type=checkbox] {
-                    display: none;
-                }
-
-                .filter-group input[type=checkbox] + label {
-                    background-color: #3386c0;
-                    display: block;
-                    cursor: pointer;
-                    padding: 10px;
-                    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-                    margin-bottom: 0;
-                }
-
-                .filter-group input[type=checkbox] + label {
-                    background-color: #fff;
-                    text-transform: capitalize;
-                }
-
-                .filter-group input[type=checkbox] + label:hover,
-                .filter-group input[type=checkbox]:checked + label {
-                    background-color: #fdcb50;
-                }
-
-                .filter-group input[type=checkbox]:checked + label:before {
-                    content: '✔ ';
-
-                }
-
-                </style>
                 <nav id="filter-group" class="filter-group">
                     <input type="checkbox" id="seats" onclick="getSeats()">
                     <label for="seats" id="seats" >Seats</label>
@@ -239,7 +219,7 @@
                     <label for="3d-buildings" id="3d-buildings" >3D</label>
                 </nav>
             </div>
-            <div class="col-lg-9" id='map' ></div>
+            <div id='map' ></div>
         </div>
     </section>
     <footer>
@@ -248,7 +228,23 @@
 </body>
 
 <?php include_once 'locations_model.php'; ?>
+<script type="text/javascript">
+    $(document).ready(function() {
 
+        $("#blockLabel").hover(function() {
+            $("#menu").css("display", "block");
+        }, function() {
+            $("#menu").css("display", "none");
+        });
+
+        $("#hideLabel").hover(function() {
+            $("#menu").css("display", "block");
+        }, function() {
+            $("#menu").css("display", "none");
+        });
+
+    });
+</script>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
     var map;
