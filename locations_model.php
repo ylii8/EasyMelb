@@ -60,5 +60,23 @@
         if (!$rows) {return null;}
     }
 
+    // Gets data from URL parameters.
+    function get_pedestrian()
+    {
+
+        $f_pointer = fopen("SensorPerHour.csv", "r"); // file pointer
+        $array=[];
+        while (!feof($f_pointer)) {
+            $ar = fgetcsv($f_pointer);
+            array_push($array,$ar);
+        }
+
+        $indexed = array_map('array_values', $array);
+
+        echo json_encode($indexed);
+        if (!$array) {return null;}
+
+    }
+
 
 ?>
