@@ -167,8 +167,8 @@
             background: #fff;
             position: absolute;
             z-index: 1;
-            top: 60px;
-            right: 129px;
+            top: -40px;
+            right: 119px;
             border-radius: 3px;
             width: 120px;
             border: 1px solid rgba(0, 0, 0, 0.4);
@@ -265,14 +265,30 @@
         });
     </script>
     <div id='blockLabel' style="text-align: left;font-size: 18px; margin-left: 4rem">
-        <label style="right: -1000px;">Change style</label>
+        <label style="right: -1000px;">Show Feature</label>
     </div>
     <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem;display:none;">
         <div id='hideLabel'>
-            <label for='light' onclick="initmap()">light</label>
-            <label for='streets' onclick="street()">streets</label>
-            <label for='dark' onclick="dark()">dark</label>
-            <label for='satellite' onclick="satellite()">satellite</label>
+<!--            <label for='light' onclick="initmap()">light</label>-->
+<!--            <label for='streets' onclick="street()">streets</label>-->
+<!--            <label for='dark' onclick="dark()">dark</label>-->
+<!--            <label for='satellite' onclick="satellite()">satellite</label>-->
+            <nav id="filter-group" class="filter-group">
+                <input type="checkbox" id="seats" onclick="getSeats()">
+                <label for="seats" id="seats" >Seats</label>
+                <input type="checkbox" id="toilets" onclick="getToilets()">
+                <label for="toilets" id="toilets" >Toilets</label>
+                <input type="checkbox" id="drinking_fountains" onclick="getDrink()">
+                <label for="drinking_fountains" id="drinking_fountains" >Drinking Fountains</label>
+                <input type="checkbox" id="pedestrian" onclick="showPedestrian()">
+                <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>
+                <input type="checkbox" id="line" onclick="showGradientLayer()">
+                <label for="line" id="line" >Gradient</label>
+                <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">
+                <label for="3d-buildings" id="3d-buildings" >3D</label>
+                <input type="checkbox" id="route" onclick="showRoute()">
+                <label for="route" id="route" >Show Route</label>
+            </nav>
         </div>
     </div>
     <style>
@@ -283,7 +299,7 @@
             top: 100px;
             right: 10px;
             z-index: 1;
-            border: 1px solid rgba(0, 0, 0, 0.4);
+            /*border: 1px solid rgba(0, 0, 0, 0.4);*/
             width: 120px;
             color: #404040;
         }
@@ -325,22 +341,22 @@
         }
 
     </style>
-    <nav id="filter-group" class="filter-group">
-        <input type="checkbox" id="seats" onclick="getSeats()">
-        <label for="seats" id="seats" >Seats</label>
-        <input type="checkbox" id="toilets" onclick="getToilets()">
-        <label for="toilets" id="toilets" >Toilets</label>
-        <input type="checkbox" id="drinking_fountains" onclick="getDrink()">
-        <label for="drinking_fountains" id="drinking_fountains" >Drinking Fountains</label>
-        <input type="checkbox" id="pedestrian" onclick="showPedestrian()">
-        <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>
-        <input type="checkbox" id="line" onclick="showGradientLayer()">
-        <label for="line" id="line" >Gradient</label>
-        <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">
-        <label for="3d-buildings" id="3d-buildings" >3D</label>
-        <input type="checkbox" id="route" onclick="showRoute()">
-        <label for="route" id="route" >Show Route</label>
-    </nav>
+<!--    <nav id="filter-group" class="filter-group">-->
+<!--        <input type="checkbox" id="seats" onclick="getSeats()">-->
+<!--        <label for="seats" id="seats" >Seats</label>-->
+<!--        <input type="checkbox" id="toilets" onclick="getToilets()">-->
+<!--        <label for="toilets" id="toilets" >Toilets</label>-->
+<!--        <input type="checkbox" id="drinking_fountains" onclick="getDrink()">-->
+<!--        <label for="drinking_fountains" id="drinking_fountains" >Drinking Fountains</label>-->
+<!--        <input type="checkbox" id="pedestrian" onclick="showPedestrian()">-->
+<!--        <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>-->
+<!--        <input type="checkbox" id="line" onclick="showGradientLayer()">-->
+<!--        <label for="line" id="line" >Gradient</label>-->
+<!--        <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">-->
+<!--        <label for="3d-buildings" id="3d-buildings" >3D</label>-->
+<!--        <input type="checkbox" id="route" onclick="showRoute()">-->
+<!--        <label for="route" id="route" >Show Route</label>-->
+<!--    </nav>-->
 </div>
 
 <div  id='map' ></div>
@@ -349,14 +365,10 @@
     <h1>Pedestrian density</h1>
     <div class='session'>
         <div class='row colors'></div>
-<!--        <div class='row labels'>-->
-<!--            <div class='label'>0.5</div>-->
-<!--            <div class='label'>1</div>-->
-<!--            <div class='label'>2</div>-->
-<!--            <div class='label'>3</div>-->
-<!--            <div class='label'>4</div>-->
-<!--            <div class='label'>5+</div>-->
-<!--        </div>-->
+        <div class='row labels'>
+            <div class='label'>Low</div>
+            <div class='label'>High</div>
+        </div>
     </div>
     <div class='session' id='sliderbar'>
         <h2>Hour: <label2 id='active-hour'>12PM</label2></h2>
