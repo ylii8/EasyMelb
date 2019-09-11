@@ -48,7 +48,7 @@
     function get_toilet_locations()
     {
         $con= connect_db();
-        $toiletData = mysqli_query($con,"select name,lat,lon from toilets");
+        $toiletData = mysqli_query($con,"select name,lat,lon, female, male, wheelchair, baby_facil from toilets");
 
         $rows = array();
         while($r = mysqli_fetch_assoc($toiletData)) {

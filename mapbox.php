@@ -1161,25 +1161,21 @@
         var filterHour = ['==', ['number', ['get', 'Hour']], 12];
         var filterDay = ['==', ['string', ['get', 'Day']], 'Monday'];
 
-        // filters for classifying numbers into five categories based on magnitude
-        var n1 = ["<", ["get", "Number"], 10];
-        var n2 = ["all", [">=", ["get", "Number"], 10], ["<", ["get", "Number"], 80]];
-        var n3 = ["all", [">=", ["get", "Number"], 80], ["<", ["get", "Number"], 300]];
-        var n4 = ["all", [">=", ["get", "Number"], 300], ["<", ["get", "Number"], 600]];
-        var n5 = ["all", [">=", ["get", "Number"], 600], ["<", ["get", "Number"], 900]];
-        var n6 = ["all", [">=", ["get", "Number"], 900], ["<", ["get", "Number"], 2000]];
-        var n7 = ["all", [">=", ["get", "Number"], 2000], ["<", ["get", "Number"], 5000]];
-        var n8 = [">=", ["get", "Number"], 5000];
-
         // colors to use for the categories
         var colors = ['#99FF00', '#CCFF00', '#FFFF00', '#FFCC00', '#FF9900', '#FF6600', '#FF3300', '#FF0000'];
 
         map.on('load', function() {
 
+
+
             map.addLayer({
                 id: 'pedestrian',
                 type: 'circle',
-                source: 'pedestrian_data',
+                source: {
+                    type: 'geojson',
+                    data: pedestrianGeojson
+                },
+
                 layout: {
                     'visibility': 'none'
                 },
