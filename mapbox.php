@@ -5,8 +5,10 @@
     <?php include 'header.php'; ?>
     <meta charset='utf-8' />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- logo -->
     <link rel="icon" href="img/logo.PNG" mce_href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo.PNG" mce_href="favicon.ico" type="image/x-icon">
+    <!-- Mapbox -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css' rel='stylesheet' />
     <!-- Geocoder plugin -->
@@ -423,6 +425,11 @@
     initmap();
 
     function initmap() {
+        // // Set bounds to Mel city
+        // var bounds = [
+        //     [145.003202, -37.848479], // Southwest coordinates
+        //     [144.922150, -37.779280]// Northeast coordinates
+        // ];
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
@@ -432,8 +439,12 @@
             pitch: 45,
             // the compass direction that is "up"
             bearing: -17.6,
-            antialias: true
+            antialias: true,
+            // maxBounds: bounds // Sets bounds as max
         });
+
+        // map.addControl(new mapboxgl.NavigationControl());
+
         getUserLocation();
         drawDrink();
         drawSeat();
@@ -496,9 +507,11 @@
         {
             document.getElementById("console").style.display = "block";
             map.setLayoutProperty('pedestrian', 'visibility', 'visible');
+            // map.setLayoutProperty('pedestrian_label', 'visibility', 'visible');
         } else {
             document.getElementById("console").style.display = "none";
             map.setLayoutProperty("pedestrian", 'visibility', 'none');
+            // map.setLayoutProperty('pedestrian_label', 'visibility', 'visible');
         }
     }
 
@@ -743,7 +756,7 @@
                 }
             });
 
-            map.loadImage('http://localhost:8888/Your_Guider/img/toilet.png', function(error, image) {
+            map.loadImage('img/toilet.png', function(error, image) {
                 if (error) throw error;
                 map.addImage('toilet', image);
                 map.addLayer({
@@ -779,6 +792,21 @@
             });
             map.on('mouseleave', 'places', function () {
                 map.getCanvas().style.cursor = '';
+            });
+
+            // inspect a cluster on click
+            map.on('click', 'places', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('geojson').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
             });
 
             // When a click event occurs on a feature in the places layer, open a popup at the
@@ -877,7 +905,7 @@
                 }
             });
 
-            map.loadImage('http://localhost:8888/Your_Guider/img/drop.png', function(error, image) {
+            map.loadImage('img/drop.png', function(error, image) {
                 if (error) throw error;
                 map.addImage('drop', image);
                 map.addLayer({
@@ -927,6 +955,21 @@
                     .setLngLat(coordinates)
                     .setHTML(description)
                     .addTo(map);
+            });
+
+            // inspect a cluster on click
+            map.on('click', 'drink', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['drink'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('drinkGeojson').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
             });
 
             // Change the cursor to a pointer when the mouse is over the places layer.
@@ -1019,7 +1062,7 @@
                 }
             });
 
-            map.loadImage('http://localhost:8888/Your_Guider/img/bench.png', function(error, image) {
+            map.loadImage('img/bench.png', function(error, image) {
                 if (error) throw error;
                 map.addImage('bench', image);
                 map.addLayer({
@@ -1105,6 +1148,16 @@
     console.log(pedestrianGeojson);
 
     function drawPedestrian(){
+        // filters for classifying numbers into five categories based on magnitude
+        var n1 = ["<", ["get", "Number"], 10];
+        var n2 = ["all", [">=", ["get", "Number"], 10], ["<", ["get", "Number"], 80]];
+        var n3 = ["all", [">=", ["get", "Number"], 80], ["<", ["get", "Number"], 300]];
+        var n4 = ["all", [">=", ["get", "Number"], 300], ["<", ["get", "Number"], 600]];
+        var n5 = ["all", [">=", ["get", "Number"], 600], ["<", ["get", "Number"], 900]];
+        var n6 = ["all", [">=", ["get", "Number"], 900], ["<", ["get", "Number"], 2000]];
+        var n7 = ["all", [">=", ["get", "Number"], 2000], ["<", ["get", "Number"], 5000]];
+        var n8 = [">=", ["get", "Number"], 5000];
+
         var filterHour = ['==', ['number', ['get', 'Hour']], 12];
         var filterDay = ['==', ['string', ['get', 'Day']], 'Monday'];
 
@@ -1126,13 +1179,11 @@
             map.addLayer({
                 id: 'pedestrian',
                 type: 'circle',
-                source: {
-                    type: 'geojson',
-                    data: pedestrianGeojson
-                },
-                "layout": {
+                source: 'pedestrian_data',
+                layout: {
                     'visibility': 'none'
                 },
+                // filter: ["!=", "cluster", true],
                 paint: {
                     "circle-color": ["case",
                         n1, colors[0],
@@ -1146,11 +1197,70 @@
                     "circle-radius": 10
                 },
             });
+            // map.addLayer({
+            //     id: "pedestrian_label",
+            //     type: "symbol",
+            //     source: "pedestrian_data",
+            //     filter: ["!=", "cluster", true],
+            //     layout: {
+            //         "text-field": ["number-format", ["get", "Number"], {"min-fraction-digits": 1, "max-fraction-digits": 1}],
+            //         "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            //         "text-size": 10,
+            //         'visibility': 'none'
+            //     },
+            //     "paint": {
+            //         "text-color": ["case", ["<", ["get", "mag"], 3], "black", "white"]
+            //     }
+            // });
+
+            // objects for caching and keeping track of HTML marker objects (for performance)
+            // var markers = {};
+            // var markersOnScreen = {};
+            //
+            // function updateMarkers() {
+            //     var newMarkers = {};
+            //     var features = map.querySourceFeatures('pedestrian_data');
+            //
+            //     // for every cluster on the screen, create an HTML marker for it (if we didn't yet),
+            //     // and add it to the map if it's not there already
+            //     for (var i = 0; i < features.length; i++) {
+            //         var coords = features[i].geometry.coordinates;
+            //         var props = features[i].properties;
+            //         if (!props.cluster) continue;
+            //         var id = props.cluster_id;
+            //
+            //         var marker = markers[id];
+            //         if (!marker) {
+            //             var el = createDonutChart(props);
+            //             marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);
+            //         }
+            //         newMarkers[id] = marker;
+            //
+            //         if (!markersOnScreen[id])
+            //             marker.addTo(map);
+            //     }
+            //     // for every marker we've added previously, remove those that are no longer visible
+            //     for (id in markersOnScreen) {
+            //         if (!newMarkers[id])
+            //             markersOnScreen[id].remove();
+            //     }
+            //     markersOnScreen = newMarkers;
+            // }
+            //
+            // // after the GeoJSON data is loaded, update markers on the screen and do so on every map move/moveend
+            // map.on('data', function (e) {
+            //     if (e.sourceId !== 'pedestrian_data' || !e.isSourceLoaded) return;
+            //     map.on('move', updateMarkers);
+            //     map.on('moveend', updateMarkers);
+            //     updateMarkers();
+            // });
+
             document.getElementById('slider').addEventListener('input', function(e) {
                 var hour = parseInt(e.target.value);
                 // update the map
                 filterHour = ['==', ['number', ['get', 'Hour']], hour];
                 map.setFilter('pedestrian', ['all', filterHour, filterDay]);
+                // map.setFilter('pedestrian_label', ['all', filterHour, filterDay]);
                 // converting 0-23 hour to AMPM format
                 var ampm = hour >= 12 ? 'PM' : 'AM';
                 var hour12 = hour % 12 ? hour % 12 : 12;
@@ -1162,8 +1272,51 @@
                 filterDay = ['==', ['string', ['get', 'Day']], day];
                 /* the rest of the if statement */
                 map.setFilter('pedestrian', ['all', filterHour, filterDay]);
+                // map.setFilter('pedestrian_label', ['all', filterHour, filterDay]);
             });
         });
+        // code for creating an SVG donut chart from feature properties
+        // function createDonutChart(props) {
+        //     var offsets = [];
+        //     var counts = [props.n1, props.n2, props.n3, props.n4, props.n5, props.n6, props.n7, props.n8];
+        //     var total = 0;
+        //     for (var i = 0; i < counts.length; i++) {
+        //         offsets.push(total);
+        //         total += counts[i];
+        //     }
+        //     var fontSize = total >= 1000 ? 22 : total >= 100 ? 20 : total >= 10 ? 18 : 16;
+        //     var r = total >= 1000 ? 50 : total >= 100 ? 32 : total >= 10 ? 24 : 18;
+        //     var r0 = Math.round(r * 0.6);
+        //     var w = r * 2;
+        //
+        //     var html = '<svg width="' + w + '" height="' + w + '" viewbox="0 0 ' + w + ' ' + w +
+        //         '" text-anchor="middle" style="font: ' + fontSize + 'px sans-serif">';
+        //
+        //     for (i = 0; i < counts.length; i++) {
+        //         html += donutSegment(offsets[i] / total, (offsets[i] + counts[i]) / total, r, r0, colors[i]);
+        //     }
+        //     html += '<circle cx="' + r + '" cy="' + r + '" r="' + r0 +
+        //         '" fill="white" /><text dominant-baseline="central" transform="translate(' +
+        //         r + ', ' + r + ')">' + total.toLocaleString() + '</text></svg>';
+        //
+        //     var el = document.createElement('div');
+        //     el.innerHTML = html;
+        //     return el.firstChild;
+        // }
+        // function donutSegment(start, end, r, r0, color) {
+        //     if (end - start === 1) end -= 0.00001;
+        //     var a0 = 2 * Math.PI * (start - 0.25);
+        //     var a1 = 2 * Math.PI * (end - 0.25);
+        //     var x0 = Math.cos(a0), y0 = Math.sin(a0);
+        //     var x1 = Math.cos(a1), y1 = Math.sin(a1);
+        //     var largeArc = end - start > 0.5 ? 1 : 0;
+        //
+        //     return ['<path d="M', r + r0 * x0, r + r0 * y0, 'L', r + r * x0, r + r * y0,
+        //         'A', r, r, 0, largeArc, 1, r + r * x1, r + r * y1,
+        //         'L', r + r0 * x1, r + r0 * y1, 'A',
+        //         r0, r0, 0, largeArc, 0, r + r0 * x0, r + r0 * y0,
+        //         '" fill="' + color + '" />'].join(' ');
+        // }
     }
 
     var start;
