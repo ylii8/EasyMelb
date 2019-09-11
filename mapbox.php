@@ -41,7 +41,7 @@
 
         #instructions {
             position: absolute;
-            margin-top: 30rem;
+            margin-top: 28rem;
             margin-left: 3rem;
             width: 25%;
             height: 30%;
@@ -744,23 +744,29 @@
                 }
             });
 
-            map.addLayer({
-                id: "unclustered-point",
-                type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": geojson,
-                    "cluster":true,
-                    "clusterMaxZoom":15,
-                    "clusterRadius":50
-                },
-                filter: ["!", ["has", "point_count"]],
-                "layout": {
-                    "icon-image": "{icon}-15",
-                    "icon-allow-overlap": true,
-                    'visibility': 'none'
-                }
+            map.loadImage('http://localhost:8888/Your_Guider/img/toilet.png', function(error, image) {
+                if (error) throw error;
+                map.addImage('toilet', image);
+                map.addLayer({
+                    id: "unclustered-point",
+                    type: "symbol",
+                    "source": {
+                        "type": "geojson",
+                        "data": geojson,
+                        "cluster":true,
+                        "clusterMaxZoom":15,
+                        "clusterRadius":50
+                    },
+                    filter: ["!", ["has", "point_count"]],
+                    "layout": {
+                        "icon-image": "toilet",
+                        "icon-allow-overlap": true,
+                        'visibility': 'none'
+                    }
+                });
             });
+
+
 
             map.on('mouseenter', 'places', function () {
                 map.getCanvas().style.cursor = 'pointer';
@@ -869,23 +875,30 @@
                 }
             });
 
-            map.addLayer({
-                id: "drink-unclustered-point",
-                type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": drinkGeojson,
-                    "cluster": true,
-                    "clusterMaxZoom": 15, // Max zoom to cluster points on
-                    "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
-                },
-                filter: ["!", ["has", "point_count"]],
-                layout: {
-                    "icon-image": "{icon}-15",
-                    "icon-allow-overlap": true,
-                    "visibility":"none"
-                }
+            map.loadImage('http://localhost:8888/Your_Guider/img/drop.png', function(error, image) {
+                if (error) throw error;
+                map.addImage('drop', image);
+                map.addLayer({
+                    id: "drink-unclustered-point",
+                    type: "symbol",
+                    "source": {
+                        "type": "geojson",
+                        "data": drinkGeojson,
+                        "cluster": true,
+                        "clusterMaxZoom": 15, // Max zoom to cluster points on
+                        "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
+                    },
+                    filter: ["!", ["has", "point_count"]],
+                    layout: {
+                        "icon-image": "drop",
+                        "icon-allow-overlap": true,
+                        "visibility":"none"
+                    }
+                });
             });
+
+
+
 
             // When a click event occurs on a feature in the places layer, open a popup at the
             // location of the feature, with description HTML from its properties.
@@ -1000,23 +1013,29 @@
                 }
             });
 
-            map.addLayer({
-                id: "seat-unclustered-point",
-                type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": seatGeojson,
-                    cluster: true,
-                    clusterMaxZoom: 17,
-                    clusterRadius: 50
-                },
-                filter: ["!", ["has", "point_count"]],
-                layout: {
-                    "icon-image": "{icon}-15",
-                    "icon-allow-overlap": true,
-                    "visibility":"none"
-                }
+            map.loadImage('http://localhost:8888/Your_Guider/img/bench.png', function(error, image) {
+                if (error) throw error;
+                map.addImage('bench', image);
+                map.addLayer({
+                    id: "seat-unclustered-point",
+                    type: "symbol",
+                    "source": {
+                        "type": "geojson",
+                        "data": seatGeojson,
+                        cluster: true,
+                        clusterMaxZoom: 17,
+                        clusterRadius: 50
+                    },
+                    filter: ["!", ["has", "point_count"]],
+                    layout: {
+                        "icon-image": "bench",
+                        "icon-allow-overlap": true,
+                        "visibility":"none"
+                    }
+                });
             });
+
+
 
             // When a click event occurs on a feature in the places layer, open a popup at the
             // location of the feature, with description HTML from its properties.
