@@ -424,11 +424,11 @@
     map.addControl(nav, 'bottom-right');
 
     function initmap() {
-        // // Set bounds to Mel city
-        // var bounds = [
-        //     [145.003202, -37.848479], // Southwest coordinates
-        //     [144.922150, -37.779280]// Northeast coordinates
-        // ];
+        // Set bounds to Mel city
+        var bounds = [
+            [144.884368, -37.875602], // Southwest coordinates
+            [145.043748, -37.757360]// Northeast coordinates
+        ];
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
@@ -439,12 +439,8 @@
             // the compass direction that is "up"
             bearing: -17.6,
             antialias: true,
-            // maxBounds: bounds // Sets bounds as max
+            maxBounds: bounds // Sets bounds as max
         });
-
-
-
-        // map.addControl(new mapboxgl.NavigationControl());
 
         getUserLocation();
         drawDrink();
@@ -649,18 +645,23 @@
                 id: 'line',
                 paint: {
                     'line-color': 'red',
-                    'line-width': 3,
+                    'line-width': 2,
                     // 'line-gradient' must be specified using an expression
                     // with the special 'line-progress' property
                     'line-gradient': [
                         'interpolate', ['linear'],
                         ['line-progress'],
-                        0, "blue",
-                        0.1, "royalblue",
-                        0.3, "cyan",
-                        0.5, "lime",
-                        0.7, "yellow",
-                        1, "red"
+                        0, "#FFE66F",
+                        0.1, "#FFE66F",
+                        0.2, "#FFE66F",
+                        0.3, "#FFD306",
+                        0.4, "#EAC100",
+                        0.5, "#D9B300",
+                        0.6, "#C6A300",
+                        0.7, "#AE8F00",
+                        0.8, "#977C00",
+                        0.9, "#796400",
+                        1, "#5B4B00",
                     ]
                 },
                 layout: {
