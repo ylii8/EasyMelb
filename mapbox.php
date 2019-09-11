@@ -127,7 +127,7 @@
         }
 
         .colors {
-            background: linear-gradient(to right, #2dc4b2, #3bb3c3, #669ec4, #8b88b6, #a2719b, #aa5e79);
+            background: linear-gradient(to right, #99FF00, #CCFF00, #FFFF00, #FFCC00, #FF9900, #FF6600, #FF3300, #FF0000);
             margin-bottom: 5px;
         }
 
@@ -167,8 +167,8 @@
             background: #fff;
             position: absolute;
             z-index: 1;
-            top: -40px;
-            right: 119px;
+            top: -20px;
+            right: -1px;
             border-radius: 3px;
             width: 120px;
             border: 1px solid rgba(0, 0, 0, 0.4);
@@ -210,7 +210,7 @@
             background: #fff;
             position: absolute;
             z-index: 1;
-            top: 60px;
+            top: 40px;
             right: 10px;
             border-radius: 3px;
             width: 120px;
@@ -367,6 +367,9 @@
         <div class='row colors'></div>
         <div class='row labels'>
             <div class='label'>Low</div>
+            <div class='label'>        </div>
+            <div class='label'>Middle</div>
+            <div class='label'>        </div>
             <div class='label'>High</div>
         </div>
     </div>
@@ -683,17 +686,19 @@
     function drawToilet(){
         map.on('load', function () {
 
+            map.addSource("geojson", {
+                type: "geojson",
+                data: geojson,
+                cluster: true,
+                clusterMaxZoom: 15, // Max zoom to cluster points on
+                clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+            });
+
             // Add a layer showing the places.
             map.addLayer({
                 "id": "places",
                 "type": "circle",
-                "source": {
-                    "type": "geojson",
-                    "data": geojson,
-                    "cluster":true,
-                    "clusterMaxZoom":15,
-                    "clusterRadius":50
-                },
+                "source": 'geojson',
                 "filter": ["has", "point_count"],
                 "layout": {
                     'visibility': 'none'
@@ -728,13 +733,7 @@
             map.addLayer({
                 id: "cluster-count",
                 type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": geojson,
-                    "cluster":true,
-                    "clusterMaxZoom":15,
-                    "clusterRadius":50
-                },
+                "source": 'geojson',
                 filter: ["has", "point_count"],
                 layout: {
                     "text-field": "{point_count_abbreviated}",
@@ -750,13 +749,7 @@
                 map.addLayer({
                     id: "unclustered-point",
                     type: "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": geojson,
-                        "cluster":true,
-                        "clusterMaxZoom":15,
-                        "clusterRadius":50
-                    },
+                    "source": 'geojson',
                     filter: ["!", ["has", "point_count"]],
                     "layout": {
                         "icon-image": "toilet",
@@ -766,7 +759,20 @@
                 });
             });
 
+            // inspect a cluster on click
+            map.on('click', 'places', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('geojson').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
 
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
 
             map.on('mouseenter', 'places', function () {
                 map.getCanvas().style.cursor = 'pointer';
@@ -820,17 +826,19 @@
 
     function drawDrink(){
         map.on('load', function () {
+            map.addSource("drinkGeojson", {
+                type: "geojson",
+                data: drinkGeojson,
+                cluster: true,
+                clusterMaxZoom: 15, // Max zoom to cluster points on
+                clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+            });
+
             // Add a layer showing the places.
             map.addLayer({
                 "id": "drink",
                 "type": "circle",
-                "source": {
-                    "type": "geojson",
-                    "data": drinkGeojson,
-                    "cluster": true,
-                    "clusterMaxZoom": 15, // Max zoom to cluster points on
-                    "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
-                },
+                "source": 'drinkGeojson',
                 "filter": ["has", "point_count"],
                 "layout": {
                     'visibility': 'none'
@@ -859,13 +867,7 @@
             map.addLayer({
                 id: "drink-cluster-count",
                 type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": drinkGeojson,
-                    "cluster": true,
-                    "clusterMaxZoom": 15, // Max zoom to cluster points on
-                    "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
-                },
+                "source": 'drinkGeojson',
                 filter: ["has", "point_count"],
                 layout: {
                     "text-field": "{point_count_abbreviated}",
@@ -881,13 +883,7 @@
                 map.addLayer({
                     id: "drink-unclustered-point",
                     type: "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": drinkGeojson,
-                        "cluster": true,
-                        "clusterMaxZoom": 15, // Max zoom to cluster points on
-                        "clusterRadius": 50 // Radius of each cluster when clustering points (defaults to 50)
-                    },
+                    "source": 'drinkGeojson',
                     filter: ["!", ["has", "point_count"]],
                     layout: {
                         "icon-image": "drop",
@@ -897,7 +893,20 @@
                 });
             });
 
+            // inspect a cluster on click
+            map.on('click', 'drink', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['drink'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('drinkGeojson').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
 
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
 
 
             // When a click event occurs on a feature in the places layer, open a popup at the
@@ -955,17 +964,20 @@
 
     function drawSeat(){
         map.on('load', function () {
+            map.addSource("seatGeojson", {
+                type: "geojson",
+                // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+                data: seatGeojson,
+                cluster: true,
+                clusterMaxZoom: 17, // Max zoom to cluster points on
+                clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+            });
+
             // Add a layer showing the places.
             map.addLayer({
                 "id": "seat",
                 "type": "circle",
-                "source": {
-                    "type": "geojson",
-                    "data": seatGeojson,
-                    cluster: true,
-                    clusterMaxZoom: 17,
-                    clusterRadius: 50
-                },
+                "source": 'seatGeojson',
                 "filter": ["has", "point_count"],
                 "layout": {
                     'visibility': 'none'
@@ -997,13 +1009,7 @@
             map.addLayer({
                 id: "seat-cluster-count",
                 type: "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": seatGeojson,
-                    cluster: true,
-                    clusterMaxZoom: 17,
-                    clusterRadius: 50
-                },
+                "source": 'seatGeojson',
                 filter: ["has", "point_count"],
                 layout: {
                     "text-field": "{point_count_abbreviated}",
@@ -1019,13 +1025,7 @@
                 map.addLayer({
                     id: "seat-unclustered-point",
                     type: "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": seatGeojson,
-                        cluster: true,
-                        clusterMaxZoom: 17,
-                        clusterRadius: 50
-                    },
+                    "source": 'seatGeojson',
                     filter: ["!", ["has", "point_count"]],
                     layout: {
                         "icon-image": "bench",
@@ -1035,7 +1035,20 @@
                 });
             });
 
+            // inspect a cluster on click
+            map.on('click', 'seat', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['seat'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('seatGeojson').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
 
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
 
             // When a click event occurs on a feature in the places layer, open a popup at the
             // location of the feature, with description HTML from its properties.
@@ -1057,12 +1070,12 @@
                     .addTo(map);
             });
 
-// Change the cursor to a pointer when the mouse is over the places layer.
+            // Change the cursor to a pointer when the mouse is over the places layer.
             map.on('mouseenter', 'seat', function () {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
-// Change it back to a pointer when it leaves.
+            // Change it back to a pointer when it leaves.
             map.on('mouseleave', 'seat', function () {
                 map.getCanvas().style.cursor = '';
             });
@@ -1094,7 +1107,22 @@
     function drawPedestrian(){
         var filterHour = ['==', ['number', ['get', 'Hour']], 12];
         var filterDay = ['==', ['string', ['get', 'Day']], 'Monday'];
+
+        // filters for classifying numbers into five categories based on magnitude
+        var n1 = ["<", ["get", "Number"], 10];
+        var n2 = ["all", [">=", ["get", "Number"], 10], ["<", ["get", "Number"], 80]];
+        var n3 = ["all", [">=", ["get", "Number"], 80], ["<", ["get", "Number"], 300]];
+        var n4 = ["all", [">=", ["get", "Number"], 300], ["<", ["get", "Number"], 600]];
+        var n5 = ["all", [">=", ["get", "Number"], 600], ["<", ["get", "Number"], 900]];
+        var n6 = ["all", [">=", ["get", "Number"], 900], ["<", ["get", "Number"], 2000]];
+        var n7 = ["all", [">=", ["get", "Number"], 2000], ["<", ["get", "Number"], 5000]];
+        var n8 = [">=", ["get", "Number"], 5000];
+
+        // colors to use for the categories
+        var colors = ['#99FF00', '#CCFF00', '#FFFF00', '#FFCC00', '#FF9900', '#FF6600', '#FF3300', '#FF0000'];
+
         map.on('load', function() {
+
             map.addLayer({
                 id: 'pedestrian',
                 type: 'circle',
@@ -1106,26 +1134,16 @@
                     'visibility': 'none'
                 },
                 paint: {
-                    'circle-radius': [
-                        'interpolate',
-                        ['linear'],
-                        // ['get', 'Number'],
-                        ['number', ['get', 'Number']],
-                        0.2, 3, 6, 10
-                    ],
-                    'circle-color': [
-                        'interpolate',
-                        ['linear'],
-                        // ['get', 'Number'],
-                        ['number', ['get', 'Number']],
-                        1, '#2DC4B2',
-                        80, '#3BB3C3',
-                        300, '#669EC4',
-                        600, '#8B88B6',
-                        900, '#A2719B',
-                        5000, '#AA5E79',
-                    ],
-                    'circle-opacity': 0.8
+                    "circle-color": ["case",
+                        n1, colors[0],
+                        n2, colors[1],
+                        n3, colors[2],
+                        n4, colors[3],
+                        n5, colors[4],
+                        n6, colors[5],
+                        n7, colors[6], colors[7]],
+                    "circle-opacity": 0.6,
+                    "circle-radius": 10
                 },
             });
             document.getElementById('slider').addEventListener('input', function(e) {
