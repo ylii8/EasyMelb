@@ -645,22 +645,14 @@
                 id: 'line',
                 paint: {
                     'line-color': 'red',
-                    'line-width': 2,
+                    'line-width': 2.8,
                     // 'line-gradient' must be specified using an expression
                     // with the special 'line-progress' property
                     'line-gradient': [
                         'interpolate', ['linear'],
                         ['line-progress'],
-                        0, "#FFE66F",
-                        0.1, "#FFE66F",
-                        0.2, "#FFE66F",
-                        0.3, "#FFD306",
-                        0.4, "#EAC100",
-                        0.5, "#D9B300",
-                        0.6, "#C6A300",
-                        0.7, "#AE8F00",
-                        0.8, "#977C00",
-                        0.9, "#796400",
+                        0, "#FFFCEC",
+                        0.5, "#FFDC35",
                         1, "#5B4B00",
                     ]
                 },
