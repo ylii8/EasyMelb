@@ -41,11 +41,11 @@
 
         #instructions {
             position: absolute;
-            margin: 60px;
+            margin-top: 30rem;
+            margin-left: 3rem;
             width: 25%;
             height: 30%;
-            top: 330px;
-            left: 20px;
+            top: 0;
             bottom: 20%;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
@@ -67,7 +67,7 @@
             }
 
         }
-        @media (max-width: 375px) {
+        @media (max-width: 376px) {
             #instructions{
                 font-family: sans-serif;
                 font-size: 0.2em;
@@ -438,7 +438,7 @@
         drawToilet();
         getGradient();
         load3D();
-        drawPedestrian()
+        drawPedestrian();
     }
 
     function unSelectAll() {
@@ -497,58 +497,6 @@
             document.getElementById("console").style.display = "none";
             map.setLayoutProperty("pedestrian", 'visibility', 'none');
         }
-    }
-
-    function satellite() {
-        map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/satellite-v9', //style URL of map style
-            center: [144.96565, -37.81384], //default location when load the map
-            zoom: 14, //default zoom level
-            // Zero is perpendicular to the surface
-            pitch: 45,
-            // the compass direction that is "up"
-            bearing: -17.6,
-            antialias: true
-        });
-        getUserLocation();
-        unSelectAll();
-    }
-
-    function dark() {
-        map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/dark-v10', //style URL of map style
-            center: [144.96565, -37.81384], //default location when load the map
-            zoom: 14, //default zoom level
-            // Zero is perpendicular to the surface
-            pitch: 45,
-            // the compass direction that is "up"
-            bearing: -17.6,
-            antialias: true
-        });
-        load3D();
-        getUserLocation();
-        unSelectAll();
-    }
-
-    function street() {
-        map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11', //style URL of map style
-            center: [144.96565, -37.81384], //default location when load the map
-            zoom: 14, //default zoom level
-            // Zero is perpendicular to the surface
-            pitch: 45,
-            // the compass direction that is "up"
-            bearing: -17.6,
-            antialias: true
-        });
-        getUserLocation();
-        unSelectAll();
-        drawToilet();
-        getGradient();
-        load3D();
     }
 
     function getUserLocation() {
