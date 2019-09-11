@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 
 <head>
     <?php include 'header.php'; ?>
@@ -7,11 +7,7 @@
 
 
         @media (max-width: 1200px) {
-            .container{
-                width="800";
-                height="430";
-            }
-            .center { margin: 0 auto; width:1000px; height:500px;}
+            .center { margin: 0 auto; width:930px; height:600px;}
         }
         @media (max-width: 995px) {
             .center { margin: 0 auto; width:600px; height:360px;}
@@ -30,7 +26,7 @@
     </style>
 </head>
 
-<body>
+<body >
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
