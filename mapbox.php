@@ -70,7 +70,7 @@
             }
 
         }
-        @media (max-width: 376px) {
+        @media (max-width: 415px) {
             #instructions{
                 font-family: sans-serif;
                 font-size: 0.2em;
