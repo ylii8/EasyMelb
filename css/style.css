@@ -179,7 +179,7 @@ header.masthead {
 }
 
 header.masthead .header-content {
-  max-width: 400px;
+  max-width: 450px;
   margin-bottom: 50px;
   text-align: center;
 }
@@ -466,7 +466,7 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
 
 .btn-outline {
   color: white;
-  border: 1px solid;
+  border: 2px solid;
   border-color: white;
 }
 
@@ -481,9 +481,11 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
   letter-spacing: 2px;
   text-transform: uppercase;
+    display:inline-block;
+    background-color:#00183c;
 }
 
 .btn-xl {
   font-size: 17px;
-  padding: 15px 45px;
+  padding: 10px 25px;
 }
