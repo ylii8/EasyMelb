@@ -116,11 +116,10 @@
         @media (max-width: 415px) {
             #console{
                 font-family: sans-serif;
-                font-size: 0.2em;
                 margin-left: 10px;
                 width: 40%;
                 height: 155px;
-                margin-top: 5em;
+                margin-top: 20%;
             }
 
         }
