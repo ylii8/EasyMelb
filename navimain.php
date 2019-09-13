@@ -143,7 +143,7 @@
 
         .label {
             font-family: sans-serif;
-            font-size: 2px;
+            font-size: 12px;
             width: 30%;
             display: inline-block;
             text-align: center;
