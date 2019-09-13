@@ -97,34 +97,40 @@
         }
 
         h2 {
-            font-size: 14px;
-            line-height: 20px;
-            margin-bottom: 10px;
-            display: block;
-            margin-block-start: 0.83em;
-            margin-block-end: 0.83em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
+            font-size: 1px;
+            font-size: 15px;
             font-weight: bold;
         }
 
         #console {
             position: absolute;
-            height: 250px;
+            height: 23%;
             top: 0;
             bottom: 20%;
             width: 250px;
-            padding: 10px 20px;
+            padding: 5px 20px;
             margin: 80px;
             background-color: rgba(255, 255, 255, 0.9);
         }
 
+        @media (max-width: 415px) {
+            #console{
+                font-family: sans-serif;
+                font-size: 0.2em;
+                margin-left: 10px;
+                width: 40%;
+                height: 155px;
+                margin-top: 5em;
+            }
+
+        }
+
         .session {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .row {
-            height: 12px;
+            height: 14px;
             width: 100%;
             margin-left: 0px;
             margin-right: 0px;
@@ -137,16 +143,13 @@
         }
 
         .label {
-            width: 15%;
+            font-family: sans-serif;
+            font-size: 2px;
+            width: 30%;
             display: inline-block;
             text-align: center;
             cursor: default;
-        }
-
-        .label2 {
-            width: 15%;
-            text-align: center;
-            cursor: default;
+            font-weight: bold;
         }
 
     </style>
@@ -282,8 +285,8 @@
                 <label for="line" id="line" >Gradient</label>
                 <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">
                 <label for="3d-buildings" id="3d-buildings" >3D</label>
-                <input type="checkbox" id="route" onclick="showRoute()">
-                <label for="route" id="route" >Show Route</label>
+<!--                <input type="checkbox" id="route" onclick="showRoute()">-->
+<!--                <label for="route" id="route" >Show Route</label>-->
                 <input type="checkbox" id="customizeRoute" onclick="showCustomizeRoute()">
                 <label for="customizeRoute" id="customizeRoute" >Draw Customize Route</label>
             </nav>
@@ -368,15 +371,11 @@
     </div>
     <div id="directions"></div>
 </div>
-
 <div id='console' style="display: none;">
-    <h1>Pedestrian density</h1>
     <div class='session'>
         <div class='row colors'></div>
         <div class='row labels'>
             <div class='label'>Low</div>
-            <div class='label'>        </div>
-            <div class='label'>Middle</div>
             <div class='label'>        </div>
             <div class='label'>High</div>
         </div>
@@ -386,7 +385,7 @@
         <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
     </div>
     <div class='session'>
-        <h2>Day of the week</h2>
+        <h2>Day</h2>
         <div class='row' id='filters'>
             <script type="text/javascript">
                 var chartsdayid = new Array("Monday","Tuesday","Wednesday",
@@ -429,8 +428,6 @@
     var map;
 
     initmap();
-    var nav = new mapboxgl.NavigationControl();
-    map.addControl(nav, 'bottom-right');
 
     function initmap() {
         // Set bounds to Mel city
@@ -438,6 +435,7 @@
             [144.884368, -37.875602], // Southwest coordinates
             [145.043748, -37.757360]// Northeast coordinates
         ];
+
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
@@ -451,6 +449,18 @@
             maxBounds: bounds // Sets bounds as max
         });
 
+        var nav = new mapboxgl.NavigationControl();
+        map.addControl(nav, 'bottom-right');
+
+        map.addControl(new MapboxDirections({
+            accessToken: mapboxgl.accessToken,
+            profile: 'mapbox/walking',
+            controls: {
+                instructions: false,
+                profileSwitcher: false}
+        }), 'bottom-left');
+
+        drawPedestrian();
         getUserLocation();
         drawDrink();
         drawSeat();
@@ -458,7 +468,7 @@
         drawToilet();
         getGradient();
         load3D();
-        drawPedestrian();
+        // map.moveLayer('cluster-count', 'line');
     }
 
     function unSelectAll() {
@@ -655,7 +665,19 @@
     function getGradient() {
 
         var geojson = 'Footpath steepness.geojson';
+
         map.on('load', function() {
+            // Insert the layer beneath any symbol layer.
+            var layers = map.getStyle().layers;
+
+            var labelLayerId;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                    labelLayerId = layers[i].id;
+                    break;
+                }
+            }
+
             // 'line-gradient' can only be used with GeoJSON sources
             // and the source must have the 'lineMetrics' option set to true
             map.addSource('line', {
@@ -685,9 +707,10 @@
                 layout: {
                     'visibility': 'none',
                     'line-cap': 'round',
-                    'line-join': 'round'
+                    'line-join': 'round',
                 }
-            });
+
+            }, labelLayerId);
         });
 
     }
@@ -743,11 +766,11 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#CCFF99",
                         10,
-                        "#f1f075",
+                        "#3CB371",
                         30,
-                        "#f28cb1"
+                        "#2E8B57"
                     ],
                     "circle-radius": [
                         "step",
@@ -774,7 +797,7 @@
                 }
             });
 
-            map.loadImage('img/toilet.png', function(error, image) {
+            map.loadImage('img/toilet_paper.png', function(error, image) {
                 if (error) throw error;
                 map.addImage('toilet', image);
                 map.addLayer({
@@ -893,11 +916,11 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#00c0ff",
                         15,
-                        "#f1f075",
+                        "#0060ff",
                         30,
-                        "#f28cb1"
+                        "#0000ff"
                     ],
                     "circle-radius": [
                         "step",
@@ -1047,13 +1070,13 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#ffc020",
                         15,
-                        "#f1f075",
+                        "#ff8020",
                         30,
-                        "#f28cb1",
+                        "#ff4020",
                         300,
-                        "#f64c4c"
+                        "#ff0020"
                     ],
                     "circle-radius": [
                         "step",
@@ -1400,8 +1423,6 @@
             },
         ]
     });
-
-
 
     function updateRoute() {
         // Set the profile
