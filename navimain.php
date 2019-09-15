@@ -11,9 +11,12 @@
     <!-- Mapbox -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- Direction API-->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css' type='text/css' />
     <!-- Geocoder plugin -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css' type='text/css' />
     <!-- Import jQuery -->
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
     <!-- Import Mapbox GL Draw -->
@@ -21,6 +24,7 @@
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
     <!-- jquery -->
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
     <style>
 
         body { margin:0; padding:0; }
@@ -67,7 +71,7 @@
         @media (max-width: 769px) {
             #instructions{
                 font-family: sans-serif;
-                font-size: 0.4em;
+                font-size: 14px;
                 height: 30%;
             }
 
@@ -75,11 +79,11 @@
         @media (max-width: 415px) {
             #instructions{
                 font-family: sans-serif;
-                font-size: 0.2em;
+                font-size: 12px;
                 padding: 7px;
                 margin-left: 40px;
                 width: 80%;
-                height: 18%;
+                height: 17%;
                 margin-top: 39rem;
             }
 
@@ -157,8 +161,6 @@
 <?php include_once 'locations_model.php'; ?>
 
 <body>
-<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js'></script>
-<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css' type='text/css' />
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
@@ -286,8 +288,8 @@
                 <label for="3d-buildings" id="3d-buildings" >3D</label>
 <!--                <input type="checkbox" id="route" onclick="showRoute()">-->
 <!--                <label for="route" id="route" >Show Route</label>-->
-                <input type="checkbox" id="customizeRoute" onclick="showCustomizeRoute()">
-                <label for="customizeRoute" id="customizeRoute" >Draw Customize Route</label>
+<!--                <input type="checkbox" id="customizeRoute" onclick="showCustomizeRoute()">-->
+<!--                <label for="customizeRoute" id="customizeRoute" >Draw Customized Route</label>-->
             </nav>
         </div>
     </div>
@@ -419,12 +421,14 @@
         </div>
     </div>
 </div>
+<!--<div id='geocoder' class='geocoder'></div>-->
 
 </body>
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
     var map;
+    var directions;
 
     initmap();
 
@@ -448,26 +452,46 @@
             maxBounds: bounds // Sets bounds as max
         });
 
+        // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
         var nav = new mapboxgl.NavigationControl();
         map.addControl(nav, 'bottom-right');
-
-        map.addControl(new MapboxDirections({
-            accessToken: mapboxgl.accessToken,
-            profile: 'mapbox/walking',
-            controls: {
-                instructions: false,
-                profileSwitcher: false}
-        }), 'bottom-left');
-
-        drawPedestrian();
         getUserLocation();
+        drawPedestrian();
         drawDrink();
         drawSeat();
         unSelectAll();
         drawToilet();
         getGradient();
         load3D();
+        addDirectionAPI();
         // map.moveLayer('cluster-count', 'line');
+
+    }
+
+    function addDirectionAPI(){
+        directions = new MapboxDirections({
+            accessToken: mapboxgl.accessToken,
+            profile: 'mapbox/walking',
+            proximity:[144.96565, -37.81384],
+            unit: 'metric',
+            controls: {
+                profileSwitcher: false}
+        });
+
+        // var geocoder = new MapboxGeocoder({
+        //     accessToken: mapboxgl.accessToken,
+        //     countries: 'au',
+        //
+        //     placeholder:'Destination',
+        //     marker: {
+        //         color: 'orange'
+        //     },
+        //     mapboxgl: mapboxgl
+        // });
+
+        map.addControl(directions, 'bottom-left');
+        // directions.setOrigin(start); use with 'load' function
     }
 
     function unSelectAll() {
@@ -536,12 +560,15 @@
             map.setLayoutProperty('customizeRoute', 'visibility', 'visible');
             // Add the draw tool to the map
             map.addControl(draw,'bottom-right');
-
+            directions.onRemove();
 
         } else {
             document.getElementById("info-box").style.display = "none";
             map.setLayoutProperty("customizeRoute", 'visibility', 'none');
+            map.removeLayer('customizeRoute');
             map.removeControl(draw);
+            initmap();
+            addDirectionAPI();
         }
     }
 
@@ -550,11 +577,89 @@
             navigator.geolocation.getCurrentPosition(function(position) {
                 start = [position.coords.longitude,position.coords.latitude];
 
-                var marker = new mapboxgl.Marker({ color: '#fcd703'})
-                    .setLngLat([position.coords.longitude, position.coords.latitude])
-                    .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
-                        .setHTML('<h3>Your current location</h3>'))
-                    .addTo(map);
+                // var marker = new mapboxgl.Marker({ color: '#fcd703'})
+                //     .setLngLat([position.coords.longitude, position.coords.latitude])
+                //     .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
+                //         .setHTML('<h3>Your current location</h3>'))
+                //     .addTo(map);
+                var size = 200;
+                var pulsingDot = {
+                    width: size,
+                    height: size,
+                    data: new Uint8Array(size * size * 4),
+
+                    onAdd: function() {
+                        var canvas = document.createElement('canvas');
+                        canvas.width = this.width;
+                        canvas.height = this.height;
+                        this.context = canvas.getContext('2d');
+                    },
+
+                    render: function() {
+                        var duration = 1000;
+                        var t = (performance.now() % duration) / duration;
+
+                        var radius = size / 2 * 0.3;
+                        var outerRadius = size / 2 * 0.7 * t + radius;
+                        var context = this.context;
+
+                        context.clearRect(0, 0, this.width, this.height);
+                        context.beginPath();
+                        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+                        context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+                        context.fill();
+
+                        context.beginPath();
+                        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+                        context.fillStyle = '#f6d753';
+                        context.strokeStyle = 'white';
+                        context.lineWidth = 2 + 4 * (1 - t);
+                        context.fill();
+                        context.stroke();
+
+                        this.data = context.getImageData(0, 0, this.width, this.height).data;
+                        map.triggerRepaint();
+                        return true;
+                    }
+                };
+                map.on('load', function () {
+
+                    map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+
+                    map.addLayer({
+                        "id": "points",
+                        "type": "symbol",
+                        "source": {
+                            "type": "geojson",
+                            "data": {
+                                "type": "FeatureCollection",
+                                "features": [{
+                                    "type": "Feature",
+                                    "geometry": {
+                                        "type": "Point",
+                                        "coordinates": start
+                                    }
+                                }]
+                            }
+                        },
+                        "layout": {
+                            "icon-image": "pulsing-dot"
+                        }
+                    });
+                });
+
+                map.on('click', 'points', function (e) {
+                    map.getCanvas().style.cursor = 'pointer';
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    console.log(coordinates);
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML('Your current location')
+                        .addTo(map);
+                });
             });
         else
             console.log("geolocation is not supported");
