@@ -9,18 +9,33 @@
     <link rel="icon" href="img/logo.PNG" mce_href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo.PNG" mce_href="favicon.ico" type="image/x-icon">
     <!-- Mapbox -->
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css' rel='stylesheet' />
+    <!-- Direction API-->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css' type='text/css' />
     <!-- Geocoder plugin -->
-    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
-    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
-    <!-- Turf.js plugin -->
-    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-    <!-- jquery -->
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-    </script>
-    <style>
 
+    <!-- Import jQuery -->
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <!-- Import Mapbox GL Draw -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
+    <!-- jquery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <style>
+        .geocoder-dropdown-item{
+            padding: 5px
+        }
+        .geocoder-dropdown-icon{
+            margin-right: 10px;
+        }
+        .geocoder-dropdown-text{
+            color: #5a3fc0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: larger;
+        }
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
 
@@ -65,7 +80,7 @@
         @media (max-width: 769px) {
             #instructions{
                 font-family: sans-serif;
-                font-size: 0.4em;
+                font-size: 14px;
                 height: 30%;
             }
 
@@ -73,11 +88,11 @@
         @media (max-width: 415px) {
             #instructions{
                 font-family: sans-serif;
-                font-size: 0.2em;
+                font-size: 12px;
                 padding: 7px;
                 margin-left: 40px;
                 width: 80%;
-                height: 18%;
+                height: 17%;
                 margin-top: 39rem;
             }
 
@@ -95,34 +110,39 @@
         }
 
         h2 {
-            font-size: 14px;
-            line-height: 20px;
-            margin-bottom: 10px;
-            display: block;
-            margin-block-start: 0.83em;
-            margin-block-end: 0.83em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
+            font-size: 1px;
+            font-size: 15px;
             font-weight: bold;
         }
 
         #console {
             position: absolute;
-            height: 250px;
+            height: 23%;
             top: 0;
             bottom: 20%;
             width: 250px;
-            padding: 10px 20px;
+            padding: 5px 20px;
             margin: 80px;
             background-color: rgba(255, 255, 255, 0.9);
         }
 
+        @media (max-width: 415px) {
+            #console{
+                font-family: sans-serif;
+                margin-left: 10px;
+                width: 40%;
+                height: 155px;
+                margin-top: 20%;
+            }
+
+        }
+
         .session {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .row {
-            height: 12px;
+            height: 14px;
             width: 100%;
             margin-left: 0px;
             margin-right: 0px;
@@ -135,16 +155,13 @@
         }
 
         .label {
-            width: 15%;
+            font-family: sans-serif;
+            font-size: 12px;
+            width: 30%;
             display: inline-block;
             text-align: center;
             cursor: default;
-        }
-
-        .label2 {
-            width: 15%;
-            text-align: center;
-            cursor: default;
+            font-weight: bold;
         }
 
     </style>
@@ -152,9 +169,49 @@
 
 <?php include_once 'locations_model.php'; ?>
 
+
+
 <body>
-<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js'></script>
-<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css' type='text/css' />
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.1/mapbox-gl-geocoder.css' type='text/css' />
+<style>
+    .geocoder {
+        position:absolute;
+        z-index:1;
+        width:20%;
+        left:50%;
+        margin-left:-45%;
+        top:60px;
+    }
+    .endGeocoder {
+        position:absolute;
+        z-index:1;
+        width:20%;
+        left:50%;
+        margin-left:-23%;
+        top:60px;
+    }
+    .my_button {
+        position: absolute;
+        z-index: 1;
+        margin-top: 52px;
+        margin-left:3%;
+        background-color: #0d95e8;
+        font-family:'Roboto',sans-serif;
+        border:0.1em solid #FFFFFF;
+        color:#FFFFFF;
+        text-align:center;
+    }
+    .my_button:hover{
+        color:#000000;
+    }
+    @media all and (max-width:30em){
+         .my_button{
+            margin:10rem auto;
+             }
+    }
+    .mapboxgl-ctrl-geocoder { min-width:100%; }
+</style>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
@@ -162,8 +219,7 @@
     </div>
 </nav>
 
-<div class="container_map row no-gutters">
-
+<div class="container_map row">
     <!-- Filter Checkboxes -->
     <style>
         #menu {
@@ -268,10 +324,6 @@
     </div>
     <div id='menu' style="text-align: left;font-size: 18px; margin-left: 4rem;display:none;">
         <div id='hideLabel'>
-<!--            <label for='light' onclick="initmap()">light</label>-->
-<!--            <label for='streets' onclick="street()">streets</label>-->
-<!--            <label for='dark' onclick="dark()">dark</label>-->
-<!--            <label for='satellite' onclick="satellite()">satellite</label>-->
             <nav id="filter-group" class="filter-group">
                 <input type="checkbox" id="seats" onclick="getSeats()">
                 <label for="seats" id="seats" >Seats</label>
@@ -285,12 +337,32 @@
                 <label for="line" id="line" >Gradient</label>
                 <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">
                 <label for="3d-buildings" id="3d-buildings" >3D</label>
-                <input type="checkbox" id="route" onclick="showRoute()">
-                <label for="route" id="route" >Show Route</label>
+                <!--                <input type="checkbox" id="customizeRoute" onclick="showCustomizeRoute()">-->
+                <!--                <label for="customizeRoute" id="customizeRoute" >Draw Customized Route</label>-->
             </nav>
         </div>
     </div>
+
     <style>
+        .info-box {
+            position: absolute;
+            margin-top: 60px;
+            margin-left: 20px;
+            width: 25%;
+            top: 0;
+            bottom: 40%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            overflow-y: scroll;
+            font-family: sans-serif;
+            font-size: 0.8rem;
+            line-height: 2em;
+        }
+
+        #info {
+            font-size: 16px;
+            font-weight: bold;
+        }
         .filter-group {
             font-size: 13px;
             font-family: 'Open Sans', sans-serif;
@@ -340,34 +412,21 @@
         }
 
     </style>
-<!--    <nav id="filter-group" class="filter-group">-->
-<!--        <input type="checkbox" id="seats" onclick="getSeats()">-->
-<!--        <label for="seats" id="seats" >Seats</label>-->
-<!--        <input type="checkbox" id="toilets" onclick="getToilets()">-->
-<!--        <label for="toilets" id="toilets" >Toilets</label>-->
-<!--        <input type="checkbox" id="drinking_fountains" onclick="getDrink()">-->
-<!--        <label for="drinking_fountains" id="drinking_fountains" >Drinking Fountains</label>-->
-<!--        <input type="checkbox" id="pedestrian" onclick="showPedestrian()">-->
-<!--        <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>-->
-<!--        <input type="checkbox" id="line" onclick="showGradientLayer()">-->
-<!--        <label for="line" id="line" >Gradient</label>-->
-<!--        <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">-->
-<!--        <label for="3d-buildings" id="3d-buildings" >3D</label>-->
-<!--        <input type="checkbox" id="route" onclick="showRoute()">-->
-<!--        <label for="route" id="route" >Show Route</label>-->
-<!--    </nav>-->
 </div>
 
 <div  id='map' ></div>
 <div id="instructions" style="display: none;"></div>
+<div id="info-box" class="info-box" style="display: none;">
+    <div id="info">
+        <p style="font-size: 16px;">Draw your route using the draw tools on the right. To get the most accurate route match, draw points at regular intervals.</p>
+    </div>
+    <div id="directions"></div>
+</div>
 <div id='console' style="display: none;">
-    <h1>Pedestrian density</h1>
     <div class='session'>
         <div class='row colors'></div>
         <div class='row labels'>
             <div class='label'>Low</div>
-            <div class='label'>        </div>
-            <div class='label'>Middle</div>
             <div class='label'>        </div>
             <div class='label'>High</div>
         </div>
@@ -377,7 +436,7 @@
         <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
     </div>
     <div class='session'>
-        <h2>Day of the week</h2>
+        <h2>Day</h2>
         <div class='row' id='filters'>
             <script type="text/javascript">
                 var chartsdayid = new Array("Monday","Tuesday","Wednesday",
@@ -412,52 +471,279 @@
         </div>
     </div>
 </div>
+<div id='geocoder' class='geocoder'></div>
+<div id='endGeocoder' class='endGeocoder'></div>
+<div ><button type="button" class="my_button" onclick="navi()">GO!</button></div>
 
 </body>
+
+
+
 
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
     var map;
+    var end;
+    var directions;
+    var customData;
+    var start;
+
+    function getUserLocation() {
+        if (navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(function(position) {
+                start = [position.coords.longitude,position.coords.latitude];
+
+                // var marker = new mapboxgl.Marker({ color: '#fcd703'})
+                //     .setLngLat([position.coords.longitude, position.coords.latitude])
+                //     .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
+                //         .setHTML('<h3>Your current location</h3>'))
+                //     .addTo(map);
+                customData = {"features": [
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "title": "current location"
+                            },
+                            "geometry": {
+                                "coordinates": start,
+                                "type": "Point"
+                            }
+                        }]};
+                var size = 200;
+                var pulsingDot = {
+                    width: size,
+                    height: size,
+                    data: new Uint8Array(size * size * 4),
+
+                    onAdd: function() {
+                        var canvas = document.createElement('canvas');
+                        canvas.width = this.width;
+                        canvas.height = this.height;
+                        this.context = canvas.getContext('2d');
+                    },
+
+                    render: function() {
+                        var duration = 1000;
+                        var t = (performance.now() % duration) / duration;
+
+                        var radius = size / 2 * 0.3;
+                        var outerRadius = size / 2 * 0.7 * t + radius;
+                        var context = this.context;
+
+                        context.clearRect(0, 0, this.width, this.height);
+                        context.beginPath();
+                        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+                        context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+                        context.fill();
+
+                        context.beginPath();
+                        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+                        context.fillStyle = '#f6d753';
+                        context.strokeStyle = 'white';
+                        context.lineWidth = 2 + 4 * (1 - t);
+                        context.fill();
+                        context.stroke();
+
+                        this.data = context.getImageData(0, 0, this.width, this.height).data;
+                        map.triggerRepaint();
+                        return true;
+                    }
+                };
+                map.on('load', function () {
+
+                    map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+
+                    map.addLayer({
+                        "id": "points",
+                        "type": "symbol",
+                        "source": {
+                            "type": "geojson",
+                            "data": {
+                                "type": "FeatureCollection",
+                                "features": [{
+                                    "type": "Feature",
+                                    "geometry": {
+                                        "type": "Point",
+                                        "coordinates": start
+                                    }
+                                }]
+                            }
+                        },
+                        "layout": {
+                            "icon-image": "pulsing-dot"
+                        }
+                    });
+                });
+
+                map.on('click', 'points', function (e) {
+                    map.getCanvas().style.cursor = 'pointer';
+                    var coordinates = e.features[0].geometry.coordinates.slice();
+                    console.log(coordinates);
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML('Your current location')
+                        .addTo(map);
+                });
+            });
+        else
+            console.log("geolocation is not supported");
+        return start;
+    }
+    getUserLocation();
+
+    console.log(start);
+
+
+
 
     initmap();
-    var nav = new mapboxgl.NavigationControl();
-    map.addControl(nav, 'bottom-right');
 
     function initmap() {
         // Set bounds to Mel city
-        var bounds = [
-            [144.884368, -37.875602], // Southwest coordinates
-            [145.043748, -37.757360]// Northeast coordinates
-        ];
+        // var bounds = [
+        //     [144.884368, -37.875602], // Southwest coordinates
+        //     [145.043748, -37.757360]// Northeast coordinates
+        // ];
+
         map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
             center: [144.96565, -37.81384], //default location when load the map
-            zoom: 16, //default zoom level
+            zoom: 15, //default zoom level
             // Zero is perpendicular to the surface
             pitch: 45,
             // the compass direction that is "up"
             bearing: -17.6,
             antialias: true,
-            maxBounds: bounds // Sets bounds as max
+            // maxBounds: bounds // Sets bounds as max
         });
 
-        getUserLocation();
+        var nav = new mapboxgl.NavigationControl();
+        map.addControl(nav, 'bottom-right');
+
+        drawPedestrian();
         drawDrink();
         drawSeat();
-        unSelectAll();
         drawToilet();
         getGradient();
         load3D();
-        drawPedestrian();
+        // map.moveLayer('cluster-count', 'line');
+
     }
 
-    function unSelectAll() {
-        var items = document.getElementsByName('checkbox');
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].type == 'checkbox')
-                items[i].checked = false;
+    function forwardGeocoder(query) {
+        var matchingFeatures = [];
+        for (var i = 0; i < customData.features.length; i++) {
+            var feature = customData.features[i];
+// handle queries with different capitalization than the source data by calling toLowerCase()
+            if (feature.properties.title.toLowerCase().search(query.toLowerCase()) !== -1) {
+// add a tree emoji as a prefix for custom data results
+// using carmen geojson format: https://github.com/mapbox/carmen/blob/master/carmen-geojson.md
+                feature['place_name'] = '🌲 ' + feature.properties.title;
+                feature['center'] = feature.geometry.coordinates;
+                feature['place_type'] = ['park'];
+                matchingFeatures.push(feature);
+            }
         }
+        return matchingFeatures;
+    }
+
+    var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        countries: 'au',
+        placeholder:'Enter search e.g. current location',
+        marker: {
+            color: 'blue'
+        },
+        localGeocoder:forwardGeocoder,
+        types: 'poi',
+        render: function(item) {
+            var maki = item.properties.maki || 'marker';
+            return "<div class='geocoder-dropdown-item'><img class='geocoder-dropdown-icon' src='https://unpkg.com/@mapbox/maki@6.1.0/icons/" + maki + "-15.svg'><span class='geocoder-dropdown-text'>" + item.text + "</span></div>";
+        },
+        mapboxgl: mapboxgl
+    });
+
+    geocoder.on('result', function(ev) {
+        var searchResult = ev.result.geometry;
+        console.log(searchResult);
+        start = searchResult.coordinates;
+
+    });
+
+    geocoder.on('clear', function(ev) {
+        if (map.getSource('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+        }
+        document.getElementById("instructions").style.display = "none";
+        start=null;
+    });
+
+    // map.addControl(geocoder,'bottom-left');
+
+    var endGeocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        countries: 'au',
+        placeholder:'Set the destination',
+        marker: {
+            color: 'orange'
+        },
+        types: 'poi',
+        render: function(item) {
+            var maki = item.properties.maki || 'marker';
+            return "<div class='geocoder-dropdown-item'><img class='geocoder-dropdown-icon' src='https://unpkg.com/@mapbox/maki@6.1.0/icons/" + maki + "-15.svg'><span class='geocoder-dropdown-text'>" + item.text + "</span></div>";
+        },
+        mapboxgl: mapboxgl
+    });
+
+    endGeocoder.on('result', function(ev) {
+        var searchResult = ev.result.geometry;
+        console.log(searchResult);
+        end = searchResult.coordinates;
+        getRoute(end);
+    });
+
+    endGeocoder.on('clear', function(ev) {
+        if (map.getSource('route')) {
+            map.removeLayer('route');
+            map.removeSource('route');
+        }
+        document.getElementById("instructions").style.display = "none";
+        end=null;
+    });
+
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+    document.getElementById('endGeocoder').appendChild(endGeocoder.onAdd(map));
+
+
+
+    function navi(){
+        if (start==null || end==null){
+            alert("You have to decide where to start and end!!");
+        }
+        else{
+            getRoute(end);
+            document.getElementById("instructions").style.display = "block";
+        }
+    }
+
+    function addDirectionAPI() {
+
+        directions = new MapboxDirections({
+            accessToken: mapboxgl.accessToken,
+            profile: 'mapbox/walking',
+            proximity:[144.96565, -37.81384],
+            unit: 'metric',
+            controls: {
+                profileSwitcher: false}
+        });
+
+        map.addControl(directions, 'bottom-left');
+        // directions.setOrigin(start); use with 'load' function
     }
 
     function  show3dLayer() {
@@ -481,22 +767,6 @@
         }
     }
 
-    function  showRoute() {
-
-        var checkBox = document.getElementById("route");
-        if (checkBox.checked == true)
-        {
-            map.setLayoutProperty('route', 'visibility', 'visible');
-            map.setLayoutProperty('end', 'visibility', 'visible');
-            document.getElementById("instructions").style.display = "block";
-
-        } else {
-            map.setLayoutProperty('route', 'visibility', 'none');
-            map.setLayoutProperty('end', 'visibility', 'none');
-            document.getElementById("instructions").style.display = "none";
-        }
-    }
-
     function  showPedestrian() {
 
         var checkBox = document.getElementById("pedestrian");
@@ -510,20 +780,26 @@
         }
     }
 
-    function getUserLocation() {
-        if (navigator.geolocation)
-            navigator.geolocation.getCurrentPosition(function(position) {
-                start = [position.coords.longitude,position.coords.latitude];
+    function showCustomizeRoute(){
+        var checkBox = document.getElementById("customizeRoute");
+        if (checkBox.checked == true)
+        {
+            document.getElementById("info-box").style.display = "block";
+            map.setLayoutProperty('customizeRoute', 'visibility', 'visible');
+            // Add the draw tool to the map
+            map.addControl(draw,'bottom-right');
+            directions.onRemove();
 
-                var marker = new mapboxgl.Marker({ color: '#fcd703'})
-                    .setLngLat([position.coords.longitude, position.coords.latitude])
-                    .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
-                        .setHTML('<h3>Your current location</h3>'))
-                    .addTo(map);
-            });
-        else
-            console.log("geolocation is not supported");
+        } else {
+            document.getElementById("info-box").style.display = "none";
+            map.setLayoutProperty("customizeRoute", 'visibility', 'none');
+            map.removeLayer('customizeRoute');
+            map.removeControl(draw);
+            initmap();
+            addDirectionAPI();
+        }
     }
+
 
     function getToilets(){
 
@@ -629,7 +905,19 @@
     function getGradient() {
 
         var geojson = 'Footpath steepness.geojson';
+
         map.on('load', function() {
+            // Insert the layer beneath any symbol layer.
+            var layers = map.getStyle().layers;
+
+            var labelLayerId;
+            for (var i = 0; i < layers.length; i++) {
+                if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+                    labelLayerId = layers[i].id;
+                    break;
+                }
+            }
+
             // 'line-gradient' can only be used with GeoJSON sources
             // and the source must have the 'lineMetrics' option set to true
             map.addSource('line', {
@@ -659,34 +947,99 @@
                 layout: {
                     'visibility': 'none',
                     'line-cap': 'round',
-                    'line-join': 'round'
+                    'line-join': 'round',
                 }
-            });
+
+            }, labelLayerId);
         });
 
     }
 
-    // pass toilet data to Geojson array
-    var locations = <?php get_toilet_locations() ?>;
     var geojson = {};
-    geojson['type'] = 'FeatureCollection';
-    geojson['features'] = [];
+    var drinkGeojson = {};
+    var seatGeojson = {};
+    var pedestrianGeojson = {};
 
-    for (var k in locations) {
-        var newFeature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [parseFloat(locations[k][2]), parseFloat(locations[k][1])]
-            },
-            "properties": {
-                "description": locations[k][0] + '<br>' + "Female: " + locations[k][3] + '<br>' + "Male: " + locations[k][4] + '<br>' + "Wheelchair: " + locations[k][5] + '<br>' + "Baby Facility: " + locations[k][6],
-                "icon": "toilet"
+    function passData(){
+        // pass toilet data to Geojson array
+        var locations = <?php get_toilet_locations() ?>;
+        geojson['type'] = 'FeatureCollection';
+        geojson['features'] = [];
+        for (var k in locations) {
+            var newFeature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [parseFloat(locations[k][2]), parseFloat(locations[k][1])]
+                },
+                "properties": {
+                    "description": locations[k][0] + '<br>' + "Female: " + locations[k][3] + '<br>' + "Male: " + locations[k][4] + '<br>' + "Wheelchair: " + locations[k][5] + '<br>' + "Baby Facility: " + locations[k][6],
+                    "icon": "toilet"
+                }
             }
+            geojson['features'].push(newFeature);
         }
-        geojson['features'].push(newFeature);
+
+        // pass drink data to Geojson array
+        var drinkLocations = <?php get_drink_locations() ?>;
+        drinkGeojson['type'] = 'FeatureCollection';
+        drinkGeojson['features'] = [];
+        for (var k in drinkLocations) {
+            var newFeature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [parseFloat(drinkLocations[k][2]), parseFloat(drinkLocations[k][1])]
+                },
+                "properties": {
+                    "description": drinkLocations[k][0],
+                    "icon": "beer"
+                }
+            }
+            drinkGeojson['features'].push(newFeature);
+        }
+
+        // pass seat data to Geojson array
+        var seatLocations = <?php get_seats_locations() ?>;
+        seatGeojson['type'] = 'FeatureCollection';
+        seatGeojson['features'] = [];
+        for (var k in seatLocations) {
+            var newFeature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [parseFloat(seatLocations[k][3]), parseFloat(seatLocations[k][2])]
+                },
+                "properties": {
+                    "description": seatLocations[k][1],
+                    "icon": "picnic-site"
+                }
+            }
+            seatGeojson['features'].push(newFeature);
+        }
+
+        // pass pedestrian data to Geojson array
+        var pedestrian = <?php get_pedestrian() ?>;
+        pedestrianGeojson['type'] = 'FeatureCollection';
+        pedestrianGeojson['features'] = [];
+        for (var k in pedestrian) {
+            var newFeature = {
+                "type": "Feature",
+                "properties": {
+                    "Day": pedestrian[k][0],
+                    "Hour": parseInt(pedestrian[k][1], 10),
+                    "Number": parseInt(pedestrian[k][3], 10),
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [parseFloat(pedestrian[k][5]), parseFloat(pedestrian[k][4])]
+                }
+            }
+            pedestrianGeojson['features'].push(newFeature);
+        }
     }
-    console.log(geojson);
+
+    passData();
 
     function drawToilet(){
         map.on('load', function () {
@@ -717,11 +1070,11 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#CCFF99",
                         10,
-                        "#f1f075",
+                        "#3CB371",
                         30,
-                        "#f28cb1"
+                        "#2E8B57"
                     ],
                     "circle-radius": [
                         "step",
@@ -748,7 +1101,7 @@
                 }
             });
 
-            map.loadImage('img/toilet.png', function(error, image) {
+            map.loadImage('img/toilet_paper.png', function(error, image) {
                 if (error) throw error;
                 map.addImage('toilet', image);
                 map.addLayer({
@@ -824,26 +1177,6 @@
         });
     }
 
-    // pass drink data to Geojson array
-    var drinkLocations = <?php get_drink_locations() ?>;
-    var drinkGeojson = {};
-    drinkGeojson['type'] = 'FeatureCollection';
-    drinkGeojson['features'] = [];
-    for (var k in drinkLocations) {
-        var newFeature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [parseFloat(drinkLocations[k][2]), parseFloat(drinkLocations[k][1])]
-            },
-            "properties": {
-                "description": drinkLocations[k][0],
-                "icon": "beer"
-            }
-        }
-        drinkGeojson['features'].push(newFeature);
-    }
-
     function drawDrink(){
         map.on('load', function () {
             map.addSource("drinkGeojson", {
@@ -867,11 +1200,11 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#00c0ff",
                         15,
-                        "#f1f075",
+                        "#0060ff",
                         30,
-                        "#f28cb1"
+                        "#0000ff"
                     ],
                     "circle-radius": [
                         "step",
@@ -976,27 +1309,6 @@
         });
     }
 
-    // pass seat data to Geojson array
-    var seatLocations = <?php get_seats_locations() ?>;
-    var seatGeojson = {};
-    seatGeojson['type'] = 'FeatureCollection';
-    seatGeojson['features'] = [];
-    for (var k in seatLocations) {
-        var newFeature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [parseFloat(seatLocations[k][3]), parseFloat(seatLocations[k][2])]
-            },
-            "properties": {
-                "description": seatLocations[k][1],
-                "icon": "picnic-site"
-            }
-        }
-        seatGeojson['features'].push(newFeature);
-    }
-    console.log(seatGeojson);
-
     function drawSeat(){
         map.on('load', function () {
             map.addSource("seatGeojson", {
@@ -1021,13 +1333,13 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#51bbd6",
+                        "#ffc020",
                         15,
-                        "#f1f075",
+                        "#ff8020",
                         30,
-                        "#f28cb1",
+                        "#ff4020",
                         300,
-                        "#f64c4c"
+                        "#ff0020"
                     ],
                     "circle-radius": [
                         "step",
@@ -1117,28 +1429,6 @@
         });
     }
 
-    // pass pedestrian data to Geojson array
-    var pedestrian = <?php get_pedestrian() ?>;
-    var pedestrianGeojson = {};
-    pedestrianGeojson['type'] = 'FeatureCollection';
-    pedestrianGeojson['features'] = [];
-    for (var k in pedestrian) {
-        var newFeature = {
-            "type": "Feature",
-            "properties": {
-                "Day": pedestrian[k][0],
-                "Hour": parseInt(pedestrian[k][1], 10),
-                "Number": parseInt(pedestrian[k][3], 10),
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [parseFloat(pedestrian[k][5]), parseFloat(pedestrian[k][4])]
-            }
-        }
-        pedestrianGeojson['features'].push(newFeature);
-    }
-    console.log(pedestrianGeojson);
-
     function drawPedestrian(){
 
         map.on('load', function() {
@@ -1194,20 +1484,10 @@
         });
     }
 
-    var start;
     var canvas = map.getCanvasContainer();
-    getUserLocation();
     // create a function to make a directions request
     function getRoute(end) {
 
-        // make a directions request using cycling profile
-        // an arbitrary start will always be the same
-        // only the end or destination will change
-        // initialize the map canvas to interact with later
-        console.log(start);
-        console.log(end);
-        // an arbitrary start will always be the same
-        // only the end or destination will change
         var url = 'https://api.mapbox.com/directions/v5/mapbox/walking/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
 
         // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
@@ -1246,7 +1526,6 @@
                     layout: {
                         'line-join': 'round',
                         'line-cap': 'round',
-                        'visibility': 'none'
                     },
                     paint: {
                         'line-color': '#e04050',
@@ -1270,55 +1549,207 @@
         req.send();
     }
 
-    map.on('click', function(e) {
-        var coordsObj = e.lngLat;
-        canvas.style.cursor = '';
-        var coords = Object.keys(coordsObj).map(function(key) {
-            return coordsObj[key];
-        });
-        var end = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                    type: 'Point',
-                    coordinates: coords
+    // map.on('click', function(e) {
+    //     var coordsObj = e.lngLat;
+    //     canvas.style.cursor = '';
+    //     var coords = Object.keys(coordsObj).map(function(key) {
+    //         return coordsObj[key];
+    //     });
+    //     var end = {
+    //         type: 'FeatureCollection',
+    //         features: [{
+    //             type: 'Feature',
+    //             properties: {},
+    //             geometry: {
+    //                 type: 'Point',
+    //                 coordinates: coords
+    //             }
+    //         }
+    //         ]
+    //     };
+    //     if (map.getLayer('end')) {
+    //         map.getSource('end').setData(end);
+    //     } else {
+    //         map.addLayer({
+    //             id: 'end',
+    //             type: 'circle',
+    //             source: {
+    //                 type: 'geojson',
+    //                 data: {
+    //                     type: 'FeatureCollection',
+    //                     features: [{
+    //                         type: 'Feature',
+    //                         properties: {},
+    //                         geometry: {
+    //                             type: 'Point',
+    //                             coordinates: coords
+    //                         }
+    //                     }]
+    //                 }
+    //             },
+    //             paint: {
+    //                 'circle-radius': 5,
+    //                 'circle-color': '#3887be'
+    //             },
+    //             layout: {
+    //                 'visibility': 'none'
+    //             },
+    //         });
+    //     }
+    //     getRoute(coords);
+    // });
+
+    var draw = new MapboxDraw({
+        // Instead of showing all the draw tools, show only the line string and delete tools
+        displayControlsDefault: false,
+        controls: {
+            line_string: true,
+            trash: true
+        },
+        styles: [
+            // Set the line style for the user-input coordinates
+            {
+                "id": "gl-draw-line",
+                "type": "line",
+                "filter": ["all", ["==", "$type", "LineString"],
+                    ["!=", "mode", "static"]
+                ],
+                "layout": {
+                    "line-cap": "round",
+                    "line-join": "round"
+                },
+                "paint": {
+                    "line-color": "#438EE4",
+                    "line-dasharray": [0.2, 2],
+                    "line-width": 4,
+                    "line-opacity": 0.7
                 }
-            }
-            ]
-        };
-        if (map.getLayer('end')) {
-            map.getSource('end').setData(end);
+            },
+            // Style the vertex point halos
+            {
+                "id": "gl-draw-polygon-and-line-vertex-halo-active",
+                "type": "circle",
+                "filter": ["all", ["==", "meta", "vertex"],
+                    ["==", "$type", "Point"],
+                    ["!=", "mode", "static"]
+                ],
+                "paint": {
+                    "circle-radius": 12,
+                    "circle-color": "#FFF"
+                }
+            },
+            // Style the vertex points
+            {
+                "id": "gl-draw-polygon-and-line-vertex-active",
+                "type": "circle",
+                "filter": ["all", ["==", "meta", "vertex"],
+                    ["==", "$type", "Point"],
+                    ["!=", "mode", "static"]
+                ],
+                "paint": {
+                    "circle-radius": 8,
+                    "circle-color": "#438EE4",
+                }
+            },
+        ]
+    });
+
+    function updateRoute() {
+        // Set the profile
+        var profile = "walking";
+        // Get the coordinates that were drawn on the map
+        var data = draw.getAll();
+        var lastFeature = data.features.length - 1;
+        var coords = data.features[lastFeature].geometry.coordinates;
+        // Format the coordinates
+        var newCoords = coords.join(';')
+        // Set the radius for each coordinate pair to 25 meters
+        var radius = [];
+        coords.forEach(element => {
+            radius.push(25);
+        });
+        getMatch(newCoords, radius, profile);
+    }
+
+    // Make a Map Matching request
+    function getMatch(coordinates, radius, profile) {
+        // Separate the radiuses with semicolons
+        var radiuses = radius.join(';')
+        // Create the query
+        var query = 'https://api.mapbox.com/matching/v5/mapbox/' + profile + '/' + coordinates + '?geometries=geojson&radiuses=' + radiuses + '&steps=true&access_token=' + mapboxgl.accessToken;
+
+        $.ajax({
+            method: 'GET',
+            url: query
+        }).done(function(data) {
+            // Get the coordinates from the response
+            var coords = data.matchings[0].geometry;
+            // Draw the route on the map
+            addRoute(coords);
+            getInstructions(data.matchings[0]);
+        });
+    }
+
+    // Draw the Map Matching route as a new layer on the map
+    function addRoute(coords) {
+        // If a route is already loaded, remove it
+        if (map.getSource('customizeRoute')) {
+            map.removeLayer('customizeRoute')
+            map.removeSource('customizeRoute')
         } else {
             map.addLayer({
-                id: 'end',
-                type: 'circle',
-                source: {
-                    type: 'geojson',
-                    data: {
-                        type: 'FeatureCollection',
-                        features: [{
-                            type: 'Feature',
-                            properties: {},
-                            geometry: {
-                                type: 'Point',
-                                coordinates: coords
-                            }
-                        }]
+                "id": "customizeRoute",
+                "type": "line",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": coords
                     }
                 },
-                paint: {
-                    'circle-radius': 5,
-                    'circle-color': '#3887be'
+                "layout": {
+                    "line-join": "round",
+                    "line-cap": "round"
                 },
-                layout: {
-                    'visibility': 'none'
-                },
+                "paint": {
+                    "line-color": "#03AA46",
+                    "line-width": 8,
+                    "line-opacity": 0.8
+                }
             });
+        };
+    }
+    function getInstructions(data) {
+        // Target the sidebar to add the instructions
+        var directions = document.getElementById('directions');
+
+        var legs = data.legs;
+        var tripDirections = [];
+        // Output the instructions for each step of each leg in the response object
+        for (var i = 0; i < legs.length; i++) {
+            var steps = legs[i].steps;
+            for (var j = 0; j < steps.length; j++) {
+                tripDirections.push('<br><li>' + steps[j].maneuver.instruction) + '</li>';
+            }
         }
-        getRoute(coords);
-    });
+        directions.innerHTML = '<h2>Trip duration: ' + Math.floor(data.duration / 60) + ' min.</h2>' + tripDirections;
+    }
+
+    // If the user clicks the delete draw button, remove the layer if it exists
+    function removeRoute() {
+        if (map.getSource('customizeRoute')) {
+            map.removeLayer('customizeRoute');
+            map.removeSource('customizeRoute');
+        } else {
+            return;
+        }
+    }
+
+    map.on('draw.create', updateRoute);
+    map.on('draw.update', updateRoute);
+    map.on('draw.delete', removeRoute);
+
 </script>
 
 </html>
