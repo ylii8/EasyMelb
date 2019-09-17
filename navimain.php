@@ -266,6 +266,7 @@
             }, function() {
                 $("#menu").css("display", "none");
             });
+
         });
     </script>
     <div id='blockLabel' style="text-align: left;font-size: 18px; margin-left: 4rem">
@@ -475,6 +476,8 @@
             profile: 'mapbox/walking',
             proximity:[144.96565, -37.81384],
             unit: 'metric',
+            placeholderOrigin:'Click or search an origin',
+            placeholderDestination:'Click or search a destination',
             controls: {
                 profileSwitcher: false}
         });
@@ -491,7 +494,10 @@
         // });
 
         map.addControl(directions, 'bottom-left');
-        // directions.setOrigin(start); use with 'load' function
+        map.on('load',function(){
+            directions.setOrigin(start);
+        })
+
     }
 
     function unSelectAll() {
@@ -582,7 +588,7 @@
                 //     .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
                 //         .setHTML('<h3>Your current location</h3>'))
                 //     .addTo(map);
-                var size = 200;
+                var size = 100;
                 var pulsingDot = {
                     width: size,
                     height: size,
@@ -824,7 +830,6 @@
     var geojson = {};
     geojson['type'] = 'FeatureCollection';
     geojson['features'] = [];
-
     for (var k in locations) {
         var newFeature = {
             "type": "Feature",
