@@ -89,27 +89,19 @@
 
         }
 
-        h1 {
-            display: block;
-            font-size: 20px;
-            line-height: 30px;
-            margin-block-start: 0.67em;
-            margin-block-end: 0.67em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
+        h2 {
+            font-size: 15px;
             font-weight: bold;
         }
 
-        h2 {
-            font-size: 1px;
-            font-size: 15px;
+        h3 {
+            font-size: 10px;
             font-weight: bold;
         }
 
         #console {
             position: absolute;
-            height: 23%;
-            top: 0;
+            top: 70px;
             bottom: 20%;
             width: 250px;
             padding: 5px 20px;
@@ -122,10 +114,8 @@
                 font-family: sans-serif;
                 margin-left: 10px;
                 width: 40%;
-                height: 155px;
-                margin-top: 20%;
+                margin-top: 17%;
             }
-
         }
 
         .session {
@@ -133,11 +123,12 @@
         }
 
         .row {
-            height: 14px;
+            height: 10px;
             width: 100%;
             margin-left: 0px;
             margin-right: 0px;
             display: block;
+
         }
 
         .colors {
@@ -148,12 +139,57 @@
         .label {
             font-family: sans-serif;
             font-size: 12px;
-            width: 30%;
+            width: 29%;
             display: inline-block;
             text-align: center;
             cursor: default;
             font-weight: bold;
         }
+
+        #gradient_color{
+            position: absolute;
+            height: 11%;
+            top: 0;
+            bottom: 20%;
+            width: 250px;
+            padding: 5px 20px;
+            margin: 80px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 415px) {
+            #gradient_color{
+                font-family: sans-serif;
+                margin-left: 10px;
+                width: 40%;
+                margin-top: 19%;
+            }
+        }
+
+        .row2 {
+            height: 10px;
+            width: 100%;
+            margin-left: 0px;
+            margin-right: 0px;
+            display: block;
+            line-height: 1px;
+        }
+
+        .colors2 {
+            background: linear-gradient(to right, #ADFF2F, #FF3300, #6e0000);
+            margin-bottom: 5px;
+        }
+
+        .label2 {
+            font-family: sans-serif;
+            font-size: 12px;
+            width: 29%;
+            display: inline-block;
+            text-align: center;
+            cursor: default;
+            font-weight: bold;
+        }
+
 
     </style>
 </head>
@@ -167,7 +203,6 @@
         <a class="navbar-brand js-scroll-trigger" href="index.html" style="color: #545765;"><img src="img/logo.PNG" style="margin-right:.3rem;margin-bottom:3px;width:2.2rem;height:2.2rem;">Your Guider</a>
     </div>
 </nav>
-
 <div class="container_map row no-gutters">
     <!-- Filter Checkboxes -->
     <style>
@@ -281,10 +316,10 @@
                 <label for="toilets" id="toilets" >Toilets</label>
                 <input type="checkbox" id="drinking_fountains" onclick="getDrink()">
                 <label for="drinking_fountains" id="drinking_fountains" >Drinking Fountains</label>
-                <input type="checkbox" id="pedestrian" onclick="showPedestrian()">
-                <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>
                 <input type="checkbox" id="line" onclick="showGradientLayer()">
                 <label for="line" id="line" >Gradient</label>
+                <input type="checkbox" id="pedestrian" onclick="showPedestrian()">
+                <label for="pedestrian" id="pedestrian" >Pedestrian Density</label>
                 <input type="checkbox" id="3d-buildings" onclick="show3dLayer()">
                 <label for="3d-buildings" id="3d-buildings" >3D</label>
 <!--                <input type="checkbox" id="route" onclick="showRoute()">-->
@@ -364,7 +399,6 @@
 
     </style>
 </div>
-
 <div  id='map' ></div>
 <div id="instructions" style="display: none;"></div>
 <div id="info-box" class="info-box" style="display: none;">
@@ -373,22 +407,23 @@
     </div>
     <div id="directions"></div>
 </div>
-<div id='console' style="display: none;">
+<div id='console' style="display: none; height: fit-content">
     <div class='session'>
-        <div class='row colors'></div>
-        <div class='row labels'>
+        <h2>Pedestrian</h2>
+        <div class='row2 colors'></div>
+        <div class='row2 labels'>
             <div class='label'>Low</div>
             <div class='label'>        </div>
             <div class='label'>High</div>
         </div>
     </div>
     <div class='session' id='sliderbar'>
-        <h2>Hour: <label2 id='active-hour'>12PM</label2></h2>
+        <h3>Hour: <label2 id='active-hour'>12PM</label2></h3>
         <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
     </div>
     <div class='session'>
-        <h2>Day</h2>
-        <div class='row' id='filters'>
+        <h3>Day</h3>
+        <div class='row2' id='filters'>
             <script type="text/javascript">
                 var chartsdayid = new Array("Monday","Tuesday","Wednesday",
                     "Thursday","Friday","Saturday","Sunday");
@@ -410,7 +445,7 @@
                     }
                 }
             </script>
-            <select onchange="selectchangeday(this.value)">
+            <select onchange="selectchangeday(this.value)" style="font-size: 5px">
                 <option value="Monday" selected="selected">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
@@ -422,6 +457,18 @@
         </div>
     </div>
 </div>
+<div id='gradient_color' style="display: none; height: fit-content">
+    <div class='session'>
+        <h2>Gradient</h2>
+        <div class='row2 colors2'></div>
+        <div class='row2 labels2'>
+            <div class='label2'>Low</div>
+            <div class='label2'>        </div>
+            <div class='label2'>High</div>
+        </div>
+    </div>
+</div>
+
 <!--<div id='geocoder' class='geocoder'></div>-->
 
 </body>
@@ -434,11 +481,11 @@
     initmap();
 
     function initmap() {
-        // Set bounds to Mel city
-        var bounds = [
-            [144.884368, -37.875602], // Southwest coordinates
-            [145.043748, -37.757360]// Northeast coordinates
-        ];
+        // // Set bounds to Mel city
+        // var bounds = [
+        //     [144.884368, -37.875602], // Southwest coordinates
+        //     [145.043748, -37.757360]// Northeast coordinates
+        // ];
 
         map = new mapboxgl.Map({
             container: 'map',
@@ -450,7 +497,7 @@
             // the compass direction that is "up"
             bearing: -17.6,
             antialias: true,
-            maxBounds: bounds // Sets bounds as max
+            // maxBounds: bounds // Sets bounds as max
         });
 
         // document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
@@ -479,7 +526,8 @@
             placeholderOrigin:'Click or search an origin',
             placeholderDestination:'Click or search a destination',
             controls: {
-                profileSwitcher: false}
+                profileSwitcher: false,
+                instructions: false}
         });
 
         // var geocoder = new MapboxGeocoder({
@@ -494,9 +542,9 @@
         // });
 
         map.addControl(directions, 'bottom-left');
-        map.on('load',function(){
-            directions.setOrigin(start);
-        })
+        // map.on('load',function(){
+        //     directions.setOrigin(start);
+        // })
 
     }
 
@@ -523,8 +571,10 @@
         var checkBox = document.getElementById("line");
         if (checkBox.checked == true)
         {
+            document.getElementById("gradient_color").style.display = "block";
             map.setLayoutProperty('line', 'visibility', 'visible');
         } else {
+            document.getElementById("gradient_color").style.display = "none";
             map.setLayoutProperty('line', 'visibility', 'none');
         }
     }
@@ -809,9 +859,9 @@
                     'line-gradient': [
                         'interpolate', ['linear'],
                         ['line-progress'],
-                        0, "#FFFCEC",
-                        0.5, "#FFDC35",
-                        1, "#5B4B00",
+                        0, "#ADFF2F",
+                        0.5, "#FF3300",
+                        1, "#6e0000",
                     ]
                 },
                 layout: {
@@ -875,11 +925,11 @@
                     "circle-color": [
                         "step",
                         ["get", "point_count"],
-                        "#CCFF99",
+                        "#ffa0c0",
                         10,
-                        "#3CB371",
+                        "#ff60c0",
                         30,
-                        "#2E8B57"
+                        "#ff20c0"
                     ],
                     "circle-radius": [
                         "step",
