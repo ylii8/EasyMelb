@@ -26,10 +26,26 @@
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 
     <style>
-
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
-
+        #fly {
+            display: block;
+            position: absolute;
+            bottom:0;
+            margin-right: 8px;
+            margin-bottom: 130px;
+            width: 37px;
+            height: 37px;
+            padding: 10px;
+            border-radius: 50%;
+            border: solid 2px rgba(92, 92, 92, 0.38);
+            font-size: 13px;
+            text-align: center;
+            right:0;
+            color: rgba(41, 41, 41, 0.99);
+            background: rgba(253, 255, 251, 0.98);
+            cursor: pointer;
+        }
         .container_map {
             height: 600px;
         }
@@ -66,6 +82,13 @@
 
         .duration {
             font-size: 2em;
+        }
+
+        @media (max-width: 640px) {
+            #fly {
+                margin-bottom: 150px;
+            }
+
         }
 
         @media (max-width: 769px) {
@@ -189,8 +212,6 @@
             cursor: default;
             font-weight: bold;
         }
-
-
     </style>
 </head>
 
@@ -400,6 +421,8 @@
     </style>
 </div>
 <div  id='map' ></div>
+<br/>
+<button id='fly'><i class="fa fa-location-arrow"></i></button>
 <div id="instructions" style="display: none;"></div>
 <div id="info-box" class="info-box" style="display: none;">
     <div id="info">
@@ -516,6 +539,10 @@
         // map.moveLayer('cluster-count', 'line');
 
     }
+
+    document.getElementById('fly').addEventListener('click', function () {
+        map.flyTo({center: start});
+    });
 
     function addDirectionAPI(){
         directions = new MapboxDirections({
