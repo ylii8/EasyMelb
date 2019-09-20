@@ -46,6 +46,9 @@
             background: rgba(253, 255, 251, 0.98);
             cursor: pointer;
         }
+        #fly:hover{
+            background: rgba(235, 236, 233, 0.84);
+        }
         .container_map {
             height: 600px;
         }
