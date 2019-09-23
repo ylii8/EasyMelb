@@ -231,7 +231,7 @@
         }
 
         .colors {
-            background: linear-gradient(to right, #99FF00, #CCFF00, #FFFF00, #FFCC00, #FF9900, #FF6600, #FF3300, #FF0000);
+            background: linear-gradient(to right, #95c78b, #72c55a, #15cb0b, #51c4c8, #2a6ed7, #132eda, #953f3f, #730709);
             margin-bottom: 5px;
         }
 
@@ -355,7 +355,7 @@
                     }
                 }
             </script>
-            <select onchange="selectchangeday(this.value)" style="font-size: 10px; display: inline-block;" >
+            <select id="day" onchange="selectchangeday(this.value)" style="font-size: 10px; display: inline-block;" >
                 <option value="Monday" selected="selected">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
@@ -423,8 +423,37 @@
         getGradient();
         load3D();
         addDirectionAPI();
+        getCurrentDay();
         // map.moveLayer('cluster-count', 'line');
 
+    }
+
+    function getCurrentDay(){
+        var currentDateTime = new Date();
+        var day;
+        switch (currentDateTime.getDay()) {
+            case 0:
+                day = "Sunday";
+                break;
+            case 1:
+                day = "Monday";
+                break;
+            case 2:
+                day = "Tuesday";
+                break;
+            case 3:
+                day = "Wednesday";
+                break;
+            case 4:
+                day = "Thursday";
+                break;
+            case 5:
+                day = "Friday";
+                break;
+            case 6:
+                day = "Saturday";
+        }
+        document.getElementById("day").value = day;
     }
 
     document.getElementById('fly').addEventListener('click', function () {
@@ -1286,19 +1315,29 @@
                         'interpolate',
                         ['linear'],
                         ['number', ['get', 'Number']],
-                        10, '#99FF00',
-                        50, '#CCFF00',
-                        100, '#FFFF00',
-                        300, '#FFCC00',
-                        600, '#FF9900',
-                        2000, '#FF6600',
-                        3000, '#FF3300',
-                        5000, '#FF0000'
+                        10, '#95c78b',
+                        50, '#72c55a',
+                        100, '#15cb0b',
+                        300, '#51c4c8',
+                        600, '#2a6ed7',
+                        2000, '#132eda',
+                        3000, '#953f3f',
+                        5000, '#730709'
                     ],
                     "circle-opacity": 0.6,
                 },
                 filter: ['all', ['==', ['number', ['get', 'Hour']], 12], ['==', ['string', ['get', 'Day']], 'Monday']]
             });
+
+            var currentHours = new Date().getHours();
+            document.getElementById('slider').value = currentHours;
+            filterHour = ['==', ['number', ['get', 'Hour']], currentHours];
+            map.setFilter('pedestrian', ['all', filterHour, filterDay]);
+            var ampm = currentHours >= 12 ? 'PM' : 'AM';
+            var hour12 = currentHours % 12 ? currentHours % 12 : 12;
+            document.getElementById('active-hour').innerText = hour12 + ampm;
+
+
             document.getElementById('slider').addEventListener('input', function(e) {
                 var hour = parseInt(e.target.value);
                 // update the map
@@ -1308,6 +1347,7 @@
                 var ampm = hour >= 12 ? 'PM' : 'AM';
                 var hour12 = hour % 12 ? hour % 12 : 12;
                 // update text in the UI
+
                 document.getElementById('active-hour').innerText = hour12 + ampm;
             });
             document.getElementById('filters').addEventListener('change', function(e) {
