@@ -28,6 +28,51 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
+        /* The snackbar - position it at the bottom and in the middle of the screen */
+        #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            background-color: #333; /* Black background color */
+            color: #fff; /* White text color */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+        }
+
+        /* Show the snackbar when clicking on a button (class added with JavaScript) */
+        #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+            However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        /* Animations to fade the snackbar in and out */
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
         .icon-bar {
             border-bottom: solid 2px rgba(92, 92, 92, 0.38);
             border-radius: 15%;
@@ -66,7 +111,7 @@
             height: 37px;
             padding: 10px;
             border-radius: 50%;
-            border: solid 2px rgba(92, 92, 92, 0.38);
+            border-bottom: solid 2px rgba(92, 92, 92, 0.38);
             font-size: 13px;
             text-align: center;
             right:0;
@@ -157,6 +202,7 @@
             top: 70px;
             bottom: 20%;
             width: 250px;
+            height: 200px;
             padding: 5px 20px;
             margin: 80px;
             background-color: rgba(255, 255, 255, 0.9);
@@ -251,7 +297,7 @@
 
 <nav class="topnav navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand js-scroll-trigger" title="Go to Home page" href="index.html" style="color: #545765;"><img src="img/logo.PNG" style="margin-right:.3rem;margin-bottom:3px;width:2.2rem;height:2.2rem;">Your Guider</a>
+        <a class="navbar-brand js-scroll-trigger" title="Go to Home page" href="index.html" style="color: #545765;"><img src="img/logo.PNG" style="margin-right:.3rem;margin-bottom:3px;width:2.2rem;height:2.2rem;">EasyMelb</a>
     </div>
 </nav>
 <div  id='map' ></div>
@@ -285,7 +331,7 @@
         <h3>Hour: <label2 id='active-hour'>12PM</label2></h3>
         <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
     </div>
-    <div class='session'>
+    <div class='session' >
         <h3>Day</h3>
         <div class='row2' id='filters'>
             <script type="text/javascript">
@@ -309,7 +355,7 @@
                     }
                 }
             </script>
-            <select onchange="selectchangeday(this.value)" style="font-size: 10px">
+            <select onchange="selectchangeday(this.value)" style="font-size: 10px; display: inline-block;" >
                 <option value="Monday" selected="selected">Monday</option>
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option>
@@ -318,7 +364,9 @@
                 <option value="Saturday">Saturday</option>
                 <option value="Sunday">Sunday</option>
             </select>
+            <button onclick="snackBar()" style="margin-left:35px;font-size: 13px;display: inline-block;">More details</button>
         </div>
+
     </div>
 </div>
 <div id='gradient_color' style="display: none; height: fit-content">
@@ -332,7 +380,7 @@
         </div>
     </div>
 </div>
-
+<div id="snackbar">The points show the sensor locations</div>
 </body>
 
 <script>
@@ -471,6 +519,15 @@
         }
     });
 
+    function snackBar() {
+        // Get the snackbar DIV
+        var x = document.getElementById("snackbar");
+        // Add the "show" class to DIV
+        x.className = "show";
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+
     function addDirectionAPI(){
         directions = new MapboxDirections({
             accessToken: mapboxgl.accessToken,
@@ -562,7 +619,7 @@
                     },
 
                     render: function() {
-                        var duration = 1000;
+                        var duration = 1500;
                         var t = (performance.now() % duration) / duration;
 
                         var radius = size / 2 * 0.3;
