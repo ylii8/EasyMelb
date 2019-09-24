@@ -4,7 +4,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Your guider, the Melbourne city route guider for ages</title>
+    <title>EasyMelb, the Melbourne city route guider for the aged</title>
 
     <!-- Bootstrap core CSS -->
     <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
