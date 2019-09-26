@@ -556,11 +556,13 @@
     }
 
     function addDirectionAPI(){
+        var query = "https://api.mapbox.com/geocoding/v5/mapbox.places/144.965,-37.813.json?access_token=" + mapboxgl.accessToken;
         directions = new MapboxDirections({
             accessToken: mapboxgl.accessToken,
             profile: 'mapbox/walking',
             proximity:[144.96565, -37.81384],
             unit: 'metric',
+            geocoder: query,
             placeholderOrigin:'Click or search an origin',
             placeholderDestination:'Click or search a destination',
             controls: {
@@ -568,22 +570,18 @@
             }
         });
 
-        // var geocoder = new MapboxGeocoder({
-        //     accessToken: mapboxgl.accessToken,
-        //     countries: 'au',
-        //
-        //     placeholder:'Destination',
-        //     marker: {
-        //         color: 'orange'
-        //     },
-        //     mapboxgl: mapboxgl
-        // });
+        // remove all waypoints
+        var removeWaypointsButton = document.body.appendChild(document.createElement('button'));
+        removeWaypointsButton.style = 'z-index:10;position:absolute;top:100px;right:50px;';
+        removeWaypointsButton.textContent = 'Undo';
+
+        map.on('load', () => {
+            removeWaypointsButton.addEventListener('click', function() {
+                directions.removeWaypoint(0);
+            });
+        });
 
         map.addControl(directions, 'bottom-left');
-        // map.on('load',function(){
-        //     directions.setOrigin(start);
-        // })
-
     }
 
     function getUserLocation() {
@@ -1093,6 +1091,9 @@
                         "icon-allow-overlap": true,
                         'visibility': 'none'
                     }
+                    // "paint":{
+                    //     color:'#730709'
+                    // }
                 });
             });
 
