@@ -1,0 +1,294 @@
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+
+/* The sidepanel */
+.sidepanel {
+    height: 410px; /* Specify a height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: #707382;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
+}
+/* The sidepanel links */
+.sidepanel a {
+    padding: 8px 8px 8px 60px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+    transition: 0.3s;
+}
+/* When you mouse over the navigation links, change their color */
+.sidepanel a:hover {
+    color: #fdcc52;
+}
+.sidepanel a:active {
+    color: #fdcc52;
+}
+/* Position and style the close button (top left corner) */
+.sidepanel .closebtn {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    font-size: 36px;
+    margin-right: 50px;
+    padding-left: 10px;
+}
+#sidepanel {
+    display: block;
+    position: absolute;
+    top:15px;
+    right: 40px;
+    width: 80px;
+    height: 40px;
+    padding: 5px;
+    border: none;
+    text-align: center;
+    font-size: 18px;
+    font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 800;
+    letter-spacing: 1.7px;
+    color: #545765;
+    background: transparent;
+    cursor: pointer;
+}
+#sidepanel:active:hover{
+    color: #fdcc52;
+}
+
+/* logo */
+#logo {
+    display: block;
+    position: absolute;
+    top:15px;
+    left: 15px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #545765;
+}
+#logo img{
+    margin-right:.3rem;
+    margin-bottom:3px;
+    width:2.2rem;
+    height:2.2rem;
+}
+
+/* current location */
+#fly {
+    display: block;
+    position: absolute;
+    bottom:0;
+    margin-left: 46px;
+    margin-bottom: 37px;
+    width: 37px;
+    height: 37px;
+    padding: 10px;
+    border-radius: 50%;
+    border-bottom: solid 2px rgba(92, 92, 92, 0.38);
+    font-size: 13px;
+    text-align: center;
+    left:0;
+    color: rgba(41, 41, 41, 0.99);
+    background: rgba(253, 255, 251, 0.98);
+    cursor: pointer;
+}
+#fly:hover{
+    background: rgba(235, 236, 233, 0.84);
+}
+#fly:active{
+    background: #fdcc52;
+}
+
+/* undo button */
+#undo {
+    display: block;
+    position: absolute;
+    bottom:0;
+    width: 36px;
+    height: 36px;
+    margin-left: 47px;
+    margin-bottom: 81px;
+    padding: 5px;
+    border-radius: 10%;
+    border-bottom: solid 2px rgba(92, 92, 92, 0.38);
+    font-size: 13px;
+    text-align: center;
+    color: rgba(41, 41, 41, 0.99);
+    background: rgba(253, 255, 251, 0.98);
+    cursor: pointer;
+}
+#undo:hover{
+    background: rgba(235, 236, 233, 0.84);
+}
+#undo:active{
+    background: #fdcc52;
+}
+
+.marker-filter hr {
+    width: 0;
+}
+
+
+@media (max-width: 640px) {
+
+}
+@media (max-width: 415px) {
+    #console{
+        font-family: sans-serif;
+        margin-left: 10px;
+        width: 40%;
+        margin-top: 17%;
+    }
+    #gradient_color{
+        font-family: sans-serif;
+        margin-left: 10px;
+        width: 40%;
+        margin-top: 19%;
+    }
+
+}
+@media (max-width: 370px) {
+    #logo{font-size: 16px;}
+    #sidepanel{font-size: 16px;}
+    .sidepanel a{font-size: 15px;}
+}
+
+h2 {
+    font-size: 15px;
+    font-weight: bold;
+}
+h3 {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#console {
+    position: absolute;
+    display:block;
+    right:5px;
+    bottom:0;
+    width: 250px;
+    height: fit-content;
+    padding: 5px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 30px;
+}
+
+.session {
+    margin-bottom: 10px;
+}
+
+.row {
+    height: 10px;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    display: block;
+
+}
+
+.colors {
+    background: linear-gradient(to right, #95c78b, #72c55a, #15cb0b, #51c4c8, #2a6ed7, #132eda, #953f3f, #730709);
+    margin-bottom: 5px;
+}
+
+.label {
+    font-family: sans-serif;
+    font-size: 12px;
+    width: 29%;
+    display: inline-block;
+    text-align: center;
+    cursor: default;
+    font-weight: bold;
+}
+
+#gradient_color{
+    position: absolute;
+    height: fit-content;
+    margin-bottom: 173px;
+    right: 5px;
+    bottom: 0;
+    width: 250px;
+    padding: 5px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: none;
+    margin-top: 0;
+}
+
+.row2 {
+    height: 10px;
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    display: block;
+    line-height: 1px;
+}
+
+.colors2 {
+    background: linear-gradient(to right, #ADFF2F, #FF3300, #6e0000);
+    margin-bottom: 5px;
+}
+
+.label2 {
+    font-family: sans-serif;
+    font-size: 12px;
+    width: 29%;
+    display: inline-block;
+    text-align: center;
+    cursor: default;
+    font-weight: bold;
+}
+.direction{
+    margin-left: 10px;
+    margin-top: 60px;
+}
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
