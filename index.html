@@ -42,10 +42,17 @@
           <div class="header-content mx-auto">
               <div class="slideshow-container">
                   <div class="mySlides">
-                      <h1  style="margin-bottom: 0px;">EasyMelb is a route planner that will help the aged find the most effortless route!</h1>
+                      <h1  style="margin-bottom: 0px;">EasyMelb is a route planner that will help people find the most effortless route!</h1>
                   </div>
-                  <div class="mySlides">
-                      <p>Add more.</p>
+                  <div class="mySlides" >
+                      <h2  style="margin-bottom: 0px;">Google Map doesn't provide these features, <span style="color:#fdcc52;">but we do!</span></h2><br>
+                              <ol type="1" style="font-size: 33px;text-align: left;font-weight: 600;font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';letter-spacing: 1px;">   <!-- The type attribute of the <ol> tag, defines the type of the list item marker: 1/A/a/I/i-->
+                                  <li>Specific street seats location</li>
+                                  <li>Drinking fountains</li>
+                                  <li>Pedestrian traffic for each hour</li>
+                                  <li>Street Steepness</li>
+                                  <li>Detailed toilet information</li>
+                              </ol>
                   </div>
                   <div class="mySlides">
                       <p>......</p>
@@ -80,22 +87,22 @@
       <div class="row no-gutters">
         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/crowd.jpg');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Scare being pushed</h2>
+          <h2 style="font-weight: 600;">Scare being pushed</h2>
           <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">When you walk within the crowd, are you worried others bumping into you? </p>
         </div>
       </div>
       <div class="row no-gutters">
         <div class="col-lg-6 text-white showcase-img" style="background-image: url('img/seats.jpg');"></div>
         <div class="col-lg-6 my-auto showcase-text">
-          <h2>Cannot find seats</h2>
-          <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">When you want to have a rest after a long walk, are you worried no seat available on the street?</p>
+          <h2 style="font-weight: 600;">Cannot find seats</h2>
+          <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">When you want to have a rest after a long walk, are you worried that you cannot find a seat?</p>
         </div>
       </div>
       <div class="row no-gutters">
         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/steep.jpg');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Steeply roads</h2>
-          <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">When you face a steep street, are you afraid of falling? </p>
+          <h2 style="font-weight: 600;">Steeply roads</h2>
+          <p class="lead mb-0" style="padding-left:0px;padding-top:0px;">When you face a steep street, are you worried about the difficulty of climbing?</p>
         </div>
       </div>
     </div>
@@ -109,13 +116,14 @@
           </div>
         </div>
     </section>
-    <section class="features" style="padding-top:50px;padding-bottom:50px;">
+    <section class="features" style="padding-top:10px;padding-bottom:10px;">
         <div class="container">
           <div class="section-heading text-center">
           <div class="row">
             <div class="col-lg-12 my-auto">
               <div class="container-fluid">
-                <div class="row">
+
+                  <div class="row">
                   <div class="col-lg-6">
                     <div class="feature-item">
                       <i class="fas fa-mobile-alt text-primary"></i>
@@ -131,6 +139,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="feature-item">
@@ -147,12 +156,14 @@
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
         </div>
       </section>
+    <!-- welcome new friends-->
     <section class="yellow bg-primary" id="contact">
     <div class="container">
         <h2>Welcome
@@ -160,7 +171,7 @@
             new friend!</h2>
     </div>
     </section>
-    <!-- 从这里的a标签挑战到新的页面，也就是有map功能的那个页面 -->
+    <!--start exploring-->
     <section class="cta" id="map">
       <div class="cta-content">
         <div class="container">
@@ -227,7 +238,7 @@
         }
         slides[slideIndex-1].style.display = "block";
         dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 3000);
+        setTimeout(showSlides, 5000);
     }
 
 </script>

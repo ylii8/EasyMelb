@@ -313,14 +313,6 @@
         }
     });
 
-    function openNav() {
-        document.getElementById("mySidepanel").style.width = "280px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidepanel").style.width = "0";
-    }
-
 </script>
 
 </html>

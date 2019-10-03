@@ -1,5 +1,3 @@
-
-
 function initmap() {
 
     map = new mapboxgl.Map({
@@ -26,7 +24,25 @@ function initmap() {
 
 }
 
+function openNav() {
+    if (window.matchMedia("(max-width: 415px)").matches) { // If media query matches
+        document.getElementById("mySidepanel").style.width = "200px";
+        document.getElementById("mySidepanel").style.height = "350px";
+        document.getElementById("seatButton").style.paddingLeft = "40px";
+        document.getElementById("toiletButton").style.paddingLeft = "40px";
+        document.getElementById("drinkButton").style.paddingLeft = "40px";
+        document.getElementById("gradientButton").style.paddingLeft = "40px";
+        document.getElementById("densityButton").style.paddingLeft = "40px";
+        document.getElementById("3dButton").style.paddingLeft = "40px";
+        document.getElementById("nearby").style.paddingLeft = "40px";
+    } else {
+        document.getElementById("mySidepanel").style.width = "280px";
+    }
+}
 
+function closeNav() {
+    document.getElementById("mySidepanel").style.width = "0";
+}
 
 function getUserLocation() {
     if (navigator.geolocation)

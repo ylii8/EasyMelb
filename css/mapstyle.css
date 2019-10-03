@@ -23,13 +23,8 @@ body { margin:0; padding:0; }
     display: block;
     transition: 0.3s;
 }
-/* When you mouse over the navigation links, change their color */
-.sidepanel a:hover {
-    color: #fdcc52;
-}
-.sidepanel a:active {
-    color: #fdcc52;
-}
+.sidepanel a:hover {color: #fdcc52;}
+.sidepanel a:active {color: #fdcc52;}
 /* Position and style the close button (top left corner) */
 .sidepanel .closebtn {
     position: absolute;
@@ -39,6 +34,7 @@ body { margin:0; padding:0; }
     margin-right: 50px;
     padding-left: 10px;
 }
+
 #sidepanel {
     display: block;
     position: absolute;
@@ -61,6 +57,7 @@ body { margin:0; padding:0; }
     color: #fdcc52;
 }
 
+
 /* logo */
 #logo {
     display: block;
@@ -81,6 +78,7 @@ body { margin:0; padding:0; }
     width:2.2rem;
     height:2.2rem;
 }
+
 
 /* current location */
 #fly {
@@ -108,6 +106,7 @@ body { margin:0; padding:0; }
     background: #fdcc52;
 }
 
+
 /* undo button */
 #undo {
     display: block;
@@ -133,6 +132,7 @@ body { margin:0; padding:0; }
     background: #fdcc52;
 }
 
+
 .marker-filter hr {
     width: 0;
 }
@@ -154,12 +154,10 @@ body { margin:0; padding:0; }
         width: 40%;
         margin-top: 19%;
     }
-
-}
-@media (max-width: 370px) {
     #logo{font-size: 16px;}
     #sidepanel{font-size: 16px;}
     .sidepanel a{font-size: 15px;}
+
 }
 
 h2 {
