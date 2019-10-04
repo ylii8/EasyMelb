@@ -35,7 +35,8 @@ function openNav() {
         document.getElementById("densityButton").style.paddingLeft = "40px";
         document.getElementById("3dButton").style.paddingLeft = "40px";
         document.getElementById("nearby").style.paddingLeft = "40px";
-    } else {
+     }
+    else {
         document.getElementById("mySidepanel").style.width = "280px";
     }
 }

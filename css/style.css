@@ -493,51 +493,30 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   padding: 10px 25px;
 }
 
-/* Slideshow container */
-.slideshow-container {
-    position: relative;
-    background: transparent;
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }
-
-/* Slides */
-.mySlides {
-    display: none;
-    text-align: center;
-    padding:0px;
+th, td {
+  padding: 15px;
+  text-align: left;
 }
-
-
-
-
-
-
-/* The dot/bullet/indicator container */
-.dot-container {
-    text-align: center;
-    padding: 20px;
-    background: transparent;
-    margin-bottom: 10px;
+table#t01 {
+  width: 90%;
+  background-color: #f1f1c1;
+  margin-left: 38px;
 }
-
-/* The dots/bullets/indicators */
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
+table#t01 tr:nth-child(even) {
+  background-color: #eee;
 }
-
-/* Add a background color to the active dot/circle */
-.active, .dot:hover {
-    background-color: #717171;
+table#t01 tr:nth-child(odd) {
+  background-color: #fff;
 }
-
-/* Add an italic font style to all quotes */
-q {font-style: italic;}
+table#t01 th {
+  background-color: black;
+  color: white;
+}
 
 
 @media (max-width: 576px) {
@@ -573,6 +552,9 @@ q {font-style: italic;}
   }
   .btn-xl{
     font-size: 14px;
+  }
+  .whyuse h2{
+    font-size: 20px;
   }
 }
 
