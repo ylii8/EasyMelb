@@ -194,6 +194,27 @@ header.masthead .header-content h1 {
     font-weight: 800;
 }
 
+header.masthead .header-content h2 {
+  font-size: 35px;
+  font-weight: 800;
+}
+header.masthead .header-content ol {
+  font-size: 33px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: left;
+  font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
+}
+
+.mySlides ol {
+  margin-left: 100px;
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.mySlides ol li {
+  font-weight: 800;
+}
 
 
 @media (min-width: 992px) {
@@ -212,7 +233,6 @@ header.masthead .header-content h1 {
   }
   header.masthead .header-content h2 {
     font-size: 35px;
-    font-weight: 800;
   }
 }
 
@@ -243,6 +263,18 @@ section.download .badges .badge-link img {
   section.download .badges .badge-link {
     display: inline-block;
     margin-bottom: 0;
+  }
+  header.masthead .header-content h1 {
+    font-size: 40px;
+  }
+  header.masthead .header-content h2 {
+    font-size: 30px;
+  }
+  header.masthead .header-content ol{
+    font-size: 28px;
+  }
+  .mySlides ol {
+    margin-left: 70px;
   }
 }
 
@@ -355,23 +387,21 @@ section.cta .cta-content h2 {
   section.cta .cta-content h2 {
     font-size: 60px;
   }
+  header.masthead .header-content h1 {
+    font-size: 35px;
+  }
+  header.masthead .header-content h2 {
+    font-size: 25px;
+  }
+  header.masthead .header-content ol{
+    font-size: 23px;
+  }
+  .mySlides ol {
+    margin-left: 50px;
+  }
 
 }
 
-@media (max-width: 576px) {
-
-  .showcase .showcase-text {
-    padding:2rem;
-  }
-  
-  .showcase .showcase-img {
-    min-height: 20rem;
-    background-size: cover;
-  }
-  section.cta .cta-content h2 {
-    font-size: 40px;
-  }
-}
 
 section.cta .overlay {
   position: absolute;
@@ -512,15 +542,7 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     padding:0px;
 }
 
-.mySlides ol {
-  margin-left: 100px;
-  font-weight: 800;
-  margin-bottom: 0;
-}
 
-.mySlides ol li {
-  font-weight: 800;
-}
 
 
 
@@ -554,4 +576,48 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
 q {font-style: italic;}
 
 
+@media (max-width: 576px) {
+
+  .showcase .showcase-text {
+    padding:2rem;
+  }
+
+  .showcase .showcase-img {
+    min-height: 20rem;
+    background-size: cover;
+  }
+  section.cta .cta-content h2 {
+    font-size: 30px;
+  }
+  header.masthead .header-content h1 {
+    font-size: 25px;
+  }
+  header.masthead .header-content h2 {
+    font-size: 20px;
+  }
+  header.masthead .header-content ol{
+    font-size: 18px;
+  }
+  .mySlides ol {
+    margin-left: 40px;
+  }
+  section h2{
+    font-size: 20px;
+  }
+  section {
+    padding: 30px 0;
+  }
+  .lead{
+    font-size: 0.85rem;
+  }
+  section.features .feature-item h3{
+    font-size: 20px;
+  }
+  p {
+    font-size: 18px;
+  }
+  .btn-xl{
+    font-size: 14px;
+  }
+}
 
