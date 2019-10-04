@@ -1,0 +1,33 @@
+*{padding:0;margin:0;}
+ul,ol{list-style:none;}
+img{border:none;outline:none;}
+a{color:#666;text-decoration:none;outline:none;}
+a:hover{color:#e8431f;}
+
+#floatDivBoxs{width:170px;background:#fff;position:fixed;top:480px;right:-170px;z-index:999;}
+#floatDivBoxs .floatDtt{width:100%;height:45px;line-height:45px; background:#f08326;color:#fff;font-size:18px;text-indent:22px;position:relative;}
+.floatShadow{ background:#fff;box-shadow:-2px 0 3px rgba(0,0,0,0.25);}
+#rightArrow{width:50px;height:45px;background:url(../img/online_arrow.jpg) no-repeat;position:fixed;top:480px;right:0;z-index:999;}
+#rightArrow a{display:block;height:45px;}
+
+#rightArrow2{width:50px;height:45px;background:url(../img/online_arrow.jpg) no-repeat;position:fixed;top:400px;right:0;z-index:999;}
+#rightArrow2 a{display:block;height:45px;}
+#floatDivBoxs2{width:170px;background:#fff;position:fixed;top:400px;right:-170px;z-index:999;}
+#floatDivBoxs2 .floatDtt{width:100%;height:45px;line-height:45px; background:#f08326;color:#fff;font-size:18px;text-indent:22px;position:relative;}
+.floatShadow{ background:#fff;box-shadow:-2px 0 3px rgba(0,0,0,0.25);}
+
+@media (max-width: 415px) {
+    #floatDivBoxs{width:170px;background:#fff;position:fixed;top:400px;right:-170px;z-index:999;}
+    #floatDivBoxs .floatDtt{width:100%;height:45px;line-height:45px; background:#f08326;color:#fff;font-size:18px;text-indent:22px;position:relative;}
+    .floatShadow{ background:#fff;box-shadow:-2px 0 3px rgba(0,0,0,0.25);}
+    #rightArrow{width:50px;height:45px;background:url(../img/online_arrow.jpg) no-repeat;position:fixed;top:400px;right:0;z-index:999;}
+    #rightArrow a{display:block;height:45px;}
+}
+
+@media (max-width: 415px) {
+    #rightArrow2{width:50px;height:45px;background:url(../img/online_arrow.jpg) no-repeat;position:fixed;top:320px;right:0;z-index:999;}
+    #rightArrow2 a{display:block;height:45px;}
+    #floatDivBoxs2{width:170px;background:#fff;position:fixed;top:320px;right:-170px;z-index:999;}
+    #floatDivBoxs2 .floatDtt{width:100%;height:45px;line-height:45px; background:#f08326;color:#fff;font-size:18px;text-indent:22px;position:relative;}
+    .floatShadow{ background:#fff;box-shadow:-2px 0 3px rgba(0,0,0,0.25);}
+}

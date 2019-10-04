@@ -24,10 +24,13 @@
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
     <!-- jquery -->
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/jquery-1.9.1.min.js"></script>
     <!--turf-->
     <script src='https://api.mapbox.com/mapbox.js/plugins/turf/v2.0.2/turf.min.js'></script>
     <!-- Custom styles -->
     <link href="css/mapstyle.css" rel="stylesheet">
+    <link href="css/bar.css" type="text/css" rel="stylesheet" />
+
     <!-- Map JS-->
     <script src='js/map.js'></script>
 </head>
@@ -51,70 +54,114 @@
 <button id='sidepanel' onclick="openNav()" title="More functions">Functions</button>
 <button id='fly' title="Show current location"><i class="fa fa-location-arrow"></i></button>
 <button id='undo' title="Undo drag changes"><i class="fas fa-undo-alt"></i></button>
-<div id='console' style="display: none; height: fit-content">
-    <div class='session'>
-        <h2>Pedestrian</h2>
-        <div class='row2 colors'></div>
-        <div class='row2 labels'>
-            <div class='label'>Low</div>
-            <div class='label'>        </div>
-            <div class='label'>High</div>
+<div id="snackbar">The points show the sensor locations</div>
+<!--Pedestrian-->
+<div id="rightArrow" style="display: none"><a href="javascript:;" title="Pedestrian"></a></div>
+<div id="floatDivBoxs" style="display: none">
+    <div class="floatDtt">Pedestrian</div>
+    <div class="floatShadow">
+        <div class='session'>
+            <div class='row2 colors'></div>
+            <div class='row2 labels'>
+                <div class='label'>Low</div>
+                <div class='label'>        </div>
+                <div class='label'>High</div>
+            </div>
         </div>
-    </div>
-    <div class='session' id='sliderbar'>
-        <h3>Hour: <label2 id='active-hour'>12PM</label2></h3>
-        <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
-    </div>
-    <div class='session' >
-        <h3>Day</h3>
-        <div class='row2' id='filters'>
-            <script type="text/javascript">
-                var chartsdayid = new Array("Monday","Tuesday","Wednesday",
-                    "Thursday","Friday","Saturday","Sunday");
-                // choose different day
-                function selectchangeday(e) {
-                    // alert(e)
-                    for(j = 0; j < chartsdayid.length; j++) {
-                        try{
-                            // document.getElementById(e).style.display="none";
-                            if (chartsdayid[j]==e)
-                            //document.getElementById(chartsyearid[j]).style.display="block";
-                                document.getElementById(chartsdayid[j]).style.height="auto";
-                            else
-                            //document.getElementById(chartsyearid[j]).style.display="none";
-                                document.getElementById(chartsdayid[j]).style.height="0";
-                        }catch(err){
-                            // alert(err);
+        <div class='session' id='sliderbar'>
+            <h3>Hour: <label2 id='active-hour'>12PM</label2></h3>
+            <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
+        </div>
+        <div class='session' >
+            <h3>Day</h3>
+            <div class='row2' id='filters'>
+                <script type="text/javascript">
+                    var chartsdayid = new Array("Monday","Tuesday","Wednesday",
+                        "Thursday","Friday","Saturday","Sunday");
+                    // choose different day
+                    function selectchangeday(e) {
+                        // alert(e)
+                        for(j = 0; j < chartsdayid.length; j++) {
+                            try{
+                                // document.getElementById(e).style.display="none";
+                                if (chartsdayid[j]==e)
+                                //document.getElementById(chartsyearid[j]).style.display="block";
+                                    document.getElementById(chartsdayid[j]).style.height="auto";
+                                else
+                                //document.getElementById(chartsyearid[j]).style.display="none";
+                                    document.getElementById(chartsdayid[j]).style.height="0";
+                            }catch(err){
+                                // alert(err);
+                            }
                         }
                     }
-                }
-            </script>
-            <select id="day" onchange="selectchangeday(this.value)" style="font-size: 10px; display: inline-block;" >
-                <option value="Monday" selected="selected">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-            </select>
-            <button onclick="snackBar()" style="margin-left:35px;font-size: 13px;display: inline-block;">More details</button>
-        </div>
+                </script>
+                <select id="day" onchange="selectchangeday(this.value)" style="font-size: 10px; display: inline-block;" >
+                    <option value="Monday" selected="selected">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+                <button onclick="snackBar()" style="margin-left:35px;font-size: 13px;display: inline-block;">More details</button>
+            </div>
 
-    </div>
-</div>
-<div id='gradient_color' style="">
-    <div class='session'>
-        <h2>Gradient</h2>
-        <div class='row2 colors2'></div>
-        <div class='row2 labels2'>
-            <div class='label2'>Low</div>
-            <div class='label2'>        </div>
-            <div class='label2'>High</div>
         </div>
     </div>
 </div>
-<div id="snackbar">The points show the sensor locations</div>
+<!--Gradient-->
+<div id="rightArrow2" style="display: none"><a href="javascript:;" title="Gradient"></a></div>
+<div id="floatDivBoxs2" style="display: none">
+    <div class="floatDtt">Gradient</div>
+    <div class="floatShadow">
+        <div class='session'>
+            <div class='row2 colors2'></div>
+            <div class='row2 labels2'>
+                <div class='label2'>Low</div>
+                <div class='label2'>        </div>
+                <div class='label2'>High</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function(){
+        var flag=0;
+        $('#rightArrow').on("click",function(){
+            if(flag==1){
+                $("#floatDivBoxs").animate({right: '-175px'},300);
+                $(this).animate({right: '-5px'},300);
+                $(this).css('background-position','-50px 0');
+                flag=0;
+            }else{
+                $("#floatDivBoxs").animate({right: '0'},300);
+                $(this).animate({right: '170px'},300);
+                $(this).css('background-position','0px 0');
+                flag=1;
+            }
+        });
+    });
+
+    $(function(){
+        var flag=0;
+        $('#rightArrow2').on("click",function(){
+            if(flag==1){
+                $("#floatDivBoxs2").animate({right: '-175px'},300);
+                $(this).animate({right: '-5px'},300);
+                $(this).css('background-position','-50px 0');
+                flag=0;
+            }else{
+                $("#floatDivBoxs2").animate({right: '0'},300);
+                $(this).animate({right: '170px'},300);
+                $(this).css('background-position','0px 0');
+                flag=1;
+            }
+        });
+    });
+</script>
 
 </body>
 
@@ -262,12 +309,14 @@
     document.getElementById("gradientButton").addEventListener("click", function() {
         if (this.classList.contains("active")) {
             this.classList.remove("active");
-            document.getElementById("gradient_color").style.display = "none";
+            document.getElementById("rightArrow2").style.display = "none";
+            document.getElementById("floatDivBoxs2").style.display = "none";
             map.setLayoutProperty('line', 'visibility', 'none');
             document.getElementById("gradientButton").style.background= "#707382";
         } else{
             this.classList.add("active");
-            document.getElementById("gradient_color").style.display = "block";
+            document.getElementById("rightArrow2").style.display = "block";
+            document.getElementById("floatDivBoxs2").style.display = "block";
             map.setLayoutProperty('line', 'visibility', 'visible');
             document.getElementById("gradientButton").style.background= "#fdcc52";
         }
@@ -275,12 +324,14 @@
     document.getElementById("densityButton").addEventListener("click", function() {
         if (this.classList.contains("active")) {
             this.classList.remove("active");
-            document.getElementById("console").style.display = "none";
+            document.getElementById("rightArrow").style.display = "none";
+            document.getElementById("floatDivBoxs").style.display = "none";
             map.setLayoutProperty("pedestrian", 'visibility', 'none');
             document.getElementById("densityButton").style.background= "#707382";
         } else{
             this.classList.add("active");
-            document.getElementById("console").style.display = "block";
+            document.getElementById("rightArrow").style.display = "block";
+            document.getElementById("floatDivBoxs").style.display = "block";
             map.setLayoutProperty('pedestrian', 'visibility', 'visible');
             document.getElementById("densityButton").style.background= "#fdcc52";
         }
