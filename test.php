@@ -30,7 +30,10 @@
     <!-- Custom styles -->
     <link href="css/mapstyle.css" rel="stylesheet">
     <link href="css/bar.css" type="text/css" rel="stylesheet" />
-
+    <!-- Add IntroJs -->
+    <link href="lib/introjs.css" rel="stylesheet">
+    <link href="lib/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type="text/javascript" src="lib/intro.js"></script>
     <!-- Map JS-->
     <script src='js/map.js'></script>
 </head>
@@ -174,6 +177,7 @@
     var drinkGeojson = {};
     var seatGeojson = {};
     var pedestrianGeojson = {};
+    var first = true;
 
     initmap();
 
@@ -364,6 +368,47 @@
         }
     });
 
+    var intro = introJs();
+    intro.setOptions({
+        steps: [
+            {
+                intro: "Welcome to EasyMelb, there are some tips to get you familiar with EasyMelb!"
+            },
+            {
+                element: document.getElementById('logo'),
+                intro: "You can go to home page by clicking this.",
+                position: 'right'
+            },
+            {
+                element: document.getElementById('sidepanel'),
+                intro: "Here we provide functions to help you find out street conditions and detailed public " +
+                    "facilities information such as street seats and toilets.",
+                position: 'left'
+            },
+            {
+                element: document.getElementById('fly'),
+                intro: "Showing your current location by click this button, the current location will show as a yellow blinking point.",
+                position: 'top'
+            },
+            {
+                element: document.getElementById('direction'),
+                intro: 'Here you can set your origin and destination for your journey, just click on the map or search in the box.',
+                position: 'bottom'
+            },
+            {
+                element: document.getElementById("undo"),
+                intro: "This is used to undo your drag changes when you already made some changes to the displayed route. <br> To make a route, start with entering your origin and destination.",
+                position: 'right'
+            },
+            {
+                intro: "Ready? Let's GO!"
+            }
+        ]
+    });
+    intro.start();
+
 </script>
+
+
 
 </html>
