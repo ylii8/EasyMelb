@@ -68,12 +68,12 @@
                 <div class='label'>High</div>
             </div>
         </div>
-        <div class='session' id='sliderbar'>
-            <h3>Hour: <label2 id='active-hour'>12PM</label2></h3>
+        <div class='session' id='sliderbar' style="margin-left: 3px;">
+            <h3 >Hour: <label2 id='active-hour'>12PM</label2></h3>
             <input id='slider' class='row' type='range' min='0' max='23' step='1' value='12' />
         </div>
-        <div class='session' >
-            <h3>Day</h3>
+        <div class='session' style="margin-left: 3px;">
+            <h3 >Day</h3>
             <div class='row2' id='filters'>
                 <script type="text/javascript">
                     var chartsdayid = new Array("Monday","Tuesday","Wednesday",
@@ -105,7 +105,7 @@
                     <option value="Saturday">Saturday</option>
                     <option value="Sunday">Sunday</option>
                 </select>
-                <button onclick="snackBar()" style="margin-left:35px;font-size: 13px;display: inline-block;">More details</button>
+                <button onclick="snackBar()" style="margin-left:65px;font-size: 13px;border:none;display: inline-block;"><i class="fas fa-info-circle"></i></button>
             </div>
 
         </div>
@@ -115,7 +115,7 @@
 <div id="rightArrow2" style="display: none"><a href="javascript:;" title="Gradient"></a></div>
 <div id="floatDivBoxs2" style="display: none">
     <div class="floatDtt">Gradient</div>
-    <div class="floatShadow">
+    <div class="floatShadowgr">
         <div class='session'>
             <div class='row2 colors2'></div>
             <div class='row2 labels2'>

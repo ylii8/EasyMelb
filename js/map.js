@@ -48,7 +48,7 @@ function closeNav() {
 function getUserLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(position) {
-            start = [position.coords.longitude,position.coords.latitude];
+             start = [position.coords.longitude,position.coords.latitude];
             passData();
             // var marker = new mapboxgl.Marker({ color: '#fcd703'})
             //     .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -214,11 +214,11 @@ function addUndo() {
 
 function discoverNearest(){
     // fake current location
-    var marker = new mapboxgl.Marker({
-        color: '#fcd703'
-    }).setLngLat([144.9639, -37.8136])
-        .setPopup(new mapboxgl.Popup({offset: 25})
-            .setHTML('<h3>Fake current location</h3>')).addTo(map);
+    // var marker = new mapboxgl.Marker({
+    //     color: '#fcd703'
+    // }).setLngLat([144.9639, -37.8136])
+    //     .setPopup(new mapboxgl.Popup({offset: 25})
+    //         .setHTML('<h3>Fake current location</h3>')).addTo(map);
 
     var nearSeat = {};
     nearSeat['type'] = 'FeatureCollection';
