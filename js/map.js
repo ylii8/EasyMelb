@@ -95,6 +95,7 @@ function getUserLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(position) {
              start = [position.coords.longitude,position.coords.latitude];
+             start = [144.9639, -37.8136];
             passData();
             // var marker = new mapboxgl.Marker({ color: '#fcd703'})
             //     .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -219,7 +220,7 @@ function snackBar() {
     // Add the "show" class to DIV
     x.className = "show";
     // After 3 seconds, remove the show class from DIV
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
 }
 
 function addDirectionAPI(){
@@ -259,7 +260,7 @@ function addUndo() {
 }
 
 function discoverNearest(){
-    // fake current location
+    //fake current location
     // var marker = new mapboxgl.Marker({
     //     color: '#fcd703'
     // }).setLngLat([144.9639, -37.8136])

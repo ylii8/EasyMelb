@@ -32,7 +32,6 @@
     <link href="css/bar.css" type="text/css" rel="stylesheet" />
     <!-- Add IntroJs -->
     <link href="lib/introjs.css" rel="stylesheet">
-    <link href="lib/bootstrap-responsive.min.css" rel="stylesheet">
     <script type="text/javascript" src="lib/intro.js"></script>
     <!-- Map JS-->
     <script src='js/map.js'></script>
