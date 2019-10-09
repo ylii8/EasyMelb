@@ -4,7 +4,7 @@ function initmap() {
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
         center: [144.96565, -37.81384], //default location when load the map
-        zoom: 16, //default zoom level
+        zoom: 15.5, //default zoom level
         pitch: 45,
         bearing: -17.6,
         antialias: true,
@@ -829,7 +829,6 @@ function drawPedestrian(){
                     10, '#95c78b',
                     50, '#72c55a',
                     100, '#15cb0b',
-                    300, '#51c4c8',
                     600, '#2a6ed7',
                     2000, '#132eda',
                     3000, '#953f3f',

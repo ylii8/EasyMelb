@@ -177,6 +177,7 @@
     var seatGeojson = {};
     var pedestrianGeojson = {};
     var first = true;
+    var intro = introJs();
 
     initmap();
 
@@ -270,7 +271,7 @@
             map.setLayoutProperty('seat', 'visibility', 'none');
             map.setLayoutProperty('seat-cluster-count', 'visibility', 'none');
             map.setLayoutProperty('seat-unclustered-point', 'visibility', 'none');
-            document.getElementById("seatButton").style.background= "#707382";
+            document.getElementById("seatButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.setLayoutProperty('seat', 'visibility', 'visible');
@@ -285,7 +286,7 @@
             map.setLayoutProperty("places", 'visibility', 'none');
             map.setLayoutProperty('cluster-count', 'visibility', 'none');
             map.setLayoutProperty('unclustered-point', 'visibility', 'none');
-            document.getElementById("toiletButton").style.background= "#707382";
+            document.getElementById("toiletButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.setLayoutProperty('places', 'visibility', 'visible');
@@ -300,7 +301,7 @@
             map.setLayoutProperty('drink', 'visibility', 'none');
             map.setLayoutProperty('drink-cluster-count', 'visibility', 'none');
             map.setLayoutProperty('drink-unclustered-point', 'visibility', 'none');
-            document.getElementById("drinkButton").style.background= "#707382";
+            document.getElementById("drinkButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.setLayoutProperty('drink', 'visibility', 'visible');
@@ -315,9 +316,14 @@
             document.getElementById("rightArrow2").style.display = "none";
             document.getElementById("floatDivBoxs2").style.display = "none";
             map.setLayoutProperty('line', 'visibility', 'none');
-            document.getElementById("gradientButton").style.background= "#707382";
+            document.getElementById("gradientButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
+            // if (first==true){
+            //     introJs().refresh();
+            //     introJs().showHints();
+            //     first = false;
+            // }
             document.getElementById("rightArrow2").style.display = "block";
             document.getElementById("floatDivBoxs2").style.display = "block";
             map.setLayoutProperty('line', 'visibility', 'visible');
@@ -330,7 +336,7 @@
             document.getElementById("rightArrow").style.display = "none";
             document.getElementById("floatDivBoxs").style.display = "none";
             map.setLayoutProperty("pedestrian", 'visibility', 'none');
-            document.getElementById("densityButton").style.background= "#707382";
+            document.getElementById("densityButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
             document.getElementById("rightArrow").style.display = "block";
@@ -343,7 +349,7 @@
         if (this.classList.contains("active")) {
             this.classList.remove("active");
             map.setLayoutProperty("3d-buildings", 'visibility', 'none');
-            document.getElementById("3dButton").style.background= "#707382";
+            document.getElementById("3dButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.setLayoutProperty("3d-buildings", 'visibility', 'visible');
@@ -356,7 +362,7 @@
             map.setLayoutProperty("nearSeat", 'visibility', 'none');
             map.setLayoutProperty("nearDrink", 'visibility', 'none');
             map.setLayoutProperty("nearFeature", 'visibility', 'none');
-            document.getElementById("nearby").style.background= "#707382";
+            document.getElementById("nearby").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.flyTo({center: [144.9639, -37.8136],zoom: 17});
@@ -367,7 +373,7 @@
         }
     });
 
-    var intro = introJs();
+
     intro.setOptions({
         steps: [
             {
