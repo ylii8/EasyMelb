@@ -105,25 +105,6 @@ body { margin:0; padding:0; }
 #fly:active{
     background: #fdcc52;
 }
-
-.tooltip{
-    display: block;
-    position: absolute;
-    bottom:0;
-    margin-left: 46px;
-    margin-bottom: 37px;
-    width: 37px;
-    height: 37px;
-    padding: 10px;
-    border-radius: 50%;
-    border-bottom: solid 2px rgba(92, 92, 92, 0.38);
-    font-size: 13px;
-    text-align: center;
-    left:0;
-    color: rgba(41, 41, 41, 0.99);
-    background: rgba(253, 255, 251, 0.98);
-    cursor: pointer;
-}
 /* undo button */
 #undo {
     display: block;

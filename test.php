@@ -381,7 +381,7 @@
             },
             {
                 element: document.getElementById('logo'),
-                intro: "You can go to home page by clicking this.",
+                intro: "You can go to the home page by clicking this.",
                 position: 'right'
             },
             {
