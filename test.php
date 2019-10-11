@@ -61,7 +61,7 @@
 <button id='undo' title="Undo drag changes"><i class="fas fa-undo-alt"></i></button>
 <div id="snackbar">The points show the sensor locations</div>
 <!--Pedestrian-->
-<div id="rightArrow" style="display: none"><a href="javascript:;" title="Pedestrian"></a></div>
+<div id="rightArrow" style="display: none"><a href="javascript:;" title="Pedestrian"><i class="fas fa-users"></i></a></div>
 <div id="floatDivBoxs" style="display: none">
     <div class="floatDtt" >Pedestrian</div>
     <div class="floatShadow">
@@ -117,7 +117,7 @@
     </div>
 </div>
 <!--Gradient-->
-<div id="rightArrow2" style="display: none"><a href="javascript:;" title="Gradient"></a></div>
+<div id="rightArrow2" style="display: none"><a href="javascript:;" title="Gradient"><i class="fas fa-mountain"></i></a></div>
 <div id="floatDivBoxs2" style="display: none">
     <div class="floatDtt">Gradient</div>
     <div class="floatShadowgr">
@@ -134,7 +134,7 @@
 
 <script>
     $(function(){
-        var flag=0;
+        var flag=1;
         $('#rightArrow').on("click",function(){
             // hide
             if(flag==1){
@@ -154,7 +154,7 @@
     });
 
     $(function(){
-        var flag=0;
+        var flag=1;
         $('#rightArrow2').on("click",function(){
             if(flag==1){
                 $("#floatDivBoxs2").animate({right: '-175px'},300);
@@ -326,6 +326,8 @@
             this.classList.add("active");
             document.getElementById("rightArrow2").style.display = "block";
             document.getElementById("floatDivBoxs2").style.display = "block";
+            document.getElementById("floatDivBoxs2").style.right='0';
+            document.getElementById("rightArrow2").style.right='170px';
             map.setLayoutProperty('line', 'visibility', 'visible');
             document.getElementById("gradientButton").style.background= "#fdcc52";
         }
@@ -341,6 +343,8 @@
             this.classList.add("active");
             document.getElementById("rightArrow").style.display = "block";
             document.getElementById("floatDivBoxs").style.display = "block";
+            document.getElementById("floatDivBoxs").style.right='0';
+            document.getElementById("rightArrow").style.right='170px';
             map.setLayoutProperty('pedestrian', 'visibility', 'visible');
             document.getElementById("densityButton").style.background= "#fdcc52";
         }
