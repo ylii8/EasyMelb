@@ -95,7 +95,7 @@ function getUserLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(position) {
              start = [position.coords.longitude,position.coords.latitude];
-             start = [144.95936, -37.81654];
+             start = [144.96358,-37.81325];
             passData();
             // var marker = new mapboxgl.Marker({ color: '#fcd703'})
             //     .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -277,18 +277,85 @@ function discoverNearest(){
     map.on('load', function () {
         map.addSource("nearSeat", {
             type: "geojson",
-            data: nearSeat
+            data: nearSeat,
+            cluster: true,
+            clusterMaxZoom: 40, // Max zoom to cluster points on
+            clusterRadius: 50
         });
+
+        // Add a layer showing the places.
+        map.addLayer({
+            "id": "nearcluster",
+            "type": "circle",
+            "source": 'nearSeat',
+            "filter": ["has", "point_count"],
+            "layout": {
+                'visibility': 'none'
+            },
+            paint: {
+                "circle-color": [
+                    "step",
+                    ["get", "point_count"],
+                    "#ffc020",
+                    3,
+                    "#ff8020",
+                    6,
+                    "#ff4020",
+                    9,
+                    "#ff0020"
+                ],
+                "circle-radius": [
+                    "step",
+                    ["get", "point_count"],
+                    20,
+                    10,
+                    30,
+                    20,
+                    40
+                ]
+            }
+        });
+        map.addLayer({
+            id: "near-cluster-count",
+            type: "symbol",
+            "source": 'nearSeat',
+            filter: ["has", "point_count"],
+            layout: {
+                "text-field": "{point_count_abbreviated}",
+                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                "text-size": 12,
+                'visibility': 'none'
+            }
+        });
+
         map.addLayer({
             id: "nearSeat",
             type: "symbol",
             "source": "nearSeat",
+            filter: ["!", ["has", "point_count"]],
             "layout": {
                 "icon-image": "bench",
                 "icon-allow-overlap": true,
                 'visibility': 'none'
             }
         });
+
+        // inspect a cluster on click
+        map.on('click', 'nearcluster', function (e) {
+            var features = map.queryRenderedFeatures(e.point, { layers: ['nearcluster'] });
+            var clusterId = features[0].properties.cluster_id;
+            map.getSource('nearSeat').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                if (err)
+                    return;
+
+                map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                });
+            });
+        });
+
+
         map.on('click', 'nearSeat', function (e) {
             var coordinates = e.features[0].geometry.coordinates.slice();
             var description = e.features[0].properties.description;
@@ -300,6 +367,16 @@ function discoverNearest(){
                 .setLngLat(coordinates)
                 .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
                 .addTo(map);
+        });
+
+        // Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', 'nearcluster', function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'nearcluster', function () {
+            map.getCanvas().style.cursor = '';
         });
     });
 
@@ -321,18 +398,81 @@ function discoverNearest(){
     map.on('load', function () {
         map.addSource("nearDrink", {
             type: "geojson",
-            data: nearDrink
+            data: nearDrink,
+            cluster: true,
+            clusterMaxZoom: 20, // Max zoom to cluster points on
+            clusterRadius: 50
         });
+        // Add a layer showing the places.
+        map.addLayer({
+            "id": "neardrinkcluster",
+            "type": "circle",
+            "source": 'nearDrink',
+            "filter": ["has", "point_count"],
+            "layout": {
+                'visibility': 'none'
+            },
+            paint: {
+                "circle-color": [
+                    "step",
+                    ["get", "point_count"],
+                    "#00c0ff",
+                    2,
+                    "#0060ff",
+                    4,
+                    "#0000ff"
+                ],
+                "circle-radius": [
+                    "step",
+                    ["get", "point_count"],
+                    20,
+                    6,
+                    30,
+                    9,
+                    40
+                ]
+            }
+        });
+        map.addLayer({
+            id: "neardrink-cluster-count",
+            type: "symbol",
+            "source": 'nearDrink',
+            filter: ["has", "point_count"],
+            layout: {
+                "text-field": "{point_count_abbreviated}",
+                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                "text-size": 12,
+                'visibility': 'none'
+            }
+        });
+
         map.addLayer({
             id: "nearDrink",
             type: "symbol",
             "source": "nearDrink",
+            filter: ["!", ["has", "point_count"]],
             "layout": {
                 "icon-image": "drop",
                 "icon-allow-overlap": true,
                 'visibility': 'none'
             }
         });
+
+        // inspect a cluster on click
+        map.on('click', 'neardrinkcluster', function (e) {
+            var features = map.queryRenderedFeatures(e.point, { layers: ['neardrinkcluster'] });
+            var clusterId = features[0].properties.cluster_id;
+            map.getSource('nearDrink').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                if (err)
+                    return;
+
+                map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                });
+            });
+        });
+
         map.on('click', 'nearDrink', function (e) {
             var coordinates = e.features[0].geometry.coordinates.slice();
             var description = e.features[0].properties.description;
@@ -365,17 +505,77 @@ function discoverNearest(){
     map.on('load', function () {
         map.addSource("near", {
             type: "geojson",
-            data: near
+            data: near,
+            cluster: true,
+            clusterMaxZoom: 20, // Max zoom to cluster points on
+            clusterRadius: 50
+        });
+        // Add a layer showing the places.
+        map.addLayer({
+            "id": "neartoiletcluster",
+            "type": "circle",
+            "source": 'near',
+            "filter": ["has", "point_count"],
+            "layout": {
+                'visibility': 'none'
+            },
+            paint: {
+                "circle-color": [
+                    "step",
+                    ["get", "point_count"],
+                    "#ffa0c0",
+                    2,
+                    "#ff60c0",
+                    3,
+                    "#ff20c0"
+                ],
+                "circle-radius": [
+                    "step",
+                    ["get", "point_count"],
+                    20,
+                    6,
+                    30,
+                    9,
+                    40
+                ]
+            }
+        });
+        map.addLayer({
+            id: "neartoilet-cluster-count",
+            type: "symbol",
+            "source": 'near',
+            filter: ["has", "point_count"],
+            layout: {
+                "text-field": "{point_count_abbreviated}",
+                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                "text-size": 12,
+                'visibility': 'none'
+            }
         });
         map.addLayer({
             id: "nearFeature",
             type: "symbol",
             "source": "near",
+            filter: ["!", ["has", "point_count"]],
             "layout": {
                 "icon-image": "toilet",
                 "icon-allow-overlap": true,
                 'visibility': 'none'
             }
+        });
+        // inspect a cluster on click
+        map.on('click', 'neartoiletcluster', function (e) {
+            var features = map.queryRenderedFeatures(e.point, { layers: ['neartoiletcluster'] });
+            var clusterId = features[0].properties.cluster_id;
+            map.getSource('near').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                if (err)
+                    return;
+
+                map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                });
+            });
         });
         map.on('click', 'nearFeature', function (e) {
             var coordinates = e.features[0].geometry.coordinates.slice();
@@ -390,6 +590,9 @@ function discoverNearest(){
                 .addTo(map);
         });
     });
+
+
+
 }
 
 function searchNearest(nearFeature,geojsonData){
@@ -415,10 +618,9 @@ function drawSeat(){
     map.on('load', function () {
         map.addSource("seatGeojson", {
             type: "geojson",
-            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
             data: seatGeojson,
             cluster: true,
-            clusterMaxZoom: 17, // Max zoom to cluster points on
+            clusterMaxZoom: 40, // Max zoom to cluster points on
             clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
         });
 
@@ -449,7 +651,7 @@ function drawSeat(){
                     20,
                     100,
                     30,
-                    750,
+                    300,
                     40
                 ]
             }

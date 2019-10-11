@@ -359,15 +359,32 @@
         if (this.classList.contains("active")) {
             this.classList.remove("active");
             map.setLayoutProperty("nearSeat", 'visibility', 'none');
+            map.setLayoutProperty("near-cluster-count", 'visibility', 'none');
+            map.setLayoutProperty("nearcluster", 'visibility', 'none');
+
             map.setLayoutProperty("nearDrink", 'visibility', 'none');
+            map.setLayoutProperty("neardrinkcluster", 'visibility', 'none');
+            map.setLayoutProperty("neardrink-cluster-count", 'visibility', 'none');
+
             map.setLayoutProperty("nearFeature", 'visibility', 'none');
+            map.setLayoutProperty("neartoiletcluster", 'visibility', 'none');
+            map.setLayoutProperty("neartoilet-cluster-count", 'visibility', 'none');
             document.getElementById("nearby").style.background= "#babed1";
         } else{
             this.classList.add("active");
             map.flyTo({center: start,zoom: 17});
             map.setLayoutProperty("nearSeat", 'visibility', 'visible');
+            map.setLayoutProperty("near-cluster-count", 'visibility', 'visible');
+            map.setLayoutProperty("nearcluster", 'visibility', 'visible');
+
             map.setLayoutProperty("nearDrink", 'visibility', 'visible');
+            map.setLayoutProperty("neardrinkcluster", 'visibility', 'visible');
+            map.setLayoutProperty("neardrink-cluster-count", 'visibility', 'visible');
+
             map.setLayoutProperty("nearFeature", 'visibility', 'visible');
+            map.setLayoutProperty("neartoiletcluster", 'visibility', 'visible');
+            map.setLayoutProperty("neartoilet-cluster-count", 'visibility', 'visible');
+
             document.getElementById("nearby").style.background= "#fdcc52";
         }
     });
