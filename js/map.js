@@ -40,51 +40,6 @@ function openNav() {
     else {
         document.getElementById("mySidepanel").style.width = "280px";
     }
-    // if (first === true){setTimeout(function(){
-    //     var aintro = introJs();
-    //     aintro.setOptions({
-    //         steps: [
-    //             {
-    //                 element: document.getElementById('seatButton'),
-    //                 intro: "Show all the street seat locations in Melbourne CBD.",
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById('toiletButton'),
-    //                 intro: "You can find public toilets here, we provides detailed information including gender, wheelchair support or baby facility.",
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById('drinkButton'),
-    //                 intro: " Check drinking fountain locations to get free, clean water.",
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById('gradientButton'),
-    //                 intro: 'Here you can see the street steepness, the gradient legend will show below.',
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById("densityButton"),
-    //                 intro: "Show the pedestrian density in each hour in 7 days.",
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById('3dButton'),
-    //                 intro: "You can show a 3D map by using this to check our the facility whether is inside the buildings.",
-    //                 position: 'left'
-    //             },
-    //             {
-    //                 element: document.getElementById('nearby'),
-    //                 intro: "Explore nearby to find out seats, drinking fountains, and toilets around you",
-    //                 position: 'left'
-    //             }
-    //         ]
-    //     });
-    //     aintro.start();
-    //     first=false;
-    // },500)
-    // }
 }
 
 function closeNav() {

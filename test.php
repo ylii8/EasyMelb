@@ -51,7 +51,10 @@
     <a id="nearby"><i class="fas fa-search-location"></i> Nearby facilities</a>
 </div>
 <div id='map'></div>
+
 <div id='direction' class='direction'></div>
+<button id='close' title="Hide or show direction form"><i class="fas fa-times"></i></button>
+
 <a id='logo' href="index.html" title="Go to the Home Page" ><img src="img/logo.PNG">EasyMelb</a>
 <button id='sidepanel' onclick="openNav()" title="More functions" style="">Features</button>
 <button id='fly' title="Show current location"><i class="fa fa-location-arrow"></i></button>
@@ -133,12 +136,15 @@
     $(function(){
         var flag=0;
         $('#rightArrow').on("click",function(){
+            // hide
             if(flag==1){
                 $("#floatDivBoxs").animate({right: '-175px'},300);
                 $(this).animate({right: '-5px'},300);
                 $(this).css('background-position','-50px 0');
                 flag=0;
-            }else{
+            }else
+                // show
+                {
                 $("#floatDivBoxs").animate({right: '0'},300);
                 $(this).animate({right: '170px'},300);
                 $(this).css('background-position','0px 0');
@@ -318,11 +324,6 @@
             document.getElementById("gradientButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
-            if (first==true){
-                introJs().refresh();
-                introJs().showHints();
-                first = false;
-            }
             document.getElementById("rightArrow2").style.display = "block";
             document.getElementById("floatDivBoxs2").style.display = "block";
             map.setLayoutProperty('line', 'visibility', 'visible');
@@ -388,6 +389,22 @@
             document.getElementById("nearby").style.background= "#fdcc52";
         }
     });
+    document.getElementById("close").addEventListener("click", function() {
+        if (this.classList.contains("active")) {
+            this.classList.remove("active");
+            document.getElementById('direction').style.display='block';
+            this.style.marginLeft = "285px";
+            $(this).find('i').removeClass('fa-chevron-right').addClass('fa-times');
+
+        }
+        else{
+
+            this.classList.add("active");
+            document.getElementById('direction').style.display='none';
+            this.style.marginLeft = "0px";
+            $(this).find('i').removeClass('fa-times').addClass('fa-chevron-right');
+        }
+    });
 
 
     intro.setOptions({
@@ -427,10 +444,11 @@
         ]
     });
 
+
     // set a cookie which the valid time will be three minutes.
     function setCookie() {
         var d = new Date();
-        d.setTime(d.getTime() + (3*60*1000));
+        d.setTime(d.getTime() + (1*60*1000));
         var expires = d.toGMTString();
         document.cookie = expires;
     }
@@ -448,6 +466,7 @@
             setCookie();
         }
     }
+
 
 </script>
 
