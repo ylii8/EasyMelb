@@ -134,38 +134,32 @@
 
 <script>
     $(function(){
-        var flag=1;
         $('#rightArrow').on("click",function(){
             // hide
-            if(flag==1){
+            if(document.getElementById("floatDivBoxs").style.right==='0px'){
                 $("#floatDivBoxs").animate({right: '-175px'},300);
                 $(this).animate({right: '-5px'},300);
                 $(this).css('background-position','-50px 0');
-                flag=0;
             }else
                 // show
                 {
                 $("#floatDivBoxs").animate({right: '0'},300);
                 $(this).animate({right: '170px'},300);
                 $(this).css('background-position','0px 0');
-                flag=1;
             }
         });
     });
 
     $(function(){
-        var flag=1;
         $('#rightArrow2').on("click",function(){
-            if(flag==1){
+            if(document.getElementById("floatDivBoxs2").style.right==='0px'){
                 $("#floatDivBoxs2").animate({right: '-175px'},300);
                 $(this).animate({right: '-5px'},300);
                 $(this).css('background-position','-50px 0');
-                flag=0;
             }else{
                 $("#floatDivBoxs2").animate({right: '0'},300);
                 $(this).animate({right: '170px'},300);
                 $(this).css('background-position','0px 0');
-                flag=1;
             }
         });
     });
