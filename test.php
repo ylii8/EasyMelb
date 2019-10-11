@@ -452,7 +452,7 @@
     // set a cookie which the valid time will be three minutes.
     function setCookie() {
         var d = new Date();
-        d.setTime(d.getTime() + (1*60*1000));
+        d.setTime(d.getTime() + (3*60*1000));
         var expires = d.toGMTString();
         document.cookie = expires;
     }
