@@ -23,8 +23,9 @@ body { margin:0; padding:0; }
     display: block;
     transition: 0.3s;
 }
-.sidepanel a:hover {color: #fdcc52;}
-.sidepanel a:active {color: #fdcc52;}
+.sidepanel .closebtn:hover {color: #fdcc52;background-color: #babed1;}
+.sidepanel a:hover {
+    background-color: #fdcc52;}
 /* Position and style the close button (top left corner) */
 .sidepanel .closebtn {
     position: absolute;
@@ -45,15 +46,18 @@ body { margin:0; padding:0; }
     padding: 5px;
     border: none;
     text-align: center;
+    background: transparent;
     font-size: 20px;
     font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
     font-weight: 800;
     letter-spacing: 1.7px;
-    color: #545765;
     cursor: pointer;
+    color: #fdc854;
+    text-shadow: 1.5px 1.5px 0.5px #4e555b;
 }
-#sidepanel:active:hover{
-    color: #fdcc52;
+
+#sidepanel:hover{
+    color: rgba(200, 140, 53, 0.98);
 }
 
 

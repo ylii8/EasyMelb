@@ -42,7 +42,7 @@
 
 <div id="mySidepanel" class="sidepanel">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a id="seatButton"><i class="fas fa-chair"></i> Seats</a>
+    <a id="seatButton" class="abtn"><i class="fas fa-chair"></i> Seats</a>
     <a id="toiletButton"><i class="fas fa-restroom"></i> Toilets</a>
     <a id="drinkButton"><i class="fas fa-tint"></i> Drinking fountains</a>
     <a id="gradientButton"><i class="fas fa-mountain"></i> Street steepness</a>
@@ -52,8 +52,8 @@
 </div>
 <div id='map'></div>
 <div id='direction' class='direction'></div>
-<a id='logo' href="index.html" title="Go to Home Page" ><img src="img/logo.PNG">EasyMelb</a>
-<button id='sidepanel' onclick="openNav()" title="More functions" style="color: #fdc854;text-shadow: 1.5px 1.5px 0.5px #4e555b;">Features</button>
+<a id='logo' href="index.html" title="Go to the Home Page" ><img src="img/logo.PNG">EasyMelb</a>
+<button id='sidepanel' onclick="openNav()" title="More functions" style="">Features</button>
 <button id='fly' title="Show current location"><i class="fa fa-location-arrow"></i></button>
 <button id='undo' title="Undo drag changes"><i class="fas fa-undo-alt"></i></button>
 <div id="snackbar">The points show the sensor locations</div>
