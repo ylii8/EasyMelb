@@ -433,7 +433,7 @@
             {
                 element: document.getElementById('sidepanel'),
                 intro: "Here we provide features to help you find out street conditions and detailed public " +
-                    "facilities information such as street seats and toilets.<br> You can customized your route based on these features.",
+                    "facilities information such as street seats and toilets.<br> You can customize your route based on these features.",
                 position: 'left'
             },
             {
