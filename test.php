@@ -454,11 +454,11 @@
     // when the cookie expired, the introduction will show again and set a new cookie.
     function checkCookie() {
         var now = new Date();
-        var expires = document.cookie;
+        var expires = null;
         console.log(now.toGMTString());
         console.log(expires);
         console.log(now.getTime() > Date.parse(expires));
-        if ( now.getTime() > Date.parse(expires) )
+        if ( expires===null || now.getTime() > Date.parse(expires) )
         {
             intro.start();
             setCookie();
