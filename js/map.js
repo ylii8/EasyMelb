@@ -3,7 +3,7 @@ function initmap() {
     map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10', //style URL of map style
-        center: [144.96565, -37.81384], //default location when load the map
+        center: [144.95936, -37.81654], //default location when load the map
         zoom: 15.5, //default zoom level
         pitch: 45,
         bearing: -17.6,
@@ -95,7 +95,7 @@ function getUserLocation() {
     if (navigator.geolocation)
         navigator.geolocation.getCurrentPosition(function(position) {
              start = [position.coords.longitude,position.coords.latitude];
-             start = [144.9639, -37.8136];
+             start = [144.95936, -37.81654];
             passData();
             // var marker = new mapboxgl.Marker({ color: '#fcd703'})
             //     .setLngLat([position.coords.longitude, position.coords.latitude])
@@ -260,19 +260,12 @@ function addUndo() {
 }
 
 function discoverNearest(){
-    //fake current location
-    // var marker = new mapboxgl.Marker({
-    //     color: '#fcd703'
-    // }).setLngLat([144.9639, -37.8136])
-    //     .setPopup(new mapboxgl.Popup({offset: 25})
-    //         .setHTML('<h3>Fake current location</h3>')).addTo(map);
-
     var nearSeat = {};
     nearSeat['type'] = 'FeatureCollection';
     nearSeat['features'] = [];
     seatGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point([144.9639, -37.8136]), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true
@@ -315,7 +308,7 @@ function discoverNearest(){
     nearDrink['features'] = [];
     drinkGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point([144.9639, -37.8136]), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true
@@ -359,7 +352,7 @@ function discoverNearest(){
     near['features'] = [];
     geojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point([144.9639, -37.8136]), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true

@@ -38,7 +38,7 @@
 </head>
 
 <?php include_once 'locations_model.php'; ?>
-<body>
+<body onload="checkCookie()">
 
 <div id="mySidepanel" class="sidepanel">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -48,19 +48,19 @@
     <a id="gradientButton"><i class="fas fa-mountain"></i> Street steepness</a>
     <a id="densityButton"><i class="fas fa-users"></i> Pedestrian density</a>
     <a id="3dButton"><i class="fas fa-cubes"></i> 3D model</a>
-    <a id="nearby"><i class="fas fa-search-location"></i> Nearby features</a>
+    <a id="nearby"><i class="fas fa-search-location"></i> Nearby facilities</a>
 </div>
 <div id='map'></div>
 <div id='direction' class='direction'></div>
 <a id='logo' href="index.html" title="Go to Home Page" ><img src="img/logo.PNG">EasyMelb</a>
-<button id='sidepanel' onclick="openNav()" title="More functions">Functions</button>
+<button id='sidepanel' onclick="openNav()" title="More functions" style="color: #fdc854;text-shadow: 1.5px 1.5px 0.5px #4e555b;">Features</button>
 <button id='fly' title="Show current location"><i class="fa fa-location-arrow"></i></button>
 <button id='undo' title="Undo drag changes"><i class="fas fa-undo-alt"></i></button>
 <div id="snackbar">The points show the sensor locations</div>
 <!--Pedestrian-->
 <div id="rightArrow" style="display: none"><a href="javascript:;" title="Pedestrian"></a></div>
 <div id="floatDivBoxs" style="display: none">
-    <div class="floatDtt">Pedestrian</div>
+    <div class="floatDtt" >Pedestrian</div>
     <div class="floatShadow">
         <div class='session'>
             <div class='row2 colors'></div>
@@ -258,7 +258,6 @@
             }
             pedestrianGeojson['features'].push(newFeature);
         }
-
         discoverNearest();
     }
 
@@ -319,11 +318,11 @@
             document.getElementById("gradientButton").style.background= "#babed1";
         } else{
             this.classList.add("active");
-            // if (first==true){
-            //     introJs().refresh();
-            //     introJs().showHints();
-            //     first = false;
-            // }
+            if (first==true){
+                introJs().refresh();
+                introJs().showHints();
+                first = false;
+            }
             document.getElementById("rightArrow2").style.display = "block";
             document.getElementById("floatDivBoxs2").style.display = "block";
             map.setLayoutProperty('line', 'visibility', 'visible');
@@ -365,7 +364,7 @@
             document.getElementById("nearby").style.background= "#babed1";
         } else{
             this.classList.add("active");
-            map.flyTo({center: [144.9639, -37.8136],zoom: 17});
+            map.flyTo({center: start,zoom: 17});
             map.setLayoutProperty("nearSeat", 'visibility', 'visible');
             map.setLayoutProperty("nearDrink", 'visibility', 'visible');
             map.setLayoutProperty("nearFeature", 'visibility', 'visible');
@@ -377,7 +376,7 @@
     intro.setOptions({
         steps: [
             {
-                intro: "Welcome to EasyMelb, there are some tips to get you familiar with EasyMelb!"
+                intro: "Welcome to EasyMelb, here are some tips to get you familiar with EasyMelb!"
             },
             {
                 element: document.getElementById('logo'),
@@ -385,20 +384,9 @@
                 position: 'right'
             },
             {
-                element: document.getElementById('sidepanel'),
-                intro: "Here we provide functions to help you find out street conditions and detailed public " +
-                    "facilities information such as street seats and toilets.",
-                position: 'left'
-            },
-            {
                 element: document.getElementById('fly'),
-                intro: "Showing your current location by click this button, the current location will show as a yellow blinking point.",
+                intro: "Showing your current location by clicking this button, the current location will show as a yellow blinking point.",
                 position: 'top'
-            },
-            {
-                element: document.getElementById('direction'),
-                intro: 'Here you can set your origin and destination for your journey, just click on the map or search in the box.',
-                position: 'bottom'
             },
             {
                 element: document.getElementById("undo"),
@@ -406,11 +394,43 @@
                 position: 'right'
             },
             {
+                element: document.getElementById('direction'),
+                intro: 'Here you can set your origin and destination for your journey, just click on the map or search in the box.',
+                position: 'top'
+            },
+            {
+                element: document.getElementById('sidepanel'),
+                intro: "Here we provide features to help you find out street conditions and detailed public " +
+                    "facilities information such as street seats and toilets.<br> You can customized your route based on these features.",
+                position: 'left'
+            },
+            {
                 intro: "Ready? Let's GO!"
             }
         ]
     });
-    intro.start();
+
+    // set a cookie which the valid time will be three minutes.
+    function setCookie() {
+        var d = new Date();
+        d.setTime(d.getTime() + (3*60*1000));
+        var expires = d.toGMTString();
+        document.cookie = expires;
+    }
+
+    // when the cookie expired, the introduction will show again and set a new cookie.
+    function checkCookie() {
+        var now = new Date();
+        var expires = document.cookie;
+        console.log(now.toGMTString());
+        console.log(expires);
+        console.log(now.getTime() > Date.parse(expires));
+        if ( now.getTime() > Date.parse(expires) )
+        {
+            intro.start();
+            setCookie();
+        }
+    }
 
 </script>
 
