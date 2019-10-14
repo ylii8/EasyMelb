@@ -9,7 +9,7 @@ body { margin:0; padding:0; }
     z-index: 1; /* Stay on top */
     top: 0;
     right: 0;
-    background-color: #babed1;
+    background-color: rgba(255, 255, 255, 0.9);
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
@@ -22,8 +22,9 @@ body { margin:0; padding:0; }
     color: black;
     display: block;
     transition: 0.3s;
+    cursor: pointer;
 }
-.sidepanel .closebtn:hover {color: #fdcc52;background-color: #babed1;}
+.sidepanel .closebtn:hover {color: #fdcc52;background-color: rgba(255, 255, 255, 0.9);}
 .sidepanel a:hover {
     background-color: #fdcc52;}
 /* Position and style the close button (top left corner) */
@@ -46,18 +47,21 @@ body { margin:0; padding:0; }
     padding: 5px;
     border: none;
     text-align: center;
-    background: transparent;
+    background: #fdc854;
+    border-radius: 10%;
     font-size: 20px;
     font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
     font-weight: 800;
     letter-spacing: 1.7px;
     cursor: pointer;
-    color: #fdc854;
-    text-shadow: 1.5px 1.5px 0.5px #4e555b;
+    color:  #4e555b;
+    /*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px #4e555b;*/
+
 }
 
 #sidepanel:hover{
-    color: rgba(200, 140, 53, 0.98);
+    color: #fdc854;
+    background: #4e555b ;
 }
 
 

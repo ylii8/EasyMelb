@@ -1070,7 +1070,7 @@ function load3D() {
 
 function getGradient() {
 
-    var geojson = 'Footpath steepness.geojson';
+    var geojson = 'data/Footpath steepness.geojson';
 
     map.on('load', function() {
         // Insert the layer beneath any symbol layer.
