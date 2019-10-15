@@ -33,8 +33,6 @@
     <!-- Add IntroJs -->
     <link href="lib/introjs.css" rel="stylesheet">
     <script type="text/javascript" src="lib/intro.js"></script>
-    <!-- Map JS-->
-    <script src='js/map.js'></script>
 </head>
 
 <?php include_once 'locations_model.php'; ?>
@@ -166,20 +164,23 @@
 </script>
 
 </body>
-
+<!-- Map JS-->
+<script src='js/map.js'></script>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiamVzc2llOTk5IiwiYSI6ImNqenh4a2w0ZTBsMWwzZ3BwN21nYnhyNXcifQ.Nzlxkc0JFpXOeHP4_nDqAw';
     var map;
     var directions;
-    var start;
     var geojson = {};
     var drinkGeojson = {};
     var seatGeojson = {};
     var pedestrianGeojson = {};
-    var first = true;
     var intro = introJs();
+    var userLocation = [];
+    var nearSeat = {};
+    var nearDrink = {};
+    var near = {};
+    var block = false;
 
-    initmap();
 
     function passData(){
         // pass toilet data to Geojson array
@@ -258,11 +259,52 @@
             }
             pedestrianGeojson['features'].push(newFeature);
         }
-        discoverNearest();
+
     }
 
+    function getUserLocation() {
+        if (navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    userLocation[0] = position.coords.longitude;
+                    userLocation[1] = position.coords.latitude;
+                    console.log(userLocation);
+                    discoverNearest(userLocation);
+                    return userLocation;
+                });
+        else{
+            block = true;
+            console.log("geolocation is not supported");
+            alert("We cannot access your current location, so some of the functions are maybe not working :( ");
+        }
+    }
+
+    async function second(){
+        await Promise.all([passData(), getUserLocation()]);
+        console.log(userLocation);
+        initmap();
+        drawCurrentLocation();
+        drawNearest();
+    }
+    second();
+
+    // passData();
+    // getUserLocation();
+
+
+    console.error = function(){
+        window.location.reload()
+    }
+
+
     document.getElementById('fly').addEventListener('click', function () {
-        map.flyTo({center: start,zoom: 17});
+        if (block===true){
+            getUserLocation();
+            if (userLocation !== 'undefined'){map.flyTo({center: userLocation,zoom: 17});}
+        }
+        else{
+            map.flyTo({center: userLocation,zoom: 17});
+        }
     });
     document.getElementById("seatButton").addEventListener("click", function() {
         if (this.classList.contains("active")) {
@@ -355,7 +397,9 @@
         }
     });
     document.getElementById("nearby").addEventListener("click", function() {
-        if (this.classList.contains("active")) {
+        if (block===true){ alert("We cannot access your current location, so this functions is maybe not working :(");}
+        else{
+            if (this.classList.contains("active")) {
             this.classList.remove("active");
             map.setLayoutProperty("nearSeat", 'visibility', 'none');
             map.setLayoutProperty("near-cluster-count", 'visibility', 'none');
@@ -369,9 +413,10 @@
             map.setLayoutProperty("neartoiletcluster", 'visibility', 'none');
             map.setLayoutProperty("neartoilet-cluster-count", 'visibility', 'none');
             document.getElementById("nearby").style.background= "rgba(255, 255, 255, 0.9)";
-        } else{
+        }
+            else{
             this.classList.add("active");
-            map.flyTo({center: start,zoom: 17});
+            map.flyTo({center: userLocation,zoom: 17});
             map.setLayoutProperty("nearSeat", 'visibility', 'visible');
             map.setLayoutProperty("near-cluster-count", 'visibility', 'visible');
             map.setLayoutProperty("nearcluster", 'visibility', 'visible');
@@ -386,6 +431,8 @@
 
             document.getElementById("nearby").style.background= "#fdcc52";
         }
+        }
+
     });
     document.getElementById("close").addEventListener("click", function() {
         if (this.classList.contains("active")) {
@@ -466,7 +513,21 @@
     }
 
 
+
+    // function checkExist(){
+    //     if(typeof map.getLayer('points') == 'undefined'){
+    //         map.eachLayer(function (layer) {
+    //             map.removeLayer(layer);
+    //         });
+    //         initmap();
+    //     }
+    // }
+
+
+
+
 </script>
+
 
 
 

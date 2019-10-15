@@ -10,18 +10,16 @@ function initmap() {
         antialias: true,
     });
 
-    getUserLocation();
+    getCurrentDay();
+    getGradient();
     drawSeat();
     drawPedestrian();
     drawDrink();
     drawToilet();
-    getGradient();
     load3D();
-    getCurrentDay();
     var nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'bottom-left');
     addDirectionAPI();
-
 }
 
 function openNav() {
@@ -44,101 +42,6 @@ function openNav() {
 
 function closeNav() {
     document.getElementById("mySidepanel").style.width = "0";
-}
-
-function getUserLocation() {
-    if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(function(position) {
-             start = [position.coords.longitude,position.coords.latitude];
-             start = [144.96358,-37.81325];
-            passData();
-            // var marker = new mapboxgl.Marker({ color: '#fcd703'})
-            //     .setLngLat([position.coords.longitude, position.coords.latitude])
-            //     .setPopup(new mapboxgl.Popup({offset: 25}) // add popups
-            //         .setHTML('<h3>Your current location</h3>'))
-            //     .addTo(map);
-            var size = 100;
-            var pulsingDot = {
-                width: size,
-                height: size,
-                data: new Uint8Array(size * size * 4),
-
-                onAdd: function() {
-                    var canvas = document.createElement('canvas');
-                    canvas.width = this.width;
-                    canvas.height = this.height;
-                    this.context = canvas.getContext('2d');
-                },
-
-                render: function() {
-                    var duration = 1500;
-                    var t = (performance.now() % duration) / duration;
-
-                    var radius = size / 2 * 0.3;
-                    var outerRadius = size / 2 * 0.7 * t + radius;
-                    var context = this.context;
-
-                    context.clearRect(0, 0, this.width, this.height);
-                    context.beginPath();
-                    context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
-                    context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
-                    context.fill();
-
-                    context.beginPath();
-                    context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
-                    context.fillStyle = '#f6d753';
-                    context.strokeStyle = 'white';
-                    context.lineWidth = 2 + 4 * (1 - t);
-                    context.fill();
-                    context.stroke();
-
-                    this.data = context.getImageData(0, 0, this.width, this.height).data;
-                    map.triggerRepaint();
-                    return true;
-                }
-            };
-            map.on('load', function () {
-
-                map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
-
-                map.addLayer({
-                    "id": "points",
-                    "type": "symbol",
-                    "source": {
-                        "type": "geojson",
-                        "data": {
-                            "type": "FeatureCollection",
-                            "features": [{
-                                "type": "Feature",
-                                "geometry": {
-                                    "type": "Point",
-                                    "coordinates": start
-                                }
-                            }]
-                        }
-                    },
-                    "layout": {
-                        "icon-image": "pulsing-dot"
-                    }
-                });
-            });
-
-            map.on('click', 'points', function (e) {
-                map.getCanvas().style.cursor = 'pointer';
-                var coordinates = e.features[0].geometry.coordinates.slice();
-                console.log(coordinates);
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML('Your current location')
-                    .addTo(map);
-            });
-        });
-
-    else
-        console.log("geolocation is not supported");
 }
 
 function getCurrentDay(){
@@ -214,13 +117,13 @@ function addUndo() {
     });
 }
 
-function discoverNearest(){
-    var nearSeat = {};
+function discoverNearest(userLocation){
+    console.log(userLocation);
     nearSeat['type'] = 'FeatureCollection';
     nearSeat['features'] = [];
     seatGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true
@@ -229,118 +132,14 @@ function discoverNearest(){
             nearSeat['features'].push(e);
         }
     });
-    map.on('load', function () {
-        map.addSource("nearSeat", {
-            type: "geojson",
-            data: nearSeat,
-            cluster: true,
-            clusterMaxZoom: 40, // Max zoom to cluster points on
-            clusterRadius: 50
-        });
+    console.log(seatGeojson);
+    console.log(nearSeat);
 
-        // Add a layer showing the places.
-        map.addLayer({
-            "id": "nearcluster",
-            "type": "circle",
-            "source": 'nearSeat',
-            "filter": ["has", "point_count"],
-            "layout": {
-                'visibility': 'none'
-            },
-            paint: {
-                "circle-color": [
-                    "step",
-                    ["get", "point_count"],
-                    "#ffc020",
-                    3,
-                    "#ff8020",
-                    6,
-                    "#ff4020",
-                    9,
-                    "#ff0020"
-                ],
-                "circle-radius": [
-                    "step",
-                    ["get", "point_count"],
-                    20,
-                    10,
-                    30,
-                    20,
-                    40
-                ]
-            }
-        });
-        map.addLayer({
-            id: "near-cluster-count",
-            type: "symbol",
-            "source": 'nearSeat',
-            filter: ["has", "point_count"],
-            layout: {
-                "text-field": "{point_count_abbreviated}",
-                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-                "text-size": 12,
-                'visibility': 'none'
-            }
-        });
-
-        map.addLayer({
-            id: "nearSeat",
-            type: "symbol",
-            "source": "nearSeat",
-            filter: ["!", ["has", "point_count"]],
-            "layout": {
-                "icon-image": "bench",
-                "icon-allow-overlap": true,
-                'visibility': 'none'
-            }
-        });
-
-        // inspect a cluster on click
-        map.on('click', 'nearcluster', function (e) {
-            var features = map.queryRenderedFeatures(e.point, { layers: ['nearcluster'] });
-            var clusterId = features[0].properties.cluster_id;
-            map.getSource('nearSeat').getClusterExpansionZoom(clusterId, function (err, zoom) {
-                if (err)
-                    return;
-
-                map.easeTo({
-                    center: features[0].geometry.coordinates,
-                    zoom: zoom
-                });
-            });
-        });
-
-
-        map.on('click', 'nearSeat', function (e) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var description = e.features[0].properties.description;
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-            var distance = Math.round(e.features[0].properties.distance * 1000);
-            new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
-                .addTo(map);
-        });
-
-        // Change the cursor to a pointer when the mouse is over the places layer.
-        map.on('mouseenter', 'nearcluster', function () {
-            map.getCanvas().style.cursor = 'pointer';
-        });
-
-        // Change it back to a pointer when it leaves.
-        map.on('mouseleave', 'nearcluster', function () {
-            map.getCanvas().style.cursor = '';
-        });
-    });
-
-    var nearDrink = {};
     nearDrink['type'] = 'FeatureCollection';
     nearDrink['features'] = [];
     drinkGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true
@@ -350,104 +149,12 @@ function discoverNearest(){
         }
     });
     searchNearest(nearDrink.features,drinkGeojson);
-    map.on('load', function () {
-        map.addSource("nearDrink", {
-            type: "geojson",
-            data: nearDrink,
-            cluster: true,
-            clusterMaxZoom: 20, // Max zoom to cluster points on
-            clusterRadius: 50
-        });
-        // Add a layer showing the places.
-        map.addLayer({
-            "id": "neardrinkcluster",
-            "type": "circle",
-            "source": 'nearDrink',
-            "filter": ["has", "point_count"],
-            "layout": {
-                'visibility': 'none'
-            },
-            paint: {
-                "circle-color": [
-                    "step",
-                    ["get", "point_count"],
-                    "#00c0ff",
-                    2,
-                    "#0060ff",
-                    4,
-                    "#0000ff"
-                ],
-                "circle-radius": [
-                    "step",
-                    ["get", "point_count"],
-                    20,
-                    6,
-                    30,
-                    9,
-                    40
-                ]
-            }
-        });
-        map.addLayer({
-            id: "neardrink-cluster-count",
-            type: "symbol",
-            "source": 'nearDrink',
-            filter: ["has", "point_count"],
-            layout: {
-                "text-field": "{point_count_abbreviated}",
-                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-                "text-size": 12,
-                'visibility': 'none'
-            }
-        });
 
-        map.addLayer({
-            id: "nearDrink",
-            type: "symbol",
-            "source": "nearDrink",
-            filter: ["!", ["has", "point_count"]],
-            "layout": {
-                "icon-image": "drop",
-                "icon-allow-overlap": true,
-                'visibility': 'none'
-            }
-        });
-
-        // inspect a cluster on click
-        map.on('click', 'neardrinkcluster', function (e) {
-            var features = map.queryRenderedFeatures(e.point, { layers: ['neardrinkcluster'] });
-            var clusterId = features[0].properties.cluster_id;
-            map.getSource('nearDrink').getClusterExpansionZoom(clusterId, function (err, zoom) {
-                if (err)
-                    return;
-
-                map.easeTo({
-                    center: features[0].geometry.coordinates,
-                    zoom: zoom
-                });
-            });
-        });
-
-        map.on('click', 'nearDrink', function (e) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var description = e.features[0].properties.description;
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-            var distance = Math.round(e.features[0].properties.distance * 1000);
-            new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
-                .addTo(map);
-        });
-    });
-
-    var near = {};
     near['type'] = 'FeatureCollection';
     near['features'] = [];
     geojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
-            value: turf.distance(turf.point(start), turf.point(e.geometry.coordinates)),
+            value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
             writable: true,
             enumerable: true,
             configurable: true
@@ -457,97 +164,378 @@ function discoverNearest(){
         }
     });
     searchNearest(near.features,geojson);
-    map.on('load', function () {
-        map.addSource("near", {
-            type: "geojson",
-            data: near,
-            cluster: true,
-            clusterMaxZoom: 20, // Max zoom to cluster points on
-            clusterRadius: 50
-        });
-        // Add a layer showing the places.
-        map.addLayer({
-            "id": "neartoiletcluster",
-            "type": "circle",
-            "source": 'near',
-            "filter": ["has", "point_count"],
-            "layout": {
-                'visibility': 'none'
-            },
-            paint: {
-                "circle-color": [
-                    "step",
-                    ["get", "point_count"],
-                    "#ffa0c0",
-                    2,
-                    "#ff60c0",
-                    3,
-                    "#ff20c0"
-                ],
-                "circle-radius": [
-                    "step",
-                    ["get", "point_count"],
-                    20,
-                    6,
-                    30,
-                    9,
-                    40
-                ]
-            }
-        });
-        map.addLayer({
-            id: "neartoilet-cluster-count",
-            type: "symbol",
-            "source": 'near',
-            filter: ["has", "point_count"],
-            layout: {
-                "text-field": "{point_count_abbreviated}",
-                "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-                "text-size": 12,
-                'visibility': 'none'
-            }
-        });
-        map.addLayer({
-            id: "nearFeature",
-            type: "symbol",
-            "source": "near",
-            filter: ["!", ["has", "point_count"]],
-            "layout": {
-                "icon-image": "toilet",
-                "icon-allow-overlap": true,
-                'visibility': 'none'
-            }
-        });
-        // inspect a cluster on click
-        map.on('click', 'neartoiletcluster', function (e) {
-            var features = map.queryRenderedFeatures(e.point, { layers: ['neartoiletcluster'] });
-            var clusterId = features[0].properties.cluster_id;
-            map.getSource('near').getClusterExpansionZoom(clusterId, function (err, zoom) {
-                if (err)
-                    return;
+}
 
-                map.easeTo({
-                    center: features[0].geometry.coordinates,
-                    zoom: zoom
+function drawNearest(){
+    if (userLocation != null || typeof userLocation !== 'undefined'){
+        map.on('load', function () {
+            map.addSource("nearSeat", {
+                type: "geojson",
+                data: nearSeat,
+                cluster: true,
+                clusterMaxZoom: 40, // Max zoom to cluster points on
+                clusterRadius: 50
+            });
+
+            // Add a layer showing the places.
+            map.addLayer({
+                "id": "nearcluster",
+                "type": "circle",
+                "source": 'nearSeat',
+                "filter": ["has", "point_count"],
+                "layout": {
+                    'visibility': 'none'
+                },
+                paint: {
+                    "circle-color": [
+                        "step",
+                        ["get", "point_count"],
+                        "#ffc020",
+                        3,
+                        "#ff8020",
+                        6,
+                        "#ff4020",
+                        9,
+                        "#ff0020"
+                    ],
+                    "circle-radius": [
+                        "step",
+                        ["get", "point_count"],
+                        20,
+                        10,
+                        30,
+                        20,
+                        40
+                    ]
+                }
+            });
+            map.addLayer({
+                id: "near-cluster-count",
+                type: "symbol",
+                "source": 'nearSeat',
+                filter: ["has", "point_count"],
+                layout: {
+                    "text-field": "{point_count_abbreviated}",
+                    "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                    "text-size": 12,
+                    'visibility': 'none'
+                }
+            });
+
+            map.addLayer({
+                id: "nearSeat",
+                type: "symbol",
+                "source": "nearSeat",
+                filter: ["!", ["has", "point_count"]],
+                "layout": {
+                    "icon-image": "bench",
+                    "icon-allow-overlap": true,
+                    'visibility': 'none'
+                }
+            });
+
+            // inspect a cluster on click
+            map.on('click', 'nearcluster', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['nearcluster'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('nearSeat').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
                 });
             });
+
+
+            map.on('click', 'nearSeat', function (e) {
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = e.features[0].properties.description;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                var distance = Math.round(e.features[0].properties.distance * 1000);
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
+                    .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.on('mouseenter', 'nearcluster', function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'nearcluster', function () {
+                map.getCanvas().style.cursor = '';
+            });
         });
-        map.on('click', 'nearFeature', function (e) {
+        map.on('load', function () {
+            map.addSource("nearDrink", {
+                type: "geojson",
+                data: nearDrink,
+                cluster: true,
+                clusterMaxZoom: 20, // Max zoom to cluster points on
+                clusterRadius: 50
+            });
+            // Add a layer showing the places.
+            map.addLayer({
+                "id": "neardrinkcluster",
+                "type": "circle",
+                "source": 'nearDrink',
+                "filter": ["has", "point_count"],
+                "layout": {
+                    'visibility': 'none'
+                },
+                paint: {
+                    "circle-color": [
+                        "step",
+                        ["get", "point_count"],
+                        "#00c0ff",
+                        2,
+                        "#0060ff",
+                        4,
+                        "#0000ff"
+                    ],
+                    "circle-radius": [
+                        "step",
+                        ["get", "point_count"],
+                        20,
+                        6,
+                        30,
+                        9,
+                        40
+                    ]
+                }
+            });
+            map.addLayer({
+                id: "neardrink-cluster-count",
+                type: "symbol",
+                "source": 'nearDrink',
+                filter: ["has", "point_count"],
+                layout: {
+                    "text-field": "{point_count_abbreviated}",
+                    "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                    "text-size": 12,
+                    'visibility': 'none'
+                }
+            });
+
+            map.addLayer({
+                id: "nearDrink",
+                type: "symbol",
+                "source": "nearDrink",
+                filter: ["!", ["has", "point_count"]],
+                "layout": {
+                    "icon-image": "drop",
+                    "icon-allow-overlap": true,
+                    'visibility': 'none'
+                }
+            });
+
+            // inspect a cluster on click
+            map.on('click', 'neardrinkcluster', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['neardrinkcluster'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('nearDrink').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
+
+            map.on('click', 'nearDrink', function (e) {
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = e.features[0].properties.description;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                var distance = Math.round(e.features[0].properties.distance * 1000);
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
+                    .addTo(map);
+            });
+        });
+        map.on('load', function () {
+            map.addSource("near", {
+                type: "geojson",
+                data: near,
+                cluster: true,
+                clusterMaxZoom: 20, // Max zoom to cluster points on
+                clusterRadius: 50
+            });
+            // Add a layer showing the places.
+            map.addLayer({
+                "id": "neartoiletcluster",
+                "type": "circle",
+                "source": 'near',
+                "filter": ["has", "point_count"],
+                "layout": {
+                    'visibility': 'none'
+                },
+                paint: {
+                    "circle-color": [
+                        "step",
+                        ["get", "point_count"],
+                        "#ffa0c0",
+                        2,
+                        "#ff60c0",
+                        3,
+                        "#ff20c0"
+                    ],
+                    "circle-radius": [
+                        "step",
+                        ["get", "point_count"],
+                        20,
+                        6,
+                        30,
+                        9,
+                        40
+                    ]
+                }
+            });
+            map.addLayer({
+                id: "neartoilet-cluster-count",
+                type: "symbol",
+                "source": 'near',
+                filter: ["has", "point_count"],
+                layout: {
+                    "text-field": "{point_count_abbreviated}",
+                    "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+                    "text-size": 12,
+                    'visibility': 'none'
+                }
+            });
+            map.addLayer({
+                id: "nearFeature",
+                type: "symbol",
+                "source": "near",
+                filter: ["!", ["has", "point_count"]],
+                "layout": {
+                    "icon-image": "toilet",
+                    "icon-allow-overlap": true,
+                    'visibility': 'none'
+                }
+            });
+            // inspect a cluster on click
+            map.on('click', 'neartoiletcluster', function (e) {
+                var features = map.queryRenderedFeatures(e.point, { layers: ['neartoiletcluster'] });
+                var clusterId = features[0].properties.cluster_id;
+                map.getSource('near').getClusterExpansionZoom(clusterId, function (err, zoom) {
+                    if (err)
+                        return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                });
+            });
+            map.on('click', 'nearFeature', function (e) {
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = e.features[0].properties.description;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                var distance = Math.round(e.features[0].properties.distance * 1000);
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
+                    .addTo(map);
+            });
+        });
+    }
+}
+
+function drawCurrentLocation(){
+    if (userLocation != null || typeof userLocation !== 'undefined'){
+        console.log(userLocation);
+        var size = 100;
+        var pulsingDot = {
+            width: size,
+            height: size,
+            data: new Uint8Array(size * size * 4),
+
+            onAdd: function() {
+                var canvas = document.createElement('canvas');
+                canvas.width = this.width;
+                canvas.height = this.height;
+                this.context = canvas.getContext('2d');
+            },
+
+            render: function() {
+                var duration = 1500;
+                var t = (performance.now() % duration) / duration;
+
+                var radius = size / 2 * 0.3;
+                var outerRadius = size / 2 * 0.7 * t + radius;
+                var context = this.context;
+
+                context.clearRect(0, 0, this.width, this.height);
+                context.beginPath();
+                context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+                context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+                context.fill();
+
+                context.beginPath();
+                context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+                context.fillStyle = '#f6d753';
+                context.strokeStyle = 'white';
+                context.lineWidth = 2 + 4 * (1 - t);
+                context.fill();
+                context.stroke();
+
+                this.data = context.getImageData(0, 0, this.width, this.height).data;
+                map.triggerRepaint();
+                return true;
+            }
+        };
+        map.on('load', function () {
+
+            map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+
+            map.addLayer({
+                "id": "points",
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [{
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": userLocation
+                            }
+                        }]
+                    }
+                },
+                "layout": {
+                    "icon-image": "pulsing-dot"
+                }
+            });
+        });
+        map.on('click', 'points', function (e) {
+            map.getCanvas().style.cursor = 'pointer';
             var coordinates = e.features[0].geometry.coordinates.slice();
-            var description = e.features[0].properties.description;
+            console.log(coordinates);
             while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
             }
-            var distance = Math.round(e.features[0].properties.distance * 1000);
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
-                .setHTML(description + '<p style="font-size: 13px;"><strong>' + distance + ' meters away</strong></p>')
+                .setHTML('Your current location')
                 .addTo(map);
         });
-    });
-
-
-
+    }
 }
 
 function searchNearest(nearFeature,geojsonData){
