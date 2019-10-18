@@ -40,6 +40,7 @@
         if (!$rows) {return null;}
     }
 
+    // Get toilets data from database
     function get_toilet_locations()
     {
         $con= connect_db();
