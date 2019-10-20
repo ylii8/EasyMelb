@@ -1,3 +1,4 @@
+// create a map and load methods to draw data on
 function initmap() {
 
     map = new mapboxgl.Map({
@@ -9,7 +10,7 @@ function initmap() {
         bearing: -17.6,
         antialias: true,
     });
-
+    discoverNearest(userLocation);
     getCurrentDay();
     getGradient();
     drawSeat();
@@ -22,6 +23,7 @@ function initmap() {
     addDirectionAPI();
 }
 
+// open side panel and change the style
 function openNav() {
     if (window.matchMedia("(max-width: 415px)").matches) { // If media query matches
         document.getElementById("mySidepanel").style.width = "200px";
@@ -40,10 +42,12 @@ function openNav() {
     }
 }
 
+// close side panel
 function closeNav() {
     document.getElementById("mySidepanel").style.width = "0";
 }
 
+// get current day and set the value to pedestrian legend
 function getCurrentDay(){
     var currentDateTime = new Date();
     var day;
@@ -72,6 +76,7 @@ function getCurrentDay(){
     document.getElementById("day").value = day;
 }
 
+// show snack bar when click information button on pedestrian legend
 function snackBar() {
     // Get the snackbar DIV
     var x = document.getElementById("snackbar");
@@ -81,6 +86,7 @@ function snackBar() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
 }
 
+// add direction API to the map
 function addDirectionAPI(){
     var query = "https://api.mapbox.com/geocoding/v5/mapbox.places/144.965,-37.813.json?access_token=" + mapboxgl.accessToken;
     directions = new MapboxDirections({
@@ -102,6 +108,7 @@ function addDirectionAPI(){
 
 }
 
+// add undo button to undo the drag change
 function addUndo() {
 
     map.on('load', () => {
@@ -117,10 +124,145 @@ function addUndo() {
     });
 }
 
+function forExpo(){
+    nearSeat = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [144.958733332854, -37.8165340323693]
+            },
+            "properties": {
+                description: "William Street between Little Collins Street and Bourke Street approximately 18m NW of The Australian Club Inc, 110 William Street, Melbourne, 3000",
+                icon: "picnic-site",
+                distance: 0.05506869752466761}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.960383415257, -37.8166099388127]
+                },
+                "properties": {
+                    description: "Bank Place between Collins Street and Little Collins Street approximately 5m SW of Melbourne Savage Club, The Melbourne Savage Club, 12-16 Bank Place, Melbourne, 3000",
+                    icon: "picnic-site",
+                    distance: 0.09026241626167168}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.960441312164, -37.8167599059526]
+                },
+                "properties": {
+                    description: "Bank Place between Collins Street and Little Collins Street approximately 2m North of Mitre Tavern, 5-9 Bank Place, Melbourne, 3000",
+                    icon: "picnic-site",
+                    distance: 0.09811178017420624}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.958390404621, -37.816368218343]
+                },
+                "properties": {
+                    description: "William Street between Little Collins Street and Bourke Street approximately 25m North of Priceline Pharmacy William Street, 111 William Street, Melbourne, 3000",
+                    icon: "picnic-site",
+                    distance: 0.08731390226875771}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.959972080052, -37.81729473501]
+                },
+                "properties": {
+                    description: "Collins Street between William Street and Market Street approximately 28m NW of 431 Collins Street, Melbourne, 3000",
+                    icon: "picnic-site",
+                    distance: 0.09969963832426827}
+            },
+    ]};
+    nearDrink = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [144.9584794, -37.8165598]
+            },
+            "properties": {
+                description: "Drinking Fountain - Stainless Steel Drinking Fountain - Leaf Type - Bottle Refill Tap",
+                icon: "beer",
+                distance: 0.0774088781027173}
+        }
+        ]};
+    near = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [144.9602543, -37.8174699]
+            },
+            "properties": {
+                description: "Public Toilet - Toilet 4 - Market Street (Opposite 74 Market Street)<br>Female: yes<br>Male: yes<br>Wheelchair: yes<br>Baby Facility: no",
+                icon: "toilet",
+                distance: 0.12989711156805617}
+        },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.9610621, -37.8158382]
+                },
+                "properties": {
+                    description: "Public Toilet - Toilet 43 - Queen Street (opposite 113 Queen Street)<br>Female: yes<br>Male: yes<br>Wheelchair: yes<br>Baby Facility: n",
+                    icon: "toilet",
+                    distance: 0.1687084803607659}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.9612768, -37.8194061]
+                },
+                "properties": {
+                    description: "Public Toilet - Toilet 3 - Flinders Street (399 Flinders Street)<br>Female: yes<br>Male: yes<br>Wheelchair: yes<br>Baby Facility: no",
+                    icon: "toilet",
+                    distance: 0.36055167922656894}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.9600121, -37.8129331]
+                },
+                "properties": {
+                    description: "Public Toilet - Toilet 36 - Lonsdale Street (Opposite 424 Lonsdale Street)<br>Female: yes<br>Male: yes<br>Wheelchair: yes<br>Baby Facility: yes",
+                    icon: "toilet",
+                    distance: 0.4052662388571639}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [144.9630972, -37.8138378]
+                },
+                "properties": {
+                    description: "Public Toilet - Toilet 6 - Elizabeth Street (Toilet Adjacent 200 Elizabeth Street)<br>Female: yes<br>Male: no<br>Wheelchair: no<br>Baby Facility: n",
+                    icon: "toilet",
+                    distance: 0.44517389782166394}
+            },
+        ]};
+
+}
+
+// explore nearest features around the user and save the data
 function discoverNearest(userLocation){
-    console.log(userLocation);
-    nearSeat['type'] = 'FeatureCollection';
-    nearSeat['features'] = [];
+    // console.log(userLocation);
+    // nearSeat['type'] = 'FeatureCollection';
+    // nearSeat['features'] = [];
     seatGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
             value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
@@ -128,15 +270,15 @@ function discoverNearest(userLocation){
             enumerable: true,
             configurable: true
         });
-        if (e.properties.distance < 0.1){
-            nearSeat['features'].push(e);
-        }
+        // if (e.properties.distance < 0.1){
+        //     nearSeat['features'].push(e);
+        // }
     });
-    console.log(seatGeojson);
-    console.log(nearSeat);
+    // console.log(seatGeojson);
+    // console.log(nearSeat);
 
-    nearDrink['type'] = 'FeatureCollection';
-    nearDrink['features'] = [];
+    // nearDrink['type'] = 'FeatureCollection';
+    // nearDrink['features'] = [];
     drinkGeojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
             value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
@@ -144,14 +286,15 @@ function discoverNearest(userLocation){
             enumerable: true,
             configurable: true
         });
-        if (e.properties.distance < 0.1){
-            nearDrink['features'].push(e);
-        }
+        // if (e.properties.distance < 0.1){
+        //     nearDrink['features'].push(e);
+        // }
     });
-    searchNearest(nearDrink.features,drinkGeojson);
+    // searchNearest(nearDrink.features,drinkGeojson);
+    // console.log(nearDrink);
 
-    near['type'] = 'FeatureCollection';
-    near['features'] = [];
+    // near['type'] = 'FeatureCollection';
+    // near['features'] = [];
     geojson.features.forEach(function(e) {
         Object.defineProperty(e.properties, 'distance', {
             value: turf.distance(turf.point(userLocation), turf.point(e.geometry.coordinates)),
@@ -159,13 +302,15 @@ function discoverNearest(userLocation){
             enumerable: true,
             configurable: true
         });
-        if (e.properties.distance < 0.1){
-            near['features'].push(e);
-        }
+        // if (e.properties.distance < 0.1){
+        //     near['features'].push(e);
+        // }
     });
-    searchNearest(near.features,geojson);
+    // searchNearest(near.features,geojson);
+    // console.log(near);
 }
 
+// draw nearest features on the map
 function drawNearest(){
     if (userLocation != null || typeof userLocation !== 'undefined'){
         map.on('load', function () {
@@ -455,6 +600,7 @@ function drawNearest(){
     }
 }
 
+// draw user current location on the map
 function drawCurrentLocation(){
     if (userLocation != null || typeof userLocation !== 'undefined'){
         console.log(userLocation);
@@ -538,8 +684,9 @@ function drawCurrentLocation(){
     }
 }
 
+// search nearest features within 100m, if no, search the nearest 5 features
 function searchNearest(nearFeature,geojsonData){
-    // if no toilet available within 100m, search the nearest 5 toilets and show on the map
+    // if no toilet available within 100m, search the nearest 5 toilets
     if (nearFeature.length === 0){
         geojsonData.features.sort(function(a, b) {
             if (a.properties.distance > b.properties.distance) {
@@ -557,6 +704,7 @@ function searchNearest(nearFeature,geojsonData){
     }
 }
 
+// draw seats on the map
 function drawSeat(){
     map.on('load', function () {
         map.addSource("seatGeojson", {
@@ -676,6 +824,7 @@ function drawSeat(){
     });
 }
 
+// draw toilets on the map
 function drawToilet(){
     map.on('load', function () {
 
@@ -810,6 +959,7 @@ function drawToilet(){
     });
 }
 
+// draw drinking fountains on the map
 function drawDrink(){
     map.on('load', function () {
         map.addSource("drinkGeojson", {
@@ -942,6 +1092,7 @@ function drawDrink(){
     });
 }
 
+// draw pedestrian density on the map
 function drawPedestrian(){
 
     map.on('load', function() {
@@ -1006,6 +1157,7 @@ function drawPedestrian(){
     });
 }
 
+// draw 3D building on the map
 function load3D() {
     // The 'building' layer in the mapbox-streets vector source contains building-height
     // data from OpenStreetMap.
@@ -1056,6 +1208,7 @@ function load3D() {
 
 }
 
+// draw street steepness on the map
 function getGradient() {
 
     var geojson = 'data/Footpath steepness.geojson';

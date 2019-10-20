@@ -37,7 +37,7 @@
 
 <?php include_once 'locations_model.php'; ?>
 <body onload="checkCookie()">
-
+<!--side panel show-->
 <div id="mySidepanel" class="sidepanel">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a id="seatButton" class="abtn"><i class="fas fa-chair"></i> Seats</a>
@@ -48,15 +48,21 @@
     <a id="3dButton"><i class="fas fa-cubes"></i> 3D model</a>
     <a id="nearby"><i class="fas fa-search-location"></i> Nearby facilities</a>
 </div>
+<!--map-->
 <div id='map'></div>
-
+<!--direction API-->
 <div id='direction' class='direction'></div>
+<!--close button-->
 <button id='close' title="Hide or show direction form"><i class="fas fa-times"></i></button>
-
+<!--easyMelb logo-->
 <a id='logo' href="index.html" title="Go to the Home Page" ><img src="img/logo.PNG">EasyMelb</a>
+<!--side panel close-->
 <button id='sidepanel' onclick="openNav()" title="More functions" style="">Features</button>
+<!--find user current location-->
 <button id='fly' title="Show current location"><i class="fa fa-location-arrow"></i></button>
+<!--undo drag changes-->
 <button id='undo' title="Undo drag changes"><i class="fas fa-undo-alt"></i></button>
+<!--snack bar under pedestrian legend-->
 <div id="snackbar">The points show the sensor locations</div>
 <!--Pedestrian-->
 <div id="rightArrow" style="display: none"><a href="javascript:;" title="Pedestrian"><i class="fas fa-users"></i></a></div>
@@ -131,6 +137,7 @@
 </div>
 
 <script>
+    // pedestrian legend
     $(function(){
         $('#rightArrow').on("click",function(){
             // hide
@@ -147,7 +154,7 @@
             }
         });
     });
-
+    // gradient legend
     $(function(){
         $('#rightArrow2').on("click",function(){
             if(document.getElementById("floatDivBoxs2").style.right==='0px'){
@@ -175,13 +182,13 @@
     var seatGeojson = {};
     var pedestrianGeojson = {};
     var intro = introJs();
-    var userLocation = [];
+    var userLocation = [144.95936,-37.81654];
     var nearSeat = {};
     var nearDrink = {};
     var near = {};
     var block = false;
 
-
+    // load data from database and save to variables
     function passData(){
         // pass toilet data to Geojson array
         var locations = <?php get_toilet_locations() ?>;
@@ -262,14 +269,18 @@
 
     }
 
+    // get user current location
     function getUserLocation() {
         if (navigator.geolocation)
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     userLocation[0] = position.coords.longitude;
                     userLocation[1] = position.coords.latitude;
+                    userLocation[0] = 144.95936;
+                    userLocation[1] = -37.81654;
                     console.log(userLocation);
-                    discoverNearest(userLocation);
+                    // discoverNearest(userLocation);
+                    forExpo();
                     return userLocation;
                 });
         else{
@@ -279,24 +290,20 @@
         }
     }
 
-    async function second(){
-        await Promise.all([passData(), getUserLocation()]);
+    // start the project
+    async function start(){
+        await Promise.all([passData()]);
         console.log(userLocation);
         initmap();
+        forExpo();
         drawCurrentLocation();
         drawNearest();
     }
-    second();
 
-    // passData();
-    // getUserLocation();
+    start();
 
 
-    console.error = function(){
-        window.location.reload()
-    }
-
-
+    // add click event
     document.getElementById('fly').addEventListener('click', function () {
         if (block===true){
             getUserLocation();
@@ -451,7 +458,7 @@
         }
     });
 
-
+    // set tutorial information
     intro.setOptions({
         steps: [
             {
@@ -511,18 +518,6 @@
             setCookie();
         }
     }
-
-
-
-    // function checkExist(){
-    //     if(typeof map.getLayer('points') == 'undefined'){
-    //         map.eachLayer(function (layer) {
-    //             map.removeLayer(layer);
-    //         });
-    //         initmap();
-    //     }
-    // }
-
 
 
 
